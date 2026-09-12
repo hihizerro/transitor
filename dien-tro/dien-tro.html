@@ -1,0 +1,2623 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e3350" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0c1218" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Mã Tụ Trở Cảm">
+<meta name="format-detection" content="telephone=no">
+<title>Máy Tính Mã Tụ, Trở &amp; Cuộn Cảm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+:root{
+  --ground:#e9edf1; --surface:#ffffff; --surface-2:#f4f7f9;
+  --ink:#0f1a23; --ink-2:#3c4b59; --ink-3:#69798a;
+  --rule:#ccd6de; --rule-strong:#9aabb9;
+  --band:#0e3350; --band-ink:#f2f8fc; --band-eyebrow:#8fc4e8; --head-title:#0e3350;
+  --accent:#a9640f; --accent-ink:#1b1206; --accent-soft:#fbf1e0;
+  --danger:#9e1f18; --danger-soft:#fbebe9;
+  --ok:#1a6045; --ok-soft:#e8f3ee;
+  --info:#10556d; --info-soft:#e5f0f4;
+  --ind:#5c3a91; --ind-soft:#efeafa;
+  --shadow:0 1px 2px rgba(15,26,35,.06),0 8px 24px rgba(15,26,35,.07);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0c1218; --surface:#141d25; --surface-2:#1a242e;
+    --ink:#e5ecf2; --ink-2:#aebdc9; --ink-3:#7d8d9b;
+    --rule:#28343f; --rule-strong:#41525f;
+    --band:#12314a; --band-ink:#dcebf7; --band-eyebrow:#7fb2d8; --head-title:#e5ecf2;
+    --accent:#e0a24a; --accent-ink:#1b1206; --accent-soft:#261d10;
+    --danger:#ef8d84; --danger-soft:#2a1513;
+    --ok:#63c79c; --ok-soft:#0f2219;
+    --info:#6dbdd6; --info-soft:#0d222a;
+    --ind:#c0a3ec; --ind-soft:#1e1730;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0c1218; --surface:#141d25; --surface-2:#1a242e;
+  --ink:#e5ecf2; --ink-2:#aebdc9; --ink-3:#7d8d9b;
+  --rule:#28343f; --rule-strong:#41525f;
+  --band:#12314a; --band-ink:#dcebf7; --band-eyebrow:#7fb2d8; --head-title:#e5ecf2;
+  --accent:#e0a24a; --accent-ink:#1b1206; --accent-soft:#261d10;
+  --danger:#ef8d84; --danger-soft:#2a1513;
+  --ok:#63c79c; --ok-soft:#0f2219;
+  --info:#6dbdd6; --info-soft:#0d222a;
+  --ind:#c0a3ec; --ind-soft:#1e1730;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; text-size-adjust:100%}
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:'Be Vietnam Pro',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-size:15px; line-height:1.55; margin:0;
+  -webkit-font-smoothing:antialiased;
+}
+/* iOS: vùng chạm tối thiểu + không nháy xám khi bấm */
+button{-webkit-tap-highlight-color:transparent; touch-action:manipulation}
+/* iOS Safari tự phóng to trang khi focus vào ô nhập có cỡ chữ < 16px */
+input,select,textarea{font-size:16px}
+select{-webkit-appearance:none; appearance:none; background-image:none}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:3px}
+code{font-family:'IBM Plex Mono',ui-monospace,monospace; font-weight:600; color:var(--ink); background:var(--surface-2); padding:1px 4px; border-radius:2px; font-size:.92em}
+
+.masthead{background:var(--band); color:var(--band-ink); padding:30px 18px 22px; border-bottom:5px solid var(--accent)}
+.masthead-in{max-width:900px; margin:0 auto}
+.masthead .eyebrow{font-size:11.5px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--band-eyebrow); margin:0 0 8px}
+.masthead h1{font-family:Bitter,Georgia,serif; font-weight:800; font-size:clamp(24px,4.2vw,36px); line-height:1.08; margin:0; color:var(--band-ink); text-wrap:balance}
+.masthead .sub{margin:10px 0 0; max-width:64ch; font-size:14.5px; color:var(--band-ink); opacity:.86}
+
+.tabnav{position:sticky; top:0; z-index:20; background:var(--surface); border-bottom:1px solid var(--rule)}
+.tabnav-in{max-width:900px; margin:0 auto; display:flex; gap:2px; overflow-x:auto; padding:0 14px}
+.tabnav button{font-family:inherit; font-size:13.5px; font-weight:600; color:var(--ink-3); background:none; border:none; border-bottom:3px solid transparent; padding:14px 12px 11px; cursor:pointer; white-space:nowrap}
+.tabnav button.active{color:var(--head-title); border-bottom-color:var(--accent)}
+.tabnav button:hover{color:var(--ink)}
+.t-mini{display:none}
+
+.wrap{max-width:900px; margin:0 auto; padding:24px 18px 80px}
+.tabpanel{display:none}
+.tabpanel.active{display:block}
+
+.intro h2{font-family:Bitter,Georgia,serif; font-size:19px; margin:0 0 6px; color:var(--head-title)}
+.intro p{margin:0 0 18px; color:var(--ink-2); font-size:14px; max-width:68ch}
+
+#codeInput{
+  width:100%; font-family:'IBM Plex Mono',monospace; font-size:19px; font-weight:600; letter-spacing:.02em;
+  padding:13px 14px; color:var(--ink); background:var(--surface); border:1px solid var(--rule-strong); border-radius:4px;
+}
+#codeInput:focus{outline:2px solid var(--accent); outline-offset:1px}
+
+.hint-box{margin-top:22px; padding:14px 16px; background:var(--surface-2); border:1px solid var(--rule); border-radius:4px}
+.hint-box .lbl{display:block; font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); margin-bottom:8px}
+ul.tight{margin:0; padding-left:19px; font-size:13.5px; color:var(--ink-2)}
+ul.tight li{margin-bottom:6px}
+
+.badge{display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:3px 8px; border-radius:2px; flex:none}
+.badge.high{background:var(--ok-soft); color:var(--ok)}
+.badge.typical{background:var(--info-soft); color:var(--info)}
+
+.result-card{background:var(--surface); border:1px solid var(--rule); border-left:4px solid var(--info); border-radius:4px; box-shadow:var(--shadow); padding:14px 16px; margin-bottom:14px}
+.result-card.res{border-left-color:var(--accent)}
+.result-card.material{border-left-color:var(--ok)}
+.result-head{display:flex; align-items:center; gap:9px; flex-wrap:wrap; margin-bottom:10px}
+.result-head h3{font-family:Bitter,Georgia,serif; font-size:14.5px; font-weight:700; margin:0; color:var(--head-title)}
+.big-value{font-family:'IBM Plex Mono',monospace; font-size:21px; font-weight:600; color:var(--ink); margin:9px 0 2px; text-wrap:balance}
+.result-note{font-size:13px; color:var(--ink-2); margin:8px 0 0}
+.result-note b{color:var(--ink)}
+
+/* dải quy đổi đơn vị */
+.uconv{display:flex; flex-wrap:wrap; gap:6px; margin:8px 0 2px}
+.uconv span{
+  font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:12.5px; font-weight:500;
+  color:var(--ink-2); background:var(--surface-2); border:1px solid var(--rule);
+  border-radius:3px; padding:3px 8px; font-variant-numeric:tabular-nums; white-space:nowrap;
+}
+.uconv span b{font-weight:600; color:var(--ink)}
+.uconv span.is-main{background:var(--accent-soft); border-color:var(--accent); color:var(--accent)}
+.uconv span.is-main b{color:var(--accent)}
+.uconv-lbl{font-size:10.5px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-3); align-self:center; margin-right:2px; font-family:'Be Vietnam Pro',sans-serif}
+
+.decode{display:flex; flex-wrap:wrap; gap:8px; margin:2px 0 4px}
+.seg{flex:1 1 100px; background:var(--surface-2); border:1px solid var(--rule); border-bottom:3px solid var(--seg,var(--accent)); border-radius:3px; padding:7px 9px; text-align:center}
+.seg b{display:block; font-family:'IBM Plex Mono',monospace; font-size:19px; font-weight:600; color:var(--seg,var(--accent)); letter-spacing:.03em}
+.seg i{display:block; font-style:normal; font-size:11px; color:var(--ink-3); margin-top:3px; line-height:1.35}
+.seg i em{display:block; font-style:normal; color:var(--ink); font-weight:600; font-size:12px}
+
+.empty-state, .no-match{padding:22px 16px; text-align:center; color:var(--ink-3); font-size:13.5px; border:1px dashed var(--rule-strong); border-radius:4px; margin-bottom:14px}
+.no-match b{color:var(--ink-2); display:block; margin-bottom:4px; font-size:14px}
+
+.section-label{font-size:11px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-3); margin:20px 0 8px}
+.section-label:first-child{margin-top:0}
+
+/* reverse lookup */
+.rev-grid{display:grid; grid-template-columns:1fr 1fr; gap:26px}
+@media (max-width:660px){.rev-grid{grid-template-columns:1fr}}
+.rev-col h2{font-family:Bitter,Georgia,serif; font-size:16.5px; margin:0 0 12px; color:var(--head-title); padding-bottom:8px; border-bottom:2px solid var(--band)}
+.field{margin-bottom:12px}
+.field label{display:block; font-size:11px; font-weight:600; color:var(--ink-3); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px}
+.field input, .field select{
+  width:100%; font-family:'Be Vietnam Pro',sans-serif; font-size:16px; font-weight:500; color:var(--ink);
+  padding:9px 10px; background:var(--surface); border:1px solid var(--rule-strong); border-radius:3px;
+  -webkit-appearance:none; appearance:none;
+}
+.field select{
+  background-image:linear-gradient(45deg,transparent 50%,var(--ink-3) 50%),linear-gradient(135deg,var(--ink-3) 50%,transparent 50%);
+  background-position:calc(100% - 16px) center,calc(100% - 11px) center;
+  background-size:5px 5px,5px 5px; background-repeat:no-repeat; padding-right:30px;
+}
+.field-row{display:flex; gap:8px}
+.field-row .field{flex:1; margin-bottom:0}
+
+.kv-out{display:grid; gap:7px; margin-top:14px}
+.kv-out .row{display:flex; justify-content:space-between; gap:10px; padding:9px 11px; background:var(--surface-2); border:1px solid var(--rule); border-radius:3px; align-items:baseline; flex-wrap:wrap}
+.kv-out .row .k{font-size:12px; color:var(--ink-3); flex:1 1 120px}
+.kv-out .row .v{font-family:'IBM Plex Mono',monospace; font-weight:600; color:var(--ink); font-size:15px; text-align:right}
+.kv-out .row .approx{display:block; font-size:10.5px; color:var(--ink-3); font-weight:400; text-align:right}
+
+/* color bands */
+.bandcount-toggle{display:flex; gap:6px; margin-bottom:20px}
+.bandcount-toggle button{flex:1; font-family:inherit; font-weight:600; font-size:13px; padding:9px; border:1px solid var(--rule); background:var(--surface); color:var(--ink-2); border-radius:3px; cursor:pointer}
+.bandcount-toggle button.active{background:var(--band); color:var(--band-ink); border-color:var(--band)}
+
+.resistor-visual{display:flex; align-items:center; height:36px; margin:4px 0 24px}
+.resistor-visual .lead{flex:0 0 26px; height:3px; background:var(--rule-strong)}
+.resistor-visual .body{flex:1; height:28px; background:linear-gradient(180deg,#ecd4a3,#dcb877); border-radius:14px; display:flex; align-items:center; justify-content:center; gap:6px; padding:0 14px; box-shadow:inset 0 -3px 6px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.1)}
+.resistor-visual .rband{width:7px; align-self:stretch; border-radius:1px; box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+
+.band-row{margin-bottom:14px}
+.band-row-label{display:block; font-size:12px; font-weight:600; color:var(--ink-3); margin-bottom:6px}
+.swatches{display:flex; flex-wrap:wrap; gap:6px}
+.swatch-btn{width:32px; height:32px; border-radius:4px; border:2px solid var(--rule-strong); background:var(--sw); cursor:pointer; box-shadow:inset 0 0 0 1px rgba(0,0,0,.08); padding:0}
+.swatch-btn.selected{border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-soft)}
+.swatch-btn[data-color="none"]{background:repeating-linear-gradient(45deg,var(--surface-2),var(--surface-2) 4px,var(--rule) 4px,var(--rule) 8px)}
+
+.color-result{text-align:center; padding:20px 16px; background:var(--surface-2); border:1px solid var(--rule); border-radius:4px}
+.color-result .val{font-family:'IBM Plex Mono',monospace; font-size:28px; font-weight:700; color:var(--head-title)}
+.color-result .meta{margin-top:6px; font-size:13px; color:var(--ink-2)}
+
+footer{max-width:900px; margin:40px auto 0; padding:16px 18px 0; border-top:1px solid var(--rule); font-size:12.5px; color:var(--ink-3)}
+
+/* ===== CUỘN CẢM ===== */
+.result-card.ind{border-left-color:var(--ind)}
+.badge.ind{background:var(--ind-soft); color:var(--ind)}
+
+.subnav{display:flex; flex-wrap:wrap; gap:6px; margin:0 0 22px}
+.subnav button{flex:1 1 120px; font-family:inherit; font-weight:600; font-size:13px; padding:9px 6px; border:1px solid var(--rule); background:var(--surface); color:var(--ink-2); border-radius:3px; cursor:pointer}
+.subnav button.active{background:var(--band); color:var(--band-ink); border-color:var(--band)}
+.subpanel{display:none}
+.subpanel.active{display:block}
+
+.blockhead{font-family:Bitter,Georgia,serif; font-size:16.5px; font-weight:700; margin:28px 0 12px; color:var(--head-title); padding-bottom:8px; border-bottom:2px solid var(--band)}
+.blockhead:first-child{margin-top:0}
+
+.idgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px}
+.idcard{background:var(--surface); border:1px solid var(--rule); border-left:4px solid var(--ind); border-radius:4px; padding:12px 14px; box-shadow:var(--shadow)}
+.idcard h4{font-family:Bitter,Georgia,serif; font-size:14.5px; margin:0 0 7px; color:var(--head-title)}
+.idcard p{margin:0 0 7px; font-size:13px; color:var(--ink-2)}
+.idcard p:last-child{margin-bottom:0}
+.idcard .tagline{display:inline-block; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:11px; font-weight:600; background:var(--surface-2); border:1px solid var(--rule); border-radius:3px; padding:2px 7px; color:var(--ink-2); margin-bottom:7px}
+/* Ba he mau cua the kien thuc: mac dinh la tu dien, con lai theo tung ho linh kien */
+.idcard{border-left-color:var(--info)}
+.idcard.res{border-left-color:var(--accent)}
+.idcard.ind{border-left-color:var(--ind)}
+.idcard.warn{border-left-color:var(--danger)}
+.hint-box.warn{background:var(--danger-soft); border-color:var(--danger); border-left:4px solid var(--danger)}
+.hint-box.warn .lbl{color:var(--danger)}
+
+.table-scroll{overflow-x:auto; -webkit-overflow-scrolling:touch; border-radius:4px}
+table.cmp{width:100%; min-width:520px; border-collapse:collapse; font-size:13px; background:var(--surface)}
+table.cmp th, table.cmp td{border:1px solid var(--rule); padding:9px 10px; text-align:left; vertical-align:top}
+table.cmp th{background:var(--surface-2); font-size:10.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3)}
+table.cmp td{color:var(--ink-2)}
+table.cmp td b{color:var(--ink)}
+table.cmp tr td:first-child{color:var(--ink)}
+
+.calc{background:var(--surface); border:1px solid var(--rule); border-radius:4px; padding:14px 16px; margin-bottom:14px; box-shadow:var(--shadow)}
+.calc h4{font-family:Bitter,Georgia,serif; font-size:15px; font-weight:700; margin:0 0 8px; color:var(--head-title)}
+.formula{font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:13px; font-weight:600; color:var(--ink); background:var(--surface-2); border:1px solid var(--rule); border-left:3px solid var(--ind); border-radius:3px; padding:8px 10px; margin:0 0 13px; overflow-x:auto; white-space:nowrap}
+.calc-out .big-value{margin-top:0}
+.calc .empty-state{margin-bottom:0; padding:14px}
+.calc .result-note{margin-top:10px}
+
+.inductor-visual{display:flex; align-items:center; height:38px; margin:4px 0 24px}
+.inductor-visual .lead{flex:0 0 26px; height:3px; background:var(--rule-strong)}
+.inductor-visual .body{flex:1; height:30px; background:linear-gradient(180deg,#d7dde2,#a3b0ba); border-radius:15px; display:flex; align-items:center; justify-content:center; gap:6px; padding:0 14px; box-shadow:inset 0 -3px 6px rgba(0,0,0,.18), 0 1px 2px rgba(0,0,0,.12)}
+.inductor-visual .rband{width:7px; align-self:stretch; border-radius:1px; box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.inductor-visual .rband.wide{width:14px; box-shadow:inset 0 0 0 1px rgba(0,0,0,.25)}
+
+@media (max-width:640px){
+  .masthead{padding:22px 14px 18px}
+  .wrap{padding:20px 14px 80px}
+  .seg{flex:1 1 100%}
+  /* Ba tab phải nằm gọn trong màn hình — nếu để cuộn ngang thì trên iPhone
+     không có thanh cuộn, người dùng không biết còn tab phía sau */
+  .tabnav-in{display:grid; grid-template-columns:repeat(5,1fr); gap:0; overflow:visible}
+  .tabnav button{padding:14px 3px 11px; font-size:12.5px; text-align:center; width:100%}
+  .subnav button{flex:1 1 44%}
+  .formula{white-space:normal}
+  .swatch-btn{width:38px; height:38px}
+  .bandcount-toggle button{padding:12px}
+  .color-result .val{font-size:24px}
+  .big-value{font-size:19px}
+}
+/* Màn hình rất hẹp: rút gọn nhãn tab cho khỏi tràn */
+@media (max-width:430px){
+  .tabnav button{font-size:11.5px; padding-left:2px; padding-right:2px}
+  .t-full{display:none}
+  .t-mini{display:inline}
+}
+
+/* Cảnh báo khi trình xem chặn JavaScript (VD: xem trước file trong app Tệp của iOS) */
+.noscript-warn{
+  max-width:900px; margin:18px auto 0; padding:14px 16px;
+  background:var(--danger-soft); border:1px solid var(--danger); border-left:4px solid var(--danger);
+  border-radius:4px; color:var(--ink);
+}
+.noscript-warn b{display:block; color:var(--danger); font-size:14.5px; margin-bottom:6px}
+.noscript-warn p{margin:0; font-size:13.5px; color:var(--ink-2)}
+
+/* Chừa lề cho tai thỏ / thanh gạt của iPhone khi xoay ngang hoặc chạy toàn màn hình */
+@supports (padding:max(0px)){
+  .masthead{padding-left:max(18px,env(safe-area-inset-left)); padding-right:max(18px,env(safe-area-inset-right))}
+  .tabnav-in{padding-left:max(14px,env(safe-area-inset-left)); padding-right:max(14px,env(safe-area-inset-right))}
+  .wrap{padding-left:max(18px,env(safe-area-inset-left)); padding-right:max(18px,env(safe-area-inset-right)); padding-bottom:max(80px,calc(60px + env(safe-area-inset-bottom)))}
+  footer{padding-left:max(18px,env(safe-area-inset-left)); padding-right:max(18px,env(safe-area-inset-right))}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-in">
+    <p class="eyebrow">Công cụ đi kèm Sổ Tra Tụ &amp; Trở</p>
+    <h1>Máy Tính Mã Tụ, Trở &amp; Cuộn Cảm</h1>
+    <p class="sub">Gõ mã in trên thân linh kiện để giải mã ngay, hoặc nhập trị số cần tìm để tra ngược ra mã — theo đúng quy tắc trong sổ tra. Có riêng một tab cho cuộn cảm và một tab kiến thức chuẩn về linh kiện thụ động: họ linh kiện, thông số datasheet, cách chọn, cách đo và cách thay.</p>
+  </div>
+</header>
+
+<nav class="tabnav">
+  <div class="tabnav-in">
+    <button type="button" class="tab-btn active" data-tab="decode"><span class="t-full">Giải mã</span><span class="t-mini">Giải mã</span></button>
+    <button type="button" class="tab-btn" data-tab="reverse"><span class="t-full">Tra ngược trị số → mã</span><span class="t-mini">Tra ngược</span></button>
+    <button type="button" class="tab-btn" data-tab="colors"><span class="t-full">Vạch màu điện trở</span><span class="t-mini">Vạch màu</span></button>
+    <button type="button" class="tab-btn" data-tab="inductor"><span class="t-full">Cuộn cảm</span><span class="t-mini">Cuộn cảm</span></button>
+    <button type="button" class="tab-btn" data-tab="know"><span class="t-full">Kiến thức chuẩn</span><span class="t-mini">Kiến thức</span></button>
+  </div>
+</nav>
+
+<noscript>
+  <div class="noscript-warn">
+    <b>Trình xem này đang chặn JavaScript — công cụ không tính được</b>
+    <p>Trang vẫn hiện đủ chữ và bảng biểu, nhưng phần giải mã, tra ngược và vạch màu đều cần JavaScript nên sẽ không chạy. Trên iPhone, đây là biểu hiện của việc mở file bằng ô xem trước trong app <b>Tệp</b>. Hãy mở bằng trình duyệt thật (Safari, Chrome) hoặc một app có trình duyệt riêng.</p>
+  </div>
+</noscript>
+
+<div class="wrap">
+
+  <!-- TAB 1: GIẢI MÃ -->
+  <section id="tab-decode" class="tabpanel active">
+    <div class="intro">
+      <h2>Nhập mã in trên thân linh kiện</h2>
+      <p>Gõ đúng mã bạn nhìn thấy, hoa/thường đều được. Công cụ tự áp các quy tắc đọc mã tụ và điện trở cùng lúc, và cho biết cách đọc nào hợp lý nhất.</p>
+    </div>
+    <input id="codeInput" type="text" inputmode="text" autocomplete="off" spellcheck="false" placeholder="VD: 2J52J, 104, 473K, 4R7, 01B, S3, X7R…">
+    <div id="decodeResults" style="margin-top:18px"></div>
+    <div class="hint-box">
+      <span class="lbl">Công cụ hiểu được những kiểu mã nào</span>
+      <ul class="tight">
+        <li><strong>Mã ghép điện áp + điện dung + dung sai</strong> (chỉ có ở tụ) — <code>2A104J</code>, <code>2J52J</code></li>
+        <li><strong>Mã 3–4 chữ số</strong> AB×10<sup>C</sup> — đọc được cả hai kiểu tụ (pF) và điện trở (Ω) — <code>104</code>, <code>1002</code></li>
+        <li><strong>Riêng ở tụ</strong>, chữ số cuối <code>8</code> = ×0,01 và <code>9</code> = ×0,1 (quy ước EIA cho trị số dưới 10 pF) — <code>479</code> = 4,7 pF, <code>508</code> = 0,5 pF</li>
+        <li><strong>Chữ thay dấu phẩy theo IEC 60062</strong> — tụ: p/n/u(µ)/m — <code>4p7</code>, <code>4n7</code>, <code>10u</code>; điện trở: R/K/M/G/T — <code>4R7</code>, <code>4K7</code>, <code>2M5</code> = 2,5 MΩ. Mili-ôm viết bằng <code>m</code> thường hoặc chữ L — <code>2m5</code>, <code>2L5</code></li>
+        <li><strong>Mã MLCC 2 ký tự EIA-198</strong> (chỉ có ở tụ) — <code>S3</code>, <code>A1</code>, <code>J3</code></li>
+        <li><strong>Mã điện trở dán EIA-96</strong> (2 số + 1 chữ, ±1%) — <code>01B</code>, <code>68C</code></li>
+        <li><strong>Số thập phân trần</strong> (µF) — <code>.1</code>, <code>0,47</code></li>
+        <li><strong>Mã dán nhãn 0 Ω</strong> — <code>0</code>, <code>000</code></li>
+        <li><strong>Tiền tố hãng + điện dung + dung sai + điện áp ghi thẳng</strong> (tụ màng/X2, tụ gốm cao áp) — <code>ALN472K275V</code>, <code>221K2KV</code></li>
+        <li><strong>Mã cuộn cảm</strong> — chữ R thay dấu phẩy đơn vị µH (<code>4R7</code> = 4,7 µH), chữ N đơn vị nH (<code>4N7</code> = 4,7 nH), mã 3–4 chữ số ngầm định µH (<code>101</code> = 100 µH). Xem tab <strong>Cuộn cảm</strong> để biết cách phân biệt với điện trở</li>
+        <li><strong>Mã vật liệu gốm Class 2 / Class 1</strong> (không phải trị số) — <code>X7R</code>, <code>Y5V</code>, <code>C0G</code></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- TAB 2: TRA NGƯỢC -->
+  <section id="tab-reverse" class="tabpanel">
+    <div class="intro">
+      <h2>Tra ngược: có trị số, cần tìm mã</h2>
+      <p>Nhập trị số cần mua hoặc cần thay, công cụ đưa ra các cách ghi mã tương ứng để bạn đối chiếu khi tìm hàng.</p>
+    </div>
+    <div class="rev-grid">
+      <div class="rev-col">
+        <h2>Tụ điện</h2>
+        <div class="field-row">
+          <div class="field"><label for="capVal">Trị số</label><input id="capVal" type="text" inputmode="decimal" value="100"></div>
+          <div class="field" style="max-width:100px"><label for="capUnit">Đơn vị</label>
+            <select id="capUnit"><option value="pF">pF</option><option value="nF" selected>nF</option><option value="uF">µF</option></select>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label for="capVolt">Điện áp cần (V) — bỏ trống nếu không cần</label><input id="capVolt" type="text" inputmode="decimal" placeholder="VD: 16, 50, 100…"></div>
+        </div>
+        <div class="field">
+          <label for="capTol">Dung sai — bỏ trống nếu không cần</label>
+          <select id="capTol">
+            <option value="">(không chọn)</option>
+            <option value="J">J — ±5%</option>
+            <option value="K">K — ±10%</option>
+            <option value="M">M — ±20%</option>
+            <option value="G">G — ±2%</option>
+            <option value="F">F — ±1%</option>
+            <option value="D">D — ±0,5%</option>
+            <option value="Z">Z — +80% / −20%</option>
+          </select>
+        </div>
+        <div id="capRevOut"></div>
+      </div>
+      <div class="rev-col">
+        <h2>Điện trở</h2>
+        <div class="field-row">
+          <div class="field"><label for="resVal">Trị số</label><input id="resVal" type="text" inputmode="decimal" value="10"></div>
+          <div class="field" style="max-width:100px"><label for="resUnit">Đơn vị</label>
+            <select id="resUnit"><option value="ohm">Ω</option><option value="kohm" selected>kΩ</option><option value="Mohm">MΩ</option></select>
+          </div>
+        </div>
+        <div id="resRevOut"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 3: VẠCH MÀU ĐIỆN TRỞ -->
+  <section id="tab-colors" class="tabpanel">
+    <div class="intro">
+      <h2>Đọc điện trở theo vạch màu</h2>
+      <p>Chọn số vạch rồi bấm màu tương ứng trên từng vạch, kết quả cập nhật ngay.</p>
+    </div>
+    <div class="bandcount-toggle">
+      <button type="button" class="bc-btn" data-count="4">4 vạch</button>
+      <button type="button" class="bc-btn active" data-count="5">5 vạch</button>
+      <button type="button" class="bc-btn" data-count="6">6 vạch</button>
+    </div>
+    <div class="resistor-visual" id="resistorVisual"><div class="lead"></div><div class="body" id="resistorBody"></div><div class="lead"></div></div>
+    <div id="bandRows"></div>
+    <div class="color-result" id="colorResult"></div>
+  </section>
+
+  <!-- TAB 4: CUỘN CẢM -->
+  <section id="tab-inductor" class="tabpanel">
+    <div class="intro">
+      <h2>Cuộn cảm: nhận diện, đọc mã và tính toán</h2>
+      <p>Cuộn cảm là linh kiện dễ đọc nhầm nhất: dùng chung kiểu mã 3 chữ số với tụ và trở, lại có loại in vạch màu y hệt điện trở. Bốn mục dưới đây đi lần lượt từ nhận mặt linh kiện → đọc trị số → tính toán.</p>
+    </div>
+
+    <div class="subnav" id="indSubnav">
+      <button type="button" class="sub-btn active" data-sub="ident">Nhận diện</button>
+      <button type="button" class="sub-btn" data-sub="read">Đọc mã</button>
+      <button type="button" class="sub-btn" data-sub="bands">Vạch màu</button>
+      <button type="button" class="sub-btn" data-sub="calc">Công thức tính</button>
+    </div>
+
+    <!-- 4.1 NHẬN DIỆN -->
+    <div class="subpanel active" id="sub-ident">
+      <h3 class="blockhead">Phân biệt nhanh trở – tụ – cuộn cảm</h3>
+      <div class="table-scroll">
+        <table class="cmp">
+          <thead><tr><th>Dấu hiệu</th><th>Điện trở (R)</th><th>Tụ điện (C)</th><th>Cuộn cảm (L)</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><b>Ký hiệu in trên mạch in</b></td>
+              <td>R, RN, RS, VR</td>
+              <td>C, CE (tụ hoá)</td>
+              <td><b>L</b>, LF; riêng hạt ferrite thường ghi <b>FB, FL, BD, EMI</b></td>
+            </tr>
+            <tr>
+              <td><b>Đo ở thang Ω (đã tháo khỏi mạch)</b></td>
+              <td>Ra đúng trị số, đứng yên</td>
+              <td>Kim vọt lên rồi về ∞ (tụ lớn), hoặc ∞ ngay (tụ nhỏ)</td>
+              <td><b>Gần như thông mạch</b> — vài mΩ đến vài chục Ω. Đây là dấu hiệu chắc chắn nhất</td>
+            </tr>
+            <tr>
+              <td><b>Đơn vị ngầm định của mã số</b></td>
+              <td>Ω</td>
+              <td>pF</td>
+              <td><b>µH</b> với cuộn cảm công suất, <b>nH</b> với cuộn cảm chip cao tần</td>
+            </tr>
+            <tr>
+              <td><b>Vạch màu</b></td>
+              <td>4–6 vạch, thân thon, các vạch lệch về một đầu</td>
+              <td>Hầu như không dùng (chỉ tụ mica/gốm đời cũ)</td>
+              <td>4–5 vạch, <b>vạch đầu rộng màu bạc</b> báo đơn vị µH (MIL-STD-1285)</td>
+            </tr>
+            <tr>
+              <td><b>Nhìn thân linh kiện</b></td>
+              <td>Gốm/than/màng kim loại, sơn mờ, thân thẳng</td>
+              <td>Gốm, nhựa, vỏ nhôm có vạch âm</td>
+              <td>Thấy <b>dây đồng quấn</b> hoặc khối ferrite xám đen, thân mập, cầm nặng tay</td>
+            </tr>
+            <tr>
+              <td><b>Vị trí trên mạch</b></td>
+              <td>Khắp nơi</td>
+              <td>Cạnh chân nguồn IC, ngõ vào/ra</td>
+              <td>Cạnh IC nguồn xung (buck/boost), lối vào nguồn, đường lọc nhiễu</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="blockhead">Các dạng vỏ thường gặp</h3>
+      <div class="idgrid">
+        <div class="idcard">
+          <span class="tagline">SMD power inductor</span>
+          <h4>Cuộn cảm dán công suất</h4>
+          <p>Khối vuông đen hoặc xám, lõi ferrite đúc kín, hai đầu là má thiếc bản rộng. Thường nằm ngay cạnh IC nguồn xung.</p>
+          <p>Mã in kiểu <code>4R7</code> = 4,7 µH hoặc <code>101</code> = 100 µH. Nhiều loại để trơn, phải tra theo mã series.</p>
+        </div>
+        <div class="idcard">
+          <span class="tagline">0402 – 1210</span>
+          <h4>Cuộn cảm chip cỡ nhỏ</h4>
+          <p>Nhỏ y hệt tụ MLCC nên hầu như không in được mã. Nhận ra bằng ký hiệu <b>L</b> trên mạch và bằng phép đo: cuộn cảm thông mạch, tụ thì không.</p>
+          <p>Mã (nếu có) đọc theo <b>nH</b>: <code>4N7</code> = 4,7 nH, <code>120</code> = 12 nH.</p>
+        </div>
+        <div class="idcard">
+          <span class="tagline">Vạch màu — giống điện trở</span>
+          <h4>Cuộn chặn đúc thân nhựa</h4>
+          <p>Loại dễ nhầm điện trở nhất vì cùng dáng viên thuốc và cùng in vạch màu.</p>
+          <p>Hai dấu hiệu tách bạch: <b>vạch đầu rộng màu bạc</b> (báo đơn vị µH) và <b>đo thang Ω ra gần 0</b>. Trị số đọc ở mục Vạch màu.</p>
+        </div>
+        <div class="idcard">
+          <span class="tagline">600Ω @ 100MHz</span>
+          <h4>Hạt ferrite (ferrite bead)</h4>
+          <p>Ghi <b>trở kháng tại 100 MHz</b> chứ không ghi µH. Nhiệm vụ là biến nhiễu cao tần thành nhiệt, không phải tích năng lượng.</p>
+          <p>Ở một chiều gần như nối tắt. <b>Không</b> thay qua lại được với cuộn cảm cùng con số.</p>
+        </div>
+        <div class="idcard">
+          <span class="tagline">T-xx / FT-xx</span>
+          <h4>Cuộn lõi xuyến (toroid)</h4>
+          <p>Dây quấn quanh vòng ferrite hoặc bột sắt. Gặp ở lọc nguồn, PFC, lọc EMI, nguồn xung công suất lớn.</p>
+          <p>Trị số không in trên thân — tính từ số vòng và hệ số A<sub>L</sub> của lõi (có máy tính ở mục Công thức).</p>
+        </div>
+        <div class="idcard">
+          <span class="tagline">4 chân trở lên</span>
+          <h4>Cuộn chung chế độ / biến áp xung</h4>
+          <p>Có từ 4 chân, đo ra <b>hai cuộn dây riêng biệt</b> không thông nhau. Không đọc như cuộn cảm 2 chân.</p>
+          <p>Cuộn chung chế độ (common-mode choke) lọc nhiễu đối xứng trên đôi dây nguồn hoặc dây tín hiệu.</p>
+        </div>
+      </div>
+
+      <h3 class="blockhead">Bẫy hay gặp</h3>
+      <div class="hint-box">
+        <span class="lbl">Nhớ kỹ những điểm này trước khi thay linh kiện</span>
+        <ul class="tight">
+          <li>Cùng mã <code>101</code>: điện trở là 100 Ω, tụ là 100 pF, cuộn cảm là <b>100 µH</b>. Ba trị số khác hẳn nhau — phải biết chắc đang cầm linh kiện gì rồi mới tra.</li>
+          <li>Cùng mã <code>4R7</code>: điện trở 4,7 Ω, cuộn cảm 4,7 µH, tụ tantalum dán 4,7 µF.</li>
+          <li>Hạt ferrite ghi số theo <b>ôm</b>, đọc thành µH là sai hoàn toàn bản chất linh kiện.</li>
+          <li>Thay cuộn cảm nguồn xung phải khớp cả <b>dòng bão hoà I<sub>sat</sub></b> và <b>điện trở một chiều DCR</b>, không chỉ khớp µH. Chọn I<sub>sat</sub> thiếu thì lõi bão hoà, dòng vọt lên, IC nguồn nóng rồi chết.</li>
+          <li>Đồng hồ vạn năng thường <b>không đo được µH</b> — cần đồng hồ LCR hoặc đồng hồ có thang L. Đo thang Ω chỉ cho biết cuộn còn thông hay đã đứt.</li>
+          <li>Cuộn cảm đứt ngầm rất hay gặp ở mạch nguồn: nhìn ngoài còn nguyên nhưng đo hở mạch. Ngược lại cuộn chập vòng thì đo vẫn thông mà mạch vẫn hỏng — phải so trị số bằng LCR.</li>
+          <li>Chấm hoặc gạch ở một đầu cuộn cảm dán là <b>dấu đầu dây quấn</b> (để giảm nhiễu khi lắp đúng chiều), không phải dấu cực tính bắt buộc.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 4.2 ĐỌC MÃ -->
+    <div class="subpanel" id="sub-read">
+      <div class="rev-grid">
+        <div class="rev-col">
+          <h2>Có mã, cần trị số</h2>
+          <div class="field">
+            <label for="indDecIn">Mã in trên thân cuộn cảm</label>
+            <input id="indDecIn" type="text" inputmode="text" autocomplete="off" spellcheck="false" placeholder="VD: 101, 4R7, 4N7, 220K…">
+          </div>
+          <div id="indDecOut"></div>
+        </div>
+        <div class="rev-col">
+          <h2>Có trị số, cần mã</h2>
+          <div class="field-row">
+            <div class="field"><label for="indRevVal">Trị số</label><input id="indRevVal" type="text" inputmode="decimal" value="100"></div>
+            <div class="field" style="max-width:100px"><label for="indRevUnit">Đơn vị</label>
+              <select id="indRevUnit"><option value="nH">nH</option><option value="uH" selected>µH</option><option value="mH">mH</option><option value="H">H</option></select>
+            </div>
+          </div>
+          <div id="indRevOut"></div>
+        </div>
+      </div>
+
+      <h3 class="blockhead">Bảng quy ước ghi mã cuộn cảm</h3>
+      <div class="table-scroll">
+        <table class="cmp">
+          <thead><tr><th>Kiểu mã</th><th>Cách đọc</th><th>Ví dụ</th></tr></thead>
+          <tbody>
+            <tr><td><b>3 chữ số</b> — cuộn cảm công suất</td><td>Hai số đầu là trị số, số cuối là số mũ 10, đơn vị <b>µH</b></td><td><code>101</code> = 100 µH · <code>470</code> = 47 µH · <code>102</code> = 1.000 µH = 1 mH</td></tr>
+            <tr><td><b>3 chữ số</b> — chip cao tần</td><td>Cùng công thức nhưng đơn vị <b>nH</b></td><td><code>120</code> = 12 nH · <code>101</code> = 100 nH</td></tr>
+            <tr><td><b>4 chữ số</b></td><td>Ba số đầu là trị số, số cuối là số mũ 10, đơn vị µH</td><td><code>1002</code> = 10.000 µH = 10 mH</td></tr>
+            <tr><td><b>Chữ R thay dấu phẩy</b></td><td>Đơn vị <b>µH</b></td><td><code>4R7</code> = 4,7 µH · <code>R47</code> = 0,47 µH · <code>1R0</code> = 1 µH — hãng chỉ dùng kiểu này cho dải dưới 10 µH</td></tr>
+            <tr><td><b>Chữ N thay dấu phẩy</b></td><td>Đơn vị <b>nH</b></td><td><code>4N7</code> = 4,7 nH · <code>N47</code> = 0,47 nH</td></tr>
+            <tr><td><b>1–2 chữ số</b></td><td>Đọc thẳng, đơn vị nH (cuộn cảm cao tần)</td><td><code>10</code> = 10 nH · <code>82</code> = 82 nH</td></tr>
+            <tr><td><b>Số + một chữ cái cuối</b></td><td>Chữ cuối là mã dung sai</td><td><code>101K</code> = 100 µH ±10% · <code>4N7S</code> = 4,7 nH ±0,3 nH</td></tr>
+            <tr><td><b>Số kèm Ω hoặc @100MHz</b></td><td>Đây là <b>hạt ferrite</b> — con số là trở kháng, không phải điện cảm</td><td><code>600</code> = 600 Ω tại 100 MHz</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="blockhead">Chữ dung sai của cuộn cảm</h3>
+      <div class="table-scroll">
+        <table class="cmp">
+          <thead><tr><th>Chữ</th><th>Từ 10 nH trở xuống</th><th>Trên 10 nH</th></tr></thead>
+          <tbody>
+            <tr><td><b>B</b></td><td>±0,1 nH</td><td>—</td></tr>
+            <tr><td><b>C</b></td><td>±0,2 nH</td><td>—</td></tr>
+            <tr><td><b>S</b></td><td>±0,3 nH</td><td>—</td></tr>
+            <tr><td><b>D</b></td><td>±0,5 nH</td><td>—</td></tr>
+            <tr><td><b>F</b></td><td>±1 nH</td><td>±1%</td></tr>
+            <tr><td><b>G</b></td><td>—</td><td>±2%</td></tr>
+            <tr><td><b>H</b></td><td>—</td><td>±3%</td></tr>
+            <tr><td><b>J</b></td><td>—</td><td>±5%</td></tr>
+            <tr><td><b>K</b></td><td>—</td><td>±10% (hay gặp nhất ở cuộn cảm nguồn)</td></tr>
+            <tr><td><b>M</b></td><td>—</td><td>±20%</td></tr>
+            <tr><td><b>N</b></td><td>—</td><td>±30%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="result-note">Chữ <b>N</b> vừa là dung sai ±30% vừa là dấu phẩy đơn vị nH — <code>10N</code> hầu như luôn là 10 nH chứ không phải 10 µH ±30%. Cứ đối chiếu với dải trị số hợp lý của mạch để chọn cách đọc.</p>
+    </div>
+
+    <!-- 4.3 VẠCH MÀU -->
+    <div class="subpanel" id="sub-bands">
+      <div class="intro">
+        <h2>Đọc cuộn cảm theo vạch màu</h2>
+        <p>Bảng chữ số và hệ số nhân giống hệt điện trở, chỉ khác hai điểm: đơn vị là <b>µH</b> và dung sai tra theo bảng riêng. Vạch bạc rộng ở đầu trái là dấu báo “đọc theo µH” — điện trở không bao giờ có vạch này.</p>
+      </div>
+      <div class="bandcount-toggle">
+        <button type="button" class="ibc-btn active" data-count="4">4 vạch</button>
+        <button type="button" class="ibc-btn" data-count="5">5 vạch (chính xác)</button>
+      </div>
+      <div class="inductor-visual" id="indVisual"><div class="lead"></div><div class="body" id="indBody"></div><div class="lead"></div></div>
+      <div id="indBandRows"></div>
+      <div class="color-result" id="indColorResult"></div>
+      <div class="hint-box">
+        <span class="lbl">Ghi nhớ khi đọc vạch màu cuộn cảm</span>
+        <ul class="tight">
+          <li><b>Vạch bạc rộng</b> ở đầu trái là dấu quy ước MIL-STD-1285 cho biết trị số tính bằng µH. Nó không tham gia tính toán.</li>
+          <li><b>Hệ số nhân</b>: đen ×1, nâu ×10, đỏ ×100, cam ×1.000, vàng ×10.000, vàng kim ×0,1, bạc ×0,01 — đơn vị µH.</li>
+          <li><b>Dung sai</b> theo bảng riêng của cuộn cảm: nâu ±1%, đỏ ±2%, cam ±3%, vàng ±4%, vàng kim ±5%, bạc ±10%, không vạch ±20%. Khác bảng dung sai điện trở, đừng tra nhầm.</li>
+          <li>Linh kiện có vạch màu mà <b>không</b> có vạch bạc rộng thì đo thang Ω trước khi kết luận: gần 0 Ω là cuộn cảm, ra đúng trị số là điện trở.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 4.4 CÔNG THỨC -->
+    <div class="subpanel" id="sub-calc">
+      <div class="intro">
+        <h2>Máy tính cuộn cảm</h2>
+        <p>Nhập một trị số điện cảm ở ô đầu tiên, tất cả các ô tính bên dưới đều dùng chung trị số đó.</p>
+      </div>
+
+      <div class="calc">
+        <h4>Trị số cuộn cảm đang xét</h4>
+        <div class="field-row">
+          <div class="field"><label for="cL">Điện cảm L</label><input id="cL" type="text" inputmode="decimal" value="100"></div>
+          <div class="field" style="max-width:110px"><label for="cLUnit">Đơn vị</label>
+            <select id="cLUnit"><option value="nH">nH</option><option value="uH" selected>µH</option><option value="mH">mH</option><option value="H">H</option></select>
+          </div>
+        </div>
+        <div id="cLConv"></div>
+      </div>
+
+      <div class="calc">
+        <h4>Cảm kháng ở một tần số</h4>
+        <div class="formula">X_L = 2 · π · f · L   (Ω — với f tính bằng Hz, L bằng H)</div>
+        <div class="field-row">
+          <div class="field"><label for="cFreq">Tần số f</label><input id="cFreq" type="text" inputmode="decimal" value="100"></div>
+          <div class="field" style="max-width:110px"><label for="cFreqUnit">Đơn vị</label>
+            <select id="cFreqUnit"><option value="1">Hz</option><option value="1000" selected>kHz</option><option value="1000000">MHz</option></select>
+          </div>
+        </div>
+        <div id="cXlOut" class="calc-out"></div>
+      </div>
+
+      <div class="calc">
+        <h4>Cộng hưởng với một tụ điện</h4>
+        <div class="formula">f₀ = 1 / (2 · π · √(L · C))    ·    Z₀ = √(L / C)</div>
+        <div class="field-row">
+          <div class="field"><label for="cCap">Điện dung C</label><input id="cCap" type="text" inputmode="decimal" value="100"></div>
+          <div class="field" style="max-width:110px"><label for="cCapUnit">Đơn vị</label>
+            <select id="cCapUnit"><option value="pF">pF</option><option value="nF" selected>nF</option><option value="uF">µF</option></select>
+          </div>
+        </div>
+        <div id="cResoOut" class="calc-out"></div>
+      </div>
+
+      <div class="calc">
+        <h4>Năng lượng tích trữ và hằng số thời gian</h4>
+        <div class="formula">W = ½ · L · I²    ·    τ = L / R    ·    v = L · di/dt</div>
+        <div class="field-row">
+          <div class="field"><label for="cI">Dòng qua cuộn I (A)</label><input id="cI" type="text" inputmode="decimal" value="1"></div>
+          <div class="field"><label for="cR">Điện trở nối tiếp R (Ω)</label><input id="cR" type="text" inputmode="decimal" value="10"></div>
+        </div>
+        <div id="cEnergyOut" class="calc-out"></div>
+      </div>
+
+      <div class="calc">
+        <h4>Ghép hai cuộn cảm</h4>
+        <div class="formula">Nối tiếp: L = L₁ + L₂    ·    Song song: L = (L₁ · L₂) / (L₁ + L₂)</div>
+        <div class="field-row">
+          <div class="field"><label for="cL2">Cuộn thứ hai L₂</label><input id="cL2" type="text" inputmode="decimal" value="100"></div>
+          <div class="field" style="max-width:110px"><label for="cL2Unit">Đơn vị</label>
+            <select id="cL2Unit"><option value="nH">nH</option><option value="uH" selected>µH</option><option value="mH">mH</option><option value="H">H</option></select>
+          </div>
+        </div>
+        <div id="cComboOut" class="calc-out"></div>
+        <p class="result-note">Hai công thức trên bỏ qua hỗ cảm. Nếu hai cuộn đặt sát nhau, nối tiếp cùng chiều từ trường sẽ ra L₁ + L₂ + 2M, ngược chiều thì trừ 2M — muốn ghép thuần cộng thì đặt hai cuộn vuông góc hoặc cách xa nhau.</p>
+      </div>
+
+      <div class="calc">
+        <h4>Quấn lấy đúng trị số — lõi xuyến có hệ số A<sub>L</sub></h4>
+        <div class="formula">L (nH) = A_L · N²    →    N = √( L / A_L )</div>
+        <div class="field">
+          <label for="cAl">Hệ số A<sub>L</sub> của lõi (nH cho mỗi vòng bình phương) — tra theo mã lõi</label>
+          <input id="cAl" type="text" inputmode="decimal" value="250">
+        </div>
+        <div id="cToroidOut" class="calc-out"></div>
+      </div>
+
+      <div class="calc">
+        <h4>Quấn lấy đúng trị số — cuộn một lớp lõi không khí</h4>
+        <div class="formula">L (µH) = 0,394 · r² · N² / (9r + 10ℓ)   — r, ℓ tính bằng cm (công thức Wheeler)</div>
+        <div class="field-row">
+          <div class="field"><label for="cCoilD">Đường kính cuộn d (mm)</label><input id="cCoilD" type="text" inputmode="decimal" value="10"></div>
+          <div class="field"><label for="cCoilLen">Chiều dài cuộn ℓ (mm)</label><input id="cCoilLen" type="text" inputmode="decimal" value="20"></div>
+        </div>
+        <div id="cCoilOut" class="calc-out"></div>
+        <p class="result-note">Công thức Wheeler chỉ đúng cho cuộn <b>một lớp, lõi không khí</b>, và cần ℓ lớn hơn khoảng 0,4·r mới đạt sai số cỡ 1%. Nhét lõi ferrite vào sẽ làm điện cảm tăng lên nhiều lần theo độ từ thẩm của lõi — khi đó phải tính theo A<sub>L</sub> ở ô trên.</p>
+      </div>
+
+      <h3 class="blockhead">Bảng công thức tra nhanh</h3>
+      <div class="table-scroll">
+        <table class="cmp">
+          <thead><tr><th>Cần tính</th><th>Công thức</th><th>Ghi chú khi dùng</th></tr></thead>
+          <tbody>
+            <tr><td>Cảm kháng</td><td><code>X_L = 2πfL</code></td><td>Tần số càng cao cuộn cảm càng cản dòng. Ở một chiều (f = 0) thì X<sub>L</sub> = 0, chỉ còn DCR.</td></tr>
+            <tr><td>Trở kháng nhánh R–L nối tiếp</td><td><code>Z = √(R² + X_L²)</code></td><td>Góc lệch pha φ = arctan(X<sub>L</sub>/R), dòng chậm pha sau áp.</td></tr>
+            <tr><td>Tần số cộng hưởng LC</td><td><code>f₀ = 1/(2π√(LC))</code></td><td>Dùng cho mạch dao động, mạch lọc, bẫy sóng.</td></tr>
+            <tr><td>Năng lượng tích trữ</td><td><code>W = ½LI²</code></td><td>Cơ sở của nguồn xung: mỗi chu kỳ nạp rồi xả đúng chỗ năng lượng này.</td></tr>
+            <tr><td>Hằng số thời gian R–L</td><td><code>τ = L/R</code></td><td>Sau 1τ dòng đạt 63% giá trị cuối, sau 5τ coi như đã ổn định.</td></tr>
+            <tr><td>Điện áp tự cảm</td><td><code>v = L·di/dt</code></td><td>Lý do phải có diode dập khi ngắt dòng qua cuộn dây hoặc rơ-le.</td></tr>
+            <tr><td>Hệ số phẩm chất</td><td><code>Q = 2πfL / DCR</code></td><td>Q càng cao càng ít tổn hao; đọc ở tần số làm việc trong datasheet.</td></tr>
+            <tr><td>Ghép nối tiếp / song song</td><td><code>L = L₁+L₂</code> · <code>1/L = 1/L₁+1/L₂</code></td><td>Giống hệt điện trở, ngược với tụ điện.</td></tr>
+            <tr><td>Điện cảm theo A<sub>L</sub></td><td><code>L(nH) = A_L·N²</code></td><td>Tăng số vòng gấp đôi thì điện cảm tăng gấp bốn.</td></tr>
+            <tr><td>Nhấp nhô dòng của nguồn buck</td><td><code>ΔI = (V_in − V_out)·D / (f·L)</code></td><td>D = V<sub>out</sub>/V<sub>in</sub>. Thường chọn L sao cho ΔI khoảng 30% dòng tải.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="result-note">Ngoài trị số µH, chọn cuộn cảm còn phải xem <b>I<sub>sat</sub></b> (dòng làm lõi bão hoà), <b>I<sub>rms</sub></b> (dòng gây nóng), <b>DCR</b> (điện trở dây) và <b>SRF</b> (tần số tự cộng hưởng — trên mức này cuộn cảm hoạt động như một tụ điện). Bốn thông số đó chỉ có trong datasheet, không suy ra được từ mã in trên thân.</p>
+    </div>
+  </section>
+
+  <!-- TAB 5: KIẾN THỨC CHUẨN -->
+  <section id="tab-know" class="tabpanel">
+    <div class="intro">
+      <h2>Kiến thức chuẩn về linh kiện thụ động</h2>
+      <p>Đọc được mã mới chỉ ra trị số. Muốn thay đúng con linh kiện còn phải biết nó thuộc họ nào, chịu được bao nhiêu, hỏng theo kiểu gì. Năm mục dưới đây gom phần lý thuyết tối thiểu mà thợ sửa mạch cần thuộc — theo đúng chuẩn EIA/IEC và cách ghi của nhà sản xuất.</p>
+    </div>
+
+    <div class="subnav" id="knowSubnav">
+      <button type="button" class="sub-btn active" data-sub="k-res">Điện trở</button>
+      <button type="button" class="sub-btn" data-sub="k-cap">Tụ điện</button>
+      <button type="button" class="sub-btn" data-sub="k-ind">Cuộn cảm &amp; ferrite</button>
+      <button type="button" class="sub-btn" data-sub="k-unit">Đơn vị &amp; dãy chuẩn</button>
+      <button type="button" class="sub-btn" data-sub="k-test">Đo, thay &amp; an toàn</button>
+    </div>
+
+    <!-- 5.1 ĐIỆN TRỞ -->
+    <div class="subpanel active" id="sub-k-res">
+      <h3 class="blockhead">Điện trở làm gì trong mạch</h3>
+      <div class="idgrid">
+        <div class="idcard res">
+          <span class="tagline">Hạn dòng</span>
+          <h4>Giữ dòng ở mức an toàn</h4>
+          <p>Kinh điển là trở nối tiếp với LED: <code>R = (V_nguồn − V_LED) / I_LED</code>. Thiếu con trở này thì LED hoặc chân IC chết ngay lần cấp nguồn đầu tiên.</p>
+        </div>
+        <div class="idcard res">
+          <span class="tagline">Chia áp</span>
+          <h4>Lấy ra một mức áp thấp hơn</h4>
+          <p><code>V_ra = V_vào · R2 / (R1 + R2)</code>. Chỉ đúng khi tải phía sau có trở kháng lớn hơn R2 ít nhất 10 lần — nếu không, chính tải sẽ kéo tụt mức áp.</p>
+        </div>
+        <div class="idcard res">
+          <span class="tagline">Pull-up / pull-down</span>
+          <h4>Ghim chân tín hiệu về một mức</h4>
+          <p>Thường 4,7 kΩ–10 kΩ cho chân số, 2,2 kΩ–4,7 kΩ cho bus I²C. Không có trở kéo, chân để hở sẽ bắt nhiễu và đọc ra mức ngẫu nhiên.</p>
+        </div>
+        <div class="idcard res">
+          <span class="tagline">Phân cực</span>
+          <h4>Định thiên cho transistor</h4>
+          <p>Trở chân B quyết định dòng I<sub>B</sub>, trở chân C quyết định điểm làm việc. Thay sai trị số ở đây là mạch chạy lệch chứ không chết hẳn — rất khó phát hiện.</p>
+        </div>
+        <div class="idcard res">
+          <span class="tagline">Shunt — đo dòng</span>
+          <h4>Biến dòng thành áp để đo</h4>
+          <p>Trị số rất nhỏ (1 mΩ–100 mΩ), ghi kiểu <code>R005</code> = 5 mΩ. Sai số của nó chính là sai số của phép đo dòng, nên luôn dùng loại ±1% và TCR thấp.</p>
+        </div>
+        <div class="idcard res">
+          <span class="tagline">Xả &amp; dập</span>
+          <h4>Xả tụ, dập xung, tải giả</h4>
+          <p>Trở xả song song tụ lọc nguồn (bleeder), trở trong mạch snubber, trở tải giả khi thử nguồn. Đây là nhóm hay phải chịu công suất lớn nhất trong mạch.</p>
+        </div>
+      </div>
+
+      <h3 class="blockhead">Các họ điện trở theo cấu tạo</h3>
+      <div class="table-scroll">
+        <table class="cmp">
+          <thead><tr><th>Họ</th><th>Nhận mặt</th><th>Dung sai · TCR điển hình</th><th>Dùng ở đâu</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><b>Màng than</b><br>carbon film — CF</td>
+              <td>Thân be hoặc nâu nhạt, 4 vạch màu</td>
+              <td>±5% · −200…−500 ppm/°C</td>
+              <td>Mạch phổ thông, giá rẻ. Nhiễu cao, trị số trôi theo nhiệt — không dùng cho mạch đo.</td>
+            </tr>
+            <tr>
+              <td><b>Màng kim loại</b><br>metal film — MF</td>
+              <td>Thân xanh lam hoặc xanh lá, 5 vạch màu</td>
+              <td>±1% · ±50…100 ppm/°C</td>
+              <td>Mặc định của mạch hiện đại: mạch đo, hồi tiếp, âm thanh. Nhiễu rất thấp.</td>
+            </tr>
+            <tr>
+              <td><b>Màng oxit kim loại</b><br>metal oxide — MO</td>
+              <td>Thân xám hoặc be đậm, mập hơn, chịu nóng</td>
+              <td>±2…5% · ±300 ppm/°C</td>
+              <td>Mạch nguồn, vị trí nóng, chịu quá tải và xung tốt hơn màng than.</td>
+            </tr>
+            <tr>
+              <td><b>Dây quấn</b><br>wirewound — WW</td>
+              <td>Vỏ sứ trắng chữ nhật, hoặc vỏ nhôm bắt tản nhiệt</td>
+              <td>±5% · ±30…100 ppm/°C</td>
+              <td>Công suất từ 2 W trở lên. <b>Có điện cảm ký sinh</b> nên không dùng ở cao tần, trừ loại ghi <i>non-inductive</i>.</td>
+            </tr>
+            <tr>
+              <td><b>Dán màng dày</b><br>thick film chip</td>
+              <td>Chip đen, mặt in 3–4 chữ số hoặc mã EIA-96</td>
+              <td>±1% hoặc ±5% · ±100…200 ppm/°C</td>
+              <td>Chiếm hầu hết điện trở trên mạch dán ngày nay.</td>
+            </tr>
+            <tr>
+              <td><b>Dán màng mỏng</b><br>thin film chip</td>
+              <td>Nhìn giống màng dày, phải tra mã hãng mới biết</td>
+              <td>±0,1% · ±10…25 ppm/°C</td>
+              <td>Mạch đo lường, khuếch đại chính xác, chia áp chuẩn.</td>
+            </tr>
+            <tr>
+              <td><b>Cầu chì trở</b><br>fusible resistor</td>
+              <td>Thân thường có <b>vạch trắng rộng</b> hoặc chữ F, hay đứng ngay sau đầu vào nguồn</td>
+              <td>±5% · —</td>
+              <td>Vừa hạn dòng vừa tự đứt khi quá tải. <b>Tuyệt đối không thay bằng trở thường cùng trị số</b> — mất luôn chức năng bảo vệ.</td>
+            </tr>
+            <tr>
+              <td><b>Shunt 4 chân</b><br>Kelvin / 4-terminal</td>
+              <td>Chip lớn 2512 trở lên, bốn má thiếc</td>
+              <td>±0,5…1% · ±50 ppm/°C</td>
+              <td>Hai chân dẫn dòng, hai chân lấy áp — loại bỏ sai số do điện trở mối hàn.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="blockhead">Bảy thông số phải đọc trên datasheet</h3>
+      <div class="table-scroll">
+        <table class="cmp">
+          <thead><tr><th>Thông số</th><th>Nghĩa là gì</th><th>Bẫy hay gặp</th></tr></thead>
+          <tbody>
+            <tr><td><b>Trị số R</b></td><td>Điện trở danh định, đơn vị Ω</td><td>Mã 3 chữ số ngầm định Ω; nhớ là <code>101</code> ở đây = 100 Ω chứ không phải 100 pF.</td></tr>
+            <tr><td><b>Dung sai</b></td><td>Sai lệch cho phép quanh trị số danh định</td><td>±5% của 10 kΩ là ±500 Ω. Ở mạch chia áp hồi tiếp, hai con ±5% có thể cộng sai số thành ±10%.</td></tr>
+            <tr><td><b>Công suất định mức P</b></td><td>Công suất tiêu tán liên tục cho phép, xét ở <b>70 °C</b> môi trường</td><td>Trên 70 °C phải giảm tải tuyến tính về 0 ở 155 °C. Trong hộp máy kín, con trở 1/4 W thực tế chỉ còn chịu được cỡ 1/8 W.</td></tr>
+            <tr><td><b>Điện áp làm việc tối đa</b></td><td>Giới hạn áp đặt lên hai đầu, bất kể công suất còn dư</td><td>Điển hình: 0402 · 50 V — 0603 · 50 V — 0805 · 150 V — 1206 · 200 V. Trở 10 MΩ vỏ 1206 chỉ chịu 200 V dù tính theo công suất ra tới hơn 700 V.</td></tr>
+            <tr><td><b>TCR</b></td><td>Trị số trôi bao nhiêu ppm cho mỗi °C</td><td>100 ppm/°C nghĩa là nóng thêm 50 °C thì trị số lệch 0,5% — đủ làm trôi điểm đặt của mạch hồi tiếp.</td></tr>
+            <tr><td><b>Nhiễu</b></td><td>Nhiễu dòng sinh ra khi có dòng chạy qua, tính bằng µV/V</td><td>Màng than nhiễu gấp hàng chục lần màng kim loại. Nghe thấy rõ ở tầng vào của mạch âm thanh và mạch cảm biến.</td></tr>
+            <tr><td><b>Chịu xung</b></td><td>Năng lượng xung ngắn chịu được, khác hẳn công suất liên tục</td><td>Vị trí nạp tụ nguồn, xả tụ, đầu vào lưới phải chọn loại ghi rõ <i>pulse withstanding</i> hoặc dùng dây quấn / màng oxit.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="blockhead">Kích thước ↔ công suất</h3>
+      <div class="table-scroll">
+        <table class="cmp">
+          <thead><tr><th>Vỏ dán (inch)</th><th>Kích thước</th><th>Công suất</th><th>Loại chân cắm</th><th>Chiều dài thân</th><th>Công suất</th></tr></thead>
+          <tbody>
+            <tr><td><b>0201</b></td><td>0,6 × 0,3 mm</td><td>1/20 W</td><td>Trở nhỏ</td><td>3,2 mm</td><td>1/8 W</td></tr>
+            <tr><td><b>0402</b></td><td>1,0 × 0,5 mm</td><td>1/16 W</td><td>Trở phổ thông</td><td>6,3 mm</td><td>1/4 W</td></tr>
+            <tr><td><b>0603</b></td><td>1,6 × 0,8 mm</td><td>1/10 W</td><td>Trở lớn</td><td>9 mm</td><td>1/2 W</td></tr>
+            <tr><td><b>0805</b></td><td>2,0 × 1,25 mm</td><td>1/8 W</td><td>Trở 1 W</td><td>11 mm</td><td>1 W</td></tr>
+            <tr><td><b>1206</b></td><td>3,2 × 1,6 mm</td><td>1/4 W</td><td>Trở 2 W</td><td>15 mm</td><td>2 W</td></tr>
+            <tr><td><b>1210</b></td><td>3,2 × 2,5 mm</td><td>1/3 W</td><td>Sứ chữ nhật</td><td>Ghi thẳng &ldquo;5W&rdquo;…</td><td>5 W trở lên</td></tr>
+            <tr><td><b>2010</b></td><td>5,0 × 2,5 mm</td><td>3/4 W</td><td rowspan="2">Vỏ nhôm bắt tản nhiệt</td><td rowspan="2">Ghi thẳng trên vỏ</td><td rowspan="2">25–300 W</td></tr>
+            <tr><td><b>2512</b></td><td>6,3 × 3,2 mm</td><td>1 W</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="result-note">Số vỏ dán là kích thước tính bằng <b>phần trăm inch</b>: 0805 = 0,08 × 0,05 inch. Hệ mét ghi khác hẳn — 0805 hệ inch chính là 2012 hệ mét, rất dễ đặt nhầm hàng khi mua.</p>
+
+      <h3 class="blockhead">Chọn và giảm tải (derating)</h3>
+      <div class="hint-box">
+        <span class="lbl">Quy tắc bỏ túi khi chọn điện trở</span>
+        <ul class="tight">
+          <li>Tính công suất thật: <code>P = I²·R = V²/R</code>, rồi chọn con trở có <b>P định mức gấp đôi</b> trở lên. Chạy quá 60% công suất định mức là trở đổi màu và trôi trị số theo thời gian.</li>
+          <li>Điện áp đặt lên trở bị chặn bởi hai giới hạn, lấy giá trị nhỏ hơn: <code>V = √(P·R)</code> và điện áp làm việc tối đa của vỏ.</li>
+          <li>Trở vỏ dán tản nhiệt qua <b>mối hàn và đồng của mạch in</b>. Cùng con 1206 nhưng đường đồng to nhỏ khác nhau thì nhiệt độ chênh nhau vài chục độ.</li>
+          <li>Cần trở công suất lớn mà không có sẵn: ghép <b>song song</b> nhiều con cùng trị số — công suất cộng lại, trị số chia đều. Bốn con 100 Ω 1/4 W song song = 25 Ω 1 W.</li>
+          <li>Chỗ nóng và chỗ chịu xung thì tránh màng than; ưu tiên màng oxit kim loại hoặc dây quấn.</li>
+          <li>Trở đứng cạnh linh kiện nhạy nhiệt (tụ hoá, cảm biến) nên nâng lên một cỡ công suất để hạ nhiệt độ bề mặt.</li>
+        </ul>
+      </div>
+
+      <h3 class="blockhead">Ghép điện trở</h3>
+      <div class="formula">Nối tiếp: R = R₁ + R₂ + …    ·    Song song: 1/R = 1/R₁ + 1/R₂ + …    ·    Hai con bằng nhau song song: R/2</div>
+      <div class="table-scroll">
+        <table class="cmp">
+          <thead><tr><th>Cần</th><th>Cách làm</th><th>Lưu ý</th></tr></thead>
+          <tbody>
+            <tr><td>Trị số lẻ không có sẵn</td><td>Ghép nối tiếp hoặc song song từ dãy E24</td><td>Sai số không tốt lên — hai con ±5% ghép lại vẫn cho kết quả ±5%.</td></tr>
+            <tr><td>Tăng công suất chịu được</td><td>Song song n con cùng trị số</td><td>Công suất ×n, trị số ÷n. Phải cùng loại, cùng lô để chia dòng đều.</td></tr>
+            <tr><td>Tăng điện áp chịu được</td><td>Nối tiếp n con cùng trị số</td><td>Cách chuẩn để làm que đo áp cao: 10 con 1 MΩ nối tiếp chịu áp gấp 10 lần một con.</td></tr>
+            <tr><td>Chia áp</td><td><code>V_ra = V_vào·R2/(R1+R2)</code></td><td>Chọn dòng qua nhánh chia lớn hơn dòng tải ít nhất 10 lần.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="blockhead">Họ &ldquo;trở&rdquo; đặc biệt — nhìn giống trở nhưng không phải trở</h3>
+      <div class="idgrid">
+        <div class="idcard res">
+          <span class="tagline">NTC · 10D-9</span>
+          <h4>Nhiệt trở âm</h4>
+          <p>Nóng lên thì trị số <b>giảm</b>. Dùng hạn dòng khởi động cho nguồn (inrush limiter) và làm cảm biến nhiệt.</p>
+          <p>Mã <code>10D-9</code> = 10 Ω ở 25 °C, đường kính 9 mm. Đo lúc nguội ra đúng trị số, sờ nóng thì trị số tụt — đó là dấu hiệu nhận biết.</p>
+        </div>
+        <div class="idcard res">
+          <span class="tagline">PTC · polyfuse</span>
+          <h4>Nhiệt trở dương &amp; cầu chì tự phục hồi</h4>
+          <p>Nóng lên thì trị số <b>tăng vọt</b>, cắt dòng rồi tự phục hồi khi nguội. Thân thường màu vàng nhạt hoặc xanh, ghi kiểu <code>X110</code> = giữ dòng 1,1 A.</p>
+          <p>Đo lúc nguội chỉ vài Ω. Đã tác động nhiều lần thì trị số giữ lại cao hơn ban đầu.</p>
+        </div>
+        <div class="idcard res">
+          <span class="tagline">MOV · 14D471K</span>
+          <h4>Varistor chống sét</h4>
+          <p>Đĩa xanh dương hoặc cam đứng ngay sau đầu vào lưới. Dưới ngưỡng thì coi như hở mạch, quá ngưỡng thì dẫn để nuốt xung.</p>
+          <p><code>14D471K</code> = đĩa 14 mm, điện áp varistor 470 V, dung sai ±10%. Nứt hoặc cháy đen là đã hy sinh — thay đúng thông số, không thay bằng trở.</p>
+        </div>
+        <div class="idcard res">
+          <span class="tagline">0 Ω</span>
+          <h4>Cầu nối trị số 0</h4>
+          <p>Một vạch đen duy nhất giữa thân, hoặc mặt dán in <code>0</code> / <code>000</code>. Thực tế dưới 50 mΩ, dòng cho phép thường 1–2 A.</p>
+          <p>Dùng làm cầu nối cho máy cắm tự động và làm điểm chọn cấu hình trên mạch.</p>
+        </div>
+        <div class="idcard res">
+          <span class="tagline">VR · 103</span>
+          <h4>Biến trở &amp; chiết áp</h4>
+          <p>Mã đọc như điện trở: <code>103</code> = 10 kΩ toàn dải. Chữ đi kèm cho biết đường đặc tính.</p>
+          <p>Hàng bán phổ biến ở Việt Nam theo chuẩn Nhật: <b>B = tuyến tính</b>, <b>A = log</b> (dùng cho núm âm lượng). Chuẩn Mỹ đời cũ thì ngược lại — cứ vặn nửa hành trình rồi đo để biết chắc.</p>
+        </div>
+        <div class="idcard res">
+          <span class="tagline">Mạng trở · array</span>
+          <h4>Nhiều trở trong một vỏ</h4>
+          <p>Thanh SIP 8–10 chân hoặc chip dán bốn phần tử. Có loại độc lập từng cặp, có loại chung một chân.</p>
+          <p>Mã in là trị số của <b>mỗi</b> phần tử. Hỏng một phần tử là phải thay cả cụm.</p>
+        </div>
+      </div>
+
+      <h3 class="blockhead">Hỏng hóc &amp; cách đo</h3>
+      <div class="hint-box">
+        <span class="lbl">Điện trở hỏng theo những kiểu này</span>
+        <ul class="tight">
+          <li><b>Đứt hẳn</b> là kiểu hỏng phổ biến nhất — đo ra ∞. Trở màng quá tải thường đứt chứ không chập.</li>
+          <li><b>Trôi trị số</b> nguy hiểm hơn: thân đổi màu, trị số tăng 20–50% mà mạch vẫn chạy sai lờ đờ. Trở đã cháy sém thì đo lại đừng tin, cứ thay.</li>
+          <li><b>Đo trong mạch luôn cho trị số nhỏ hơn hoặc bằng thực tế</b>, vì phần mạch còn lại nối song song. Đo ra lớn hơn mã in thì chắc chắn con trở đã hỏng; nhỏ hơn thì chưa kết luận được — phải nhấc một chân.</li>
+          <li>Que đo và tiếp xúc tay cũng có trở. Đo dưới 10 Ω thì chập hai que lại xem đồng hồ chỉ bao nhiêu rồi trừ đi; đo trên 1 MΩ thì đừng cầm tay vào cả hai chân.</li>
+          <li>Trở cháy đen gần như luôn là <b>hậu quả</b>, không phải nguyên nhân. Tìm con chập phía sau (thường là bán dẫn) trước khi cấp nguồn lại.</li>
+          <li>Trở dán nứt do uốn mạch in thì nhìn ngoài vẫn còn nguyên. Nghi ngờ thì đo lại từng con ở khu vực gần vít bắt và mép mạch.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 5.2 TỤ ĐIỆN -->
+    <div class="subpanel" id="sub-k-cap">
+      <h3 class="blockhead">Tụ điện làm gì trong mạch</h3>
+      <div class="idgrid">
+        <div class="idcard">
+          <span class="tagline">Lọc nguồn</span>
+          <h4>San phẳng điện áp một chiều</h4>
+          <p>Tụ hoá dung lượng lớn đứng sau cầu chỉnh lưu. Trị số càng lớn thì nhấp nhô càng nhỏ, nhưng dòng nạp đỉnh càng cao.</p>
+        </div>
+        <div class="idcard">
+          <span class="tagline">Decoupling · 104</span>
+          <h4>Cấp dòng tức thời cho IC</h4>
+          <p>Con <code>104</code> (100 nF) gắn sát chân nguồn của mọi IC số. Nó bù phần dòng mà nguồn ở xa không kịp đưa tới trong vài nano giây.</p>
+        </div>
+        <div class="idcard">
+          <span class="tagline">Ghép tầng</span>
+          <h4>Chặn một chiều, cho xoay chiều qua</h4>
+          <p>Cho tín hiệu đi qua mà không làm xê dịch điểm phân cực của tầng sau. Trị số quyết định tần số cắt phía thấp: <code>f = 1/(2πRC)</code>.</p>
+        </div>
+        <div class="idcard">
+          <span class="tagline">Định thời</span>
+          <h4>Tạo trễ, tạo dao động</h4>
+          <p>Cặp R–C quyết định chu kỳ: <code>τ = R·C</code>. Chỗ này phải dùng tụ ổn định (film hoặc C0G), không dùng gốm Class 2.</p>
+        </div>
+        <div class="idcard">
+          <span class="tagline">Cộng hưởng</span>
+          <h4>Chọn tần số cùng cuộn cảm</h4>
+          <p><code>f₀ = 1/(2π√(LC))</code> — mạch lọc, mạch dao động, bẫy sóng. Sai số của tụ đi thẳng vào sai số tần số.</p>
+        </div>
+        <div class="idcard">
+          <span class="tagline">Snubber · khởi động</span>
+          <h4>Dập xung, chạy động cơ</h4>
+          <p>Tụ film nối tiếp điện trở để dập xung cho rơ-le và triac; tụ dầu trị số µF để khởi động động cơ một pha.</p>
+        </div>
+      </div>
+
+      <h3 class="blockhead">Các họ tụ theo điện môi</h3>
+      <div class="table-scroll">
+        <table class="cmp">
+          <thead><tr><th>Họ</th><th>Dải điện dung</th><th>Cực tính · ESR</th><th>Mạnh ở</th><th>Yếu ở</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><b>Gốm Class 1</b><br>C0G / NP0, U2J, N750</td>
+              <td>0,5 pF – 100 nF</td>
+              <td>Không cực · ESR rất thấp</td>
+              <td>Ổn định gần như tuyệt đối: 0 ±30 ppm/°C, không trôi theo điện áp, không già hoá, không kêu áp điện.</td>
+              <td>Dung lượng nhỏ; cùng trị số thì to và đắt hơn Class 2.</td>
+            </tr>
+            <tr>
+              <td><b>Gốm Class 2</b><br>X7R, X5R, Y5V, Z5U</td>
+              <td>100 pF – 100 µF</td>
+              <td>Không cực · ESR rất thấp</td>
+              <td>Dung lượng lớn trong vỏ nhỏ, giá rẻ, làm việc ở tần số cao rất tốt. Lựa chọn mặc định cho decoupling.</td>
+              <td><b>Mất dung lượng theo điện áp một chiều, theo nhiệt độ và theo thời gian</b>; có hiệu ứng áp điện gây tiếng rít.</td>
+            </tr>
+            <tr>
+              <td><b>Film PET</b><br>MKT, mylar — hộp vàng hoặc xanh</td>
+              <td>1 nF – 10 µF</td>
+              <td>Không cực · ESR thấp</td>
+              <td>Rẻ, ổn định hơn hẳn gốm Class 2, loại tráng kim tự phục hồi khi bị đánh thủng điểm.</td>
+              <td>Trôi theo nhiệt nhiều hơn PP, tổn hao cao hơn ở tần số cao.</td>
+            </tr>
+            <tr>
+              <td><b>Film PP</b><br>MKP, CBB — polypropylene</td>
+              <td>100 pF – 100 µF</td>
+              <td>Không cực · ESR rất thấp</td>
+              <td>Tổn hao cực thấp, chịu dòng xoay chiều và dV/dt lớn. Dùng cho snubber, phân tần loa, mạch cộng hưởng công suất.</td>
+              <td>Cồng kềnh, đắt.</td>
+            </tr>
+            <tr>
+              <td><b>Tụ an toàn</b><br>lớp X1, X2, Y1, Y2</td>
+              <td>1 nF – 2,2 µF</td>
+              <td>Không cực</td>
+              <td>Được chứng nhận để nối thẳng vào lưới điện. Lớp X mắc giữa hai dây pha–trung tính, lớp Y mắc xuống vỏ hoặc đất; cả hai hỏng theo kiểu <b>hở mạch</b>.</td>
+              <td>Bắt buộc dùng đúng lớp: X2 chịu 275 V~ và xung 2,5 kV, Y2 chịu 250 V~ và xung 5 kV. <b>Không thay bằng tụ film thường</b>.</td>
+            </tr>
+            <tr>
+              <td><b>Hoá nhôm</b><br>vỏ nhôm có vạch âm</td>
+              <td>0,1 µF – 100 mF</td>
+              <td><b>Có cực</b> · ESR cao</td>
+              <td>Dung lượng lớn nhất trên mỗi đồng bỏ ra. Xương sống của mọi mạch lọc nguồn.</td>
+              <td>Tuổi thọ hữu hạn vì dung dịch bay hơi, ESR tăng theo tuổi, sợ nóng, đấu ngược cực là nổ.</td>
+            </tr>
+            <tr>
+              <td><b>Hoá polymer</b><br>OS-CON, vỏ đen hoặc nhôm lùn</td>
+              <td>10 µF – 1 mF</td>
+              <td><b>Có cực</b> · ESR cực thấp</td>
+              <td>ESR thấp hơn tụ hoá thường cả chục lần, chịu ripple lớn, tuổi thọ dài, ít sợ nóng.</td>
+              <td>Đắt, điện áp định mức thường chỉ tới 35 V, dòng rò cao hơn.</td>
+            </tr>
+            <tr>
+              <td><b>Tantalum</b><br>chip vàng hoặc đen có <b>vạch dương</b></td>
+              <td>0,1 µF – 1 mF</td>
+              <td><b>Có cực</b> · ESR trung bình</td>
+              <td>Nhỏ gọn, ổn định theo nhiệt độ và thời gian, không khô như tụ hoá nhôm.</td>
+              <td><b>Hỏng theo kiểu chập và bốc cháy.</b> Bắt buộc dùng ở ≤50% điện áp định mức. Chú ý vạch trên tụ tantalum là cực <b>dương</b>, ngược với tụ hoá nhôm.</td>
+            </tr>
+            <tr>
+              <td><b>Mica bạc</b></td>
+              <td>1 pF – 10 nF</td>
+              <td>Không cực · ESR rất thấp</td>
+              <td>Cực kỳ ổn định và chính xác, chịu áp cao, dùng ở mạch cao tần công suất.</td>
+              <td>Hiếm, đắt, dung lượng nhỏ.</td>
+            </tr>
+            <tr>
+              <td><b>Siêu tụ</b><br>supercapacitor</td>
+              <td>0,1 F – vài nghìn F</td>
+              <td><b>Có cực</b> · ESR cao</td>
+              <td>Trữ năng lượng thay pin nuôi đồng hồ, RAM, bộ nhớ tạm khi mất điện.</td>
+              <td>Điện áp định mức rất thấp (2,5–5,5 V), dòng rò cao, không lọc được tần số cao.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="blockhead">Đọc mã điện môi gốm 3 ký tự (EIA — Class 2)</h3>
+      <div class="table-scroll">
+        <table class="cmp">
+          <thead><tr><th>Ký tự 1 — nhiệt độ thấp nhất</th><th>Ký tự 2 — nhiệt độ cao nhất</th><th>Ký tự 3 — sai lệch điện dung trong dải đó</th></tr></thead>
+          <tbody>
+            <tr><td><b>X</b> = −55 °C</td><td><b>5</b> = +85 °C</td><td><b>F</b> = ±7,5% · <b>P</b> = ±10%</td></tr>
+            <tr><td><b>Y</b> = −30 °C</td><td><b>6</b> = +105 °C</td><td><b>R</b> = ±15% · <b>S</b> = ±22%</td></tr>
+            <tr><td><b>Z</b> = +10 °C</td><td><b>7</b> = +125 °C</td><td><b>T</b> = +22%/−33% · <b>U</b> = +22%/−56%</td></tr>
+            <tr><td>—</td><td><b>8</b> = +150 °C · <b>9</b> = +200 °C</td><td><b>V</b> = +22%/−82%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="result-note">Vậy <b>X7R</b> = −55…+125 °C, điện dung lệch tối đa ±15% — loại dùng được ở hầu hết mọi chỗ. <b>X5R</b> giống thế nhưng chỉ tới 85 °C. <b>Y5V</b> = −30…+85 °C với sai lệch <b>+22%/−82%</b>: con tụ 10 µF Y5V ở 80 °C chỉ còn chưa tới 2 µF, tuyệt đối không dùng cho mạch định thời hay lọc quan trọng. Nhóm Class 1 ghi kiểu <b>C0G</b> (tên MIL cũ là NP0): chữ đầu là phần trị số của hệ số nhiệt, chữ số là bội số, chữ cuối là dung sai của hệ số nhiệt — C0G nghĩa là 0 ppm/°C, dung sai ±30 ppm/°C.</p>
+
+      <h3 class="blockhead">Thông số phải đọc trên datasheet tụ</h3>
+      <div class="table-scroll">
+        <table class="cmp">
+          <thead><tr><th>Thông số</th><th>Nghĩa là gì</th><th>Bẫy hay gặp</th></tr></thead>
+          <tbody>
+            <tr><td><b>Điện dung C</b></td><td>Trị số danh định, đo ở điều kiện chuẩn (thường 1 kHz hoặc 1 MHz, 1 V~)</td><td>Trị số ghi trên vỏ là lúc <b>chưa có điện áp một chiều đặt vào</b> — xem mục ba hiệu ứng bên dưới.</td></tr>
+            <tr><td><b>Dung sai</b></td><td>Chữ cái đi sau mã: J ±5%, K ±10%, M ±20%, Z +80%/−20%</td><td>Tụ hoá thường là M hoặc Z. Đo ra thiếu 15% so với vỏ vẫn có thể là tụ còn tốt.</td></tr>
+            <tr><td><b>Điện áp định mức</b></td><td>Áp một chiều tối đa đặt liên tục lên tụ</td><td>Tụ một chiều <b>không</b> dùng thay tụ xoay chiều. Một con 400 V DC không chịu nổi 230 V~ liên tục nếu không phải loại X/Y.</td></tr>
+            <tr><td><b>ESR</b></td><td>Điện trở nối tiếp tương đương — phần biến dòng ripple thành nhiệt</td><td>Đây là <b>thông số hỏng trước tiên</b> ở tụ hoá. Điện dung vẫn đủ mà ESR tăng gấp mấy lần là mạch nguồn đã chạy sai.</td></tr>
+            <tr><td><b>Dòng ripple I<sub>rms</sub></b></td><td>Dòng xoay chiều cho phép chạy qua, ứng với một tần số và nhiệt độ cho trước</td><td>Vượt ngưỡng thì tụ tự nóng từ bên trong và khô rất nhanh. Đây mới là lý do tụ nguồn phồng, không phải do &ldquo;quá áp&rdquo;.</td></tr>
+            <tr><td><b>tan δ</b> (DF)</td><td>Hệ số tổn hao</td><td>Cách ghi khác của cùng câu chuyện ESR, hay gặp ở tụ gốm và tụ film.</td></tr>
+            <tr><td><b>Dòng rò</b></td><td>Dòng một chiều rỉ qua tụ khi đã nạp đầy</td><td>Tụ hoá để lâu không dùng có dòng rò cao; cấp áp từ từ qua trở hạn dòng để &ldquo;luyện&rdquo; lại lớp oxit.</td></tr>
+            <tr><td><b>SRF</b></td><td>Tần số tự cộng hưởng</td><td>Trên tần số này tụ hoạt động như một <b>cuộn cảm</b>, hết tác dụng lọc. Vỏ càng nhỏ, chân càng ngắn thì SRF càng cao.</td></tr>
+            <tr><td><b>Tuổi thọ &amp; nhiệt độ</b></td><td>Ghi kiểu <code>2000 h @ 105 °C</code></td><td>Cứ hạ 10 °C nhiệt độ làm việc thì tuổi thọ nhân đôi: <code>L = L₀ · 2^((T_max − T_thực)/10)</code>. Tụ 2000 h ở 105 °C chạy thực tế ở 65 °C sẽ sống khoảng 32.000 giờ.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="blockhead">Ba hiệu ứng làm tụ gốm &ldquo;hụt&rdquo; dung lượng</h3>
+      <div class="idgrid">
+        <div class="idcard warn">
+          <span class="tagline">DC bias</span>
+          <h4>Mất dung lượng theo điện áp</h4>
+          <p>Đây là cái bẫy lớn nhất của tụ gốm Class 2. Điện áp một chiều đặt lên tụ càng cao thì điện dung thật càng tụt.</p>
+          <p>Ví dụ điển hình: tụ <b>10 µF X5R 6,3 V vỏ 0805</b> khi làm việc ở 5 V chỉ còn khoảng <b>2–3 µF</b>. Cách chữa: chọn điện áp định mức <b>gấp đôi</b> áp làm việc, hoặc lên một cỡ vỏ lớn hơn.</p>
+        </div>
+        <div class="idcard warn">
+          <span class="tagline">Hệ số nhiệt</span>
+          <h4>Mất dung lượng theo nhiệt độ</h4>
+          <p>Chính là ký tự thứ ba trong mã điện môi. X7R lệch tới ±15% trong dải làm việc, Y5V lệch tới −82%.</p>
+          <p>Mạch định thời, mạch lọc và mạch dao động phải dùng C0G hoặc tụ film, không dùng Class 2.</p>
+        </div>
+        <div class="idcard warn">
+          <span class="tagline">Aging</span>
+          <h4>Mất dung lượng theo thời gian</h4>
+          <p>Gốm Class 2 già hoá theo hàm lô-ga-rít: X7R mất cỡ <b>1–2% mỗi thập kỷ giờ</b>, Y5V mất nhiều hơn. Nằm trên kệ một năm đã hụt vài phần trăm.</p>
+          <p>Nung quá điểm Curie (kể cả lúc hàn) sẽ &ldquo;xoá&rdquo; tuổi và tụ bắt đầu già lại từ đầu. Class 1 không có hiện tượng này.</p>
+        </div>
+        <div class="idcard warn">
+          <span class="tagline">Piezo / microphonic</span>
+          <h4>Tụ gốm biết kêu và biết nghe</h4>
+          <p>Gốm Class 2 có tính áp điện: điện áp xoay chiều làm nó rung, sinh tiếng rít nghe được ở mạch nguồn xung.</p>
+          <p>Chiều ngược lại cũng đúng — rung động cơ học biến thành nhiễu điện, nên tránh dùng Class 2 ở đầu vào mạch khuếch đại nhạy.</p>
+        </div>
+      </div>
+
+      <h3 class="blockhead">Giảm tải và ghép tụ</h3>
+      <div class="formula">Song song: C = C₁ + C₂ + …    ·    Nối tiếp: 1/C = 1/C₁ + 1/C₂ + …    ·    W = ½·C·V²    ·    X_C = 1/(2πfC)</div>
+      <div class="hint-box">
+        <span class="lbl">Chọn điện áp định mức cho đúng</span>
+        <ul class="tight">
+          <li><b>Tụ hoá nhôm</b>: dùng ở không quá 80% điện áp định mức; ở mạch nguồn nên để 50–60% cho mát và bền.</li>
+          <li><b>Tantalum</b>: bắt buộc ≤50% điện áp định mức, chỗ có dòng nạp đột ngột thì còn phải thấp hơn. Đây là điều kiện sống còn vì nó hỏng theo kiểu chập và cháy.</li>
+          <li><b>Gốm Class 2</b>: chọn điện áp định mức gấp đôi áp làm việc — không phải vì sợ đánh thủng mà vì hiệu ứng DC bias.</li>
+          <li><b>Nối tiếp tụ để chịu áp cao</b> thì phải mắc thêm trở cân áp song song từng tụ (thường 100 kΩ–470 kΩ), nếu không dòng rò lệch nhau sẽ dồn áp lên một con và làm nó nổ.</li>
+          <li>Ghép <b>song song</b> tụ hoá lớn với tụ gốm 100 nF là cách làm chuẩn: tụ hoá lo phần năng lượng, tụ gốm lo phần tần số cao mà tụ hoá không với tới.</li>
+          <li>Tụ nối vào lưới điện xoay chiều phải là <b>tụ an toàn lớp X hoặc Y</b> có chứng nhận, không phải tụ film thường dù ghi 630 V.</li>
+        </ul>
+      </div>
+
+      <h3 class="blockhead">Thay tụ cho đúng</h3>
+      <div class="table-scroll">
+        <table class="cmp">
+          <thead><tr><th>Tiêu chí</th><th>Được phép</th><th>Không được</th></tr></thead>
+          <tbody>
+            <tr><td>Điện dung</td><td>Bằng, hoặc lớn hơn một cỡ ở mạch lọc nguồn</td><td>Đổi trị số ở mạch định thời, lọc, cộng hưởng — trị số ở đó là kết quả tính toán, không phải &ldquo;càng to càng tốt&rdquo;.</td></tr>
+            <tr><td>Điện áp</td><td>Bằng hoặc cao hơn</td><td>Thấp hơn, dù chỉ một nấc.</td></tr>
+            <tr><td>Nhiệt độ</td><td>Thay loại 85 °C bằng loại 105 °C</td><td>Thay 105 °C bằng 85 °C, nhất là tụ nằm gần tản nhiệt hoặc trong nguồn xung.</td></tr>
+            <tr><td>ESR</td><td>Thay tụ thường bằng tụ low-ESR ở mạch nguồn xung</td><td>Thay tụ low-ESR bằng tụ thường ở ngõ ra nguồn xung — mạch sẽ nóng và nhấp nhô lớn. Ngược lại, một số IC ổn áp tuyến tính đời cũ lại <b>cần</b> ESR tối thiểu mới ổn định; hạ ESR quá thấp thì mạch tự dao động.</td></tr>
+            <tr><td>Kích thước</td><td>Nhỏ hơn nếu cùng thông số</td><td>Chọn vỏ quá nhỏ so với dòng ripple — diện tích toả nhiệt không đủ, tụ khô sớm.</td></tr>
+            <tr><td>Cực tính</td><td>Thay tụ có cực bằng tụ không cực cùng trị số và cùng mức áp</td><td>Lắp ngược cực tụ hoá hoặc tantalum. Vạch trên tụ nhôm là cực <b>âm</b>, vạch trên tụ tantalum là cực <b>dương</b>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 5.3 CUỘN CẢM -->
+    <div class="subpanel" id="sub-k-ind">
+      <div class="intro">
+        <h2>Cuộn cảm nhìn từ phía chọn linh kiện</h2>
+        <p>Cách đọc mã, đọc vạch màu và các công thức tính đã nằm ở tab <b>Cuộn cảm</b>. Mục này nói phần còn lại: những thông số quyết định cuộn cảm có sống được trong mạch hay không, và lõi làm bằng gì thì dùng ở đâu.</p>
+      </div>
+
+      <h3 class="blockhead">Bốn thông số quyết định, không có trên thân linh kiện</h3>
+      <div class="table-scroll">
+        <table class="cmp">
+          <thead><tr><th>Thông số</th><th>Nghĩa là gì</th><th>Chọn thiếu thì sao</th></tr></thead>
+          <tbody>
+            <tr><td><b>I<sub>sat</sub></b><br>dòng bão hoà</td><td>Dòng làm điện cảm tụt xuống còn 70–80% trị số danh định vì lõi đã bão hoà từ</td><td>Lõi bão hoà thì cuộn cảm gần như biến mất, dòng vọt lên rất nhanh — IC nguồn nóng rồi chết. Đây là lỗi chọn sai phổ biến nhất.</td></tr>
+            <tr><td><b>I<sub>rms</sub></b><br>dòng gây nóng</td><td>Dòng hiệu dụng làm cuộn nóng thêm khoảng 40 °C</td><td>Cuộn nóng, mất hiệu suất, lâu ngày cháy lớp cách điện. Chọn cuộn theo giá trị nhỏ hơn trong hai dòng I<sub>sat</sub> và I<sub>rms</sub>.</td></tr>
+            <tr><td><b>DCR</b><br>điện trở dây một chiều</td><td>Điện trở thuần của sợi dây quấn, đơn vị mΩ</td><td>DCR cao thì tổn hao <code>P = I²·DCR</code> lớn, hiệu suất nguồn tụt và cuộn nóng. Cùng trị số µH thì cuộn to hơn thường có DCR thấp hơn.</td></tr>
+            <tr><td><b>SRF</b><br>tần số tự cộng hưởng</td><td>Tần số mà điện cảm cộng hưởng với điện dung ký sinh giữa các vòng dây</td><td>Trên SRF, cuộn cảm hành xử như một <b>tụ điện</b> — mất hoàn toàn tác dụng chặn cao tần. Chọn SRF cao hơn tần số làm việc vài lần.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="blockhead">Vật liệu lõi — quyết định dùng được ở dải tần nào</h3>
+      <div class="table-scroll">
+        <table class="cmp">
+          <thead><tr><th>Lõi</th><th>Dải tần</th><th>Đặc điểm</th><th>Gặp ở đâu</th></tr></thead>
+          <tbody>
+            <tr><td><b>Không khí</b></td><td>1 MHz – vài GHz</td><td>Không bao giờ bão hoà, tổn hao rất thấp, nhưng điện cảm nhỏ và dễ bức xạ ra ngoài</td><td>Mạch cao tần, cuộn vài vòng trên board RF</td></tr>
+            <tr><td><b>Bột sắt</b><br>iron powder</td><td>10 kHz – 50 MHz</td><td>Bão hoà mềm (điện cảm giảm từ từ), tổn hao trung bình, giá rẻ</td><td>Lọc nguồn, cuộn xuyến màu vàng–trắng trong nguồn máy tính</td></tr>
+            <tr><td><b>Ferrite MnZn</b></td><td>10 kHz – 2 MHz</td><td>Độ từ thẩm rất cao nên ít vòng đã đủ điện cảm, nhưng <b>bão hoà cứng</b> — quá ngưỡng là sụp ngay</td><td>Biến áp xung, cuộn nguồn buck/boost, lọc nhiễu tần thấp</td></tr>
+            <tr><td><b>Ferrite NiZn</b></td><td>1 MHz – 500 MHz</td><td>Điện trở suất cao, tổn hao thấp ở cao tần</td><td>Hạt ferrite chống nhiễu, cuộn chặn cao tần</td></tr>
+            <tr><td><b>Sendust / Kool-Mµ</b></td><td>10 kHz – 1 MHz</td><td>Bão hoà mềm, tổn hao thấp hơn bột sắt, chịu thành phần dòng một chiều lớn</td><td>Cuộn PFC, nguồn công suất lớn</td></tr>
+            <tr><td><b>Tôn silic lá ghép</b></td><td>50 Hz – 400 Hz</td><td>Chịu từ thông lớn ở tần số lưới</td><td>Biến áp nguồn, cuộn chặn tần số lưới</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="blockhead">Che chắn và hạt ferrite</h3>
+      <div class="idgrid">
+        <div class="idcard ind">
+          <span class="tagline">Shielded / unshielded</span>
+          <h4>Cuộn có che chắn hay không</h4>
+          <p>Loại <b>không che chắn</b> hở lõi ra ngoài, rẻ và DCR thấp nhưng bức xạ từ trường sang linh kiện bên cạnh.</p>
+          <p>Loại <b>che chắn</b> bọc kín bằng ferrite hoặc keo pha ferrite, nhiễu thấp hơn hẳn — gần như bắt buộc ở mạch đặt cạnh cảm biến, ăng-ten hoặc đường tín hiệu nhỏ.</p>
+        </div>
+        <div class="idcard ind">
+          <span class="tagline">600 Ω @ 100 MHz</span>
+          <h4>Hạt ferrite không phải cuộn cảm</h4>
+          <p>Con số in trên hạt ferrite là <b>trở kháng tại 100 MHz</b>, không phải µH. Nhiệm vụ của nó là biến nhiễu cao tần thành nhiệt.</p>
+          <p>Ba thông số phải xem: trở kháng ở đúng tần số cần chặn, <b>dòng định mức</b>, và <b>DCR</b> — vì toàn bộ dòng nguồn chạy qua nó.</p>
+        </div>
+        <div class="idcard ind">
+          <span class="tagline">4 chân trở lên</span>
+          <h4>Cuộn chung chế độ</h4>
+          <p>Hai cuộn quấn trên cùng một lõi: dòng tín hiệu đi–về triệt tiêu từ trường của nhau nên qua tự do, còn nhiễu cùng pha trên cả hai dây thì bị chặn.</p>
+          <p>Đo ra hai cuộn riêng biệt không thông nhau — đừng đọc như cuộn cảm hai chân.</p>
+        </div>
+        <div class="idcard ind">
+          <span class="tagline">Dấu chấm đầu dây</span>
+          <h4>Chấm trên thân nghĩa là gì</h4>
+          <p>Chấm hoặc gạch ở một đầu cuộn cảm dán là <b>dấu đầu ngoài của cuộn dây</b>. Lắp sao cho đầu ngoài nối về phía điểm ít dao động điện áp sẽ giảm nhiễu bức xạ.</p>
+          <p>Đây không phải cực tính bắt buộc — lắp ngược vẫn chạy, chỉ nhiễu nhiều hơn một chút.</p>
+        </div>
+      </div>
+
+      <h3 class="blockhead">Nhớ khi thay cuộn cảm</h3>
+      <div class="hint-box">
+        <span class="lbl">Thay cuộn cảm nguồn xung</span>
+        <ul class="tight">
+          <li>Khớp cả bốn: trị số µH, I<sub>sat</sub>, I<sub>rms</sub> và DCR. Chỉ khớp mỗi µH là chưa đủ.</li>
+          <li>Trị số lớn hơn làm nhấp nhô dòng nhỏ hơn nhưng đáp ứng chậm đi; nhỏ hơn thì ngược lại. Lệch quá 30% thì nên tính lại theo <code>ΔI = (V_vào − V_ra)·D/(f·L)</code>.</li>
+          <li>Cuộn cảm là linh kiện <b>hiếm khi tự hỏng</b>. Thấy cuộn cháy thì gần như chắc chắn có con bán dẫn chập ở phía sau — tìm nguyên nhân trước khi cấp nguồn lại.</li>
+          <li>Chập vòng là kiểu hỏng khó phát hiện nhất: đo thang Ω vẫn thông, phải so trị số bằng LCR mới ra.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 5.4 ĐƠN VỊ -->
+    <div class="subpanel" id="sub-k-unit">
+      <h3 class="blockhead">Tiền tố đơn vị</h3>
+      <div class="table-scroll">
+        <table class="cmp">
+          <thead><tr><th>Tiền tố</th><th>Ký hiệu</th><th>Hệ số</th><th>Hay gặp ở</th></tr></thead>
+          <tbody>
+            <tr><td>pico</td><td><b>p</b></td><td>10⁻¹² = 0,000000000001</td><td>Điện dung tụ gốm nhỏ (pF)</td></tr>
+            <tr><td>nano</td><td><b>n</b></td><td>10⁻⁹</td><td>Điện dung (nF), điện cảm cao tần (nH)</td></tr>
+            <tr><td>micro</td><td><b>µ</b> (u)</td><td>10⁻⁶</td><td>Điện dung tụ hoá (µF), cuộn cảm nguồn (µH)</td></tr>
+            <tr><td>mili</td><td><b>m</b></td><td>10⁻³</td><td>Điện trở shunt (mΩ), điện cảm lớn (mH)</td></tr>
+            <tr><td>—</td><td>—</td><td>1</td><td>Ω, F, H, V, A</td></tr>
+            <tr><td>kilo</td><td><b>k</b></td><td>10³</td><td>Điện trở (kΩ), tần số (kHz)</td></tr>
+            <tr><td>mega</td><td><b>M</b></td><td>10⁶</td><td>Điện trở (MΩ), tần số (MHz)</td></tr>
+            <tr><td>giga</td><td><b>G</b></td><td>10⁹</td><td>Điện trở cách điện (GΩ), tần số (GHz)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="result-note">Chữ <b>M</b> viết hoa là mega, chữ <b>m</b> viết thường là mili — sai một nét là lệch 10⁹ lần. Riêng ở mã tụ theo IEC, chữ <b>m</b> thường nghĩa là mF; còn trên điện trở, <code>4M7</code> luôn là 4,7 MΩ.</p>
+
+      <h3 class="blockhead">Quy đổi điện dung — bảng phải thuộc</h3>
+      <div class="table-scroll">
+        <table class="cmp">
+          <thead><tr><th>pF</th><th>nF</th><th>µF</th><th>Mã 3 chữ số</th><th>Thường thấy ở</th></tr></thead>
+          <tbody>
+            <tr><td>10 pF</td><td>0,01 nF</td><td>0,00001 µF</td><td><code>100</code></td><td>Mạch dao động, bù tần</td></tr>
+            <tr><td>100 pF</td><td>0,1 nF</td><td>0,0001 µF</td><td><code>101</code></td><td>Lọc cao tần</td></tr>
+            <tr><td>1.000 pF</td><td>1 nF</td><td>0,001 µF</td><td><code>102</code></td><td>Snubber nhỏ, lọc tín hiệu</td></tr>
+            <tr><td>10.000 pF</td><td>10 nF</td><td>0,01 µF</td><td><code>103</code></td><td>Lọc, ghép tầng</td></tr>
+            <tr><td>100.000 pF</td><td>100 nF</td><td>0,1 µF</td><td><code>104</code></td><td><b>Tụ decoupling kinh điển</b></td></tr>
+            <tr><td>1.000.000 pF</td><td>1.000 nF</td><td>1 µF</td><td><code>105</code></td><td>Lọc nguồn nhỏ, ghép âm thanh</td></tr>
+            <tr><td>10.000.000 pF</td><td>10.000 nF</td><td>10 µF</td><td><code>106</code></td><td>Lọc nguồn</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="blockhead">Dãy giá trị chuẩn E — vì sao không có trở 13 kΩ ±10%</h3>
+      <div class="table-scroll">
+        <table class="cmp">
+          <thead><tr><th>Dãy</th><th>Số giá trị mỗi thập kỷ</th><th>Dung sai đi kèm</th><th>Các trị số</th></tr></thead>
+          <tbody>
+            <tr><td><b>E6</b></td><td>6</td><td>±20%</td><td>10 · 15 · 22 · 33 · 47 · 68</td></tr>
+            <tr><td><b>E12</b></td><td>12</td><td>±10%</td><td>10 · 12 · 15 · 18 · 22 · 27 · 33 · 39 · 47 · 56 · 68 · 82</td></tr>
+            <tr><td><b>E24</b></td><td>24</td><td>±5%</td><td>E12 cộng thêm 11 · 13 · 16 · 20 · 24 · 30 · 36 · 43 · 51 · 62 · 75 · 91</td></tr>
+            <tr><td><b>E48</b></td><td>48</td><td>±2%</td><td>Bước 4,6%: 100 · 105 · 110 · 115 · 121 · 127 …</td></tr>
+            <tr><td><b>E96</b></td><td>96</td><td>±1%</td><td>Bước 2,3%: 100 · 102 · 105 · 107 · 110 · 113 … — đây chính là bảng mà mã dán <b>EIA-96</b> tra theo</td></tr>
+            <tr><td><b>E192</b></td><td>192</td><td>±0,5% trở xuống</td><td>Bước 1,1%, dùng cho linh kiện đo lường</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="result-note">Các dãy này chia đều theo thang lô-ga-rít, sao cho dải dung sai của hai trị số liền nhau vừa chạm nhau — nghĩa là <b>mọi trị số cần dùng đều có một mã phủ tới</b>, không thừa không thiếu. Vì thế trong dãy ±10% có 12 kΩ chứ không có 13 kΩ, còn 13 kΩ chỉ xuất hiện từ dãy E24 ±5% trở đi.</p>
+
+      <h3 class="blockhead">Chữ dung sai — cùng một chữ, ba nghĩa khác nhau</h3>
+      <div class="table-scroll">
+        <table class="cmp">
+          <thead><tr><th>Chữ</th><th>Điện trở</th><th>Tụ &gt; 10 pF</th><th>Tụ ≤ 10 pF</th><th>Cuộn cảm &gt; 10 nH</th></tr></thead>
+          <tbody>
+            <tr><td><b>B</b></td><td>±0,1%</td><td>±0,1%</td><td>±0,1 pF</td><td>—</td></tr>
+            <tr><td><b>C</b></td><td>±0,25%</td><td>±0,25%</td><td>±0,25 pF</td><td>—</td></tr>
+            <tr><td><b>D</b></td><td>±0,5%</td><td>±0,5%</td><td>±0,5 pF</td><td>—</td></tr>
+            <tr><td><b>F</b></td><td>±1%</td><td>±1%</td><td>±1 pF</td><td>±1%</td></tr>
+            <tr><td><b>G</b></td><td>±2%</td><td>±2%</td><td>±2 pF</td><td>±2%</td></tr>
+            <tr><td><b>J</b></td><td>±5%</td><td>±5%</td><td>—</td><td>±5%</td></tr>
+            <tr><td><b>K</b></td><td>±10%</td><td>±10%</td><td>—</td><td>±10%</td></tr>
+            <tr><td><b>M</b></td><td>±20%</td><td>±20%</td><td>—</td><td>±20%</td></tr>
+            <tr><td><b>Z</b></td><td>—</td><td>+80% / −20%</td><td>—</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="result-note">Bẫy lớn nhất nằm ở chữ <b>K</b> và chữ <b>M</b>: trên điện trở chúng còn có thể là <b>bội số</b> (<code>4K7</code> = 4,7 kΩ, <code>1M0</code> = 1 MΩ) chứ không phải dung sai. Cứ xem vị trí: chữ nằm <b>giữa, thay cho dấu phẩy</b> là bội số; chữ đứng <b>cuối, sau đủ bộ chữ số</b> là dung sai. Tương tự, chữ <b>N</b> trên cuộn cảm vừa là dung sai ±30% vừa là dấu phẩy của đơn vị nH.</p>
+
+      <h3 class="blockhead">Mã 3 chữ số — đơn vị ngầm định theo từng họ</h3>
+      <div class="table-scroll">
+        <table class="cmp">
+          <thead><tr><th>Mã in</th><th>Nếu là điện trở</th><th>Nếu là tụ điện</th><th>Nếu là cuộn cảm công suất</th><th>Nếu là cuộn cảm cao tần</th></tr></thead>
+          <tbody>
+            <tr><td><code>100</code></td><td>10 Ω</td><td>10 pF</td><td>10 µH</td><td>10 nH</td></tr>
+            <tr><td><code>101</code></td><td>100 Ω</td><td>100 pF</td><td>100 µH</td><td>100 nH</td></tr>
+            <tr><td><code>103</code></td><td>10 kΩ</td><td>10 nF</td><td>10 mH</td><td>10 µH</td></tr>
+            <tr><td><code>104</code></td><td>100 kΩ</td><td>100 nF</td><td>100 mH</td><td>100 µH</td></tr>
+            <tr><td><code>4R7</code></td><td>4,7 Ω</td><td>4,7 pF</td><td>4,7 µH</td><td>4,7 µH</td></tr>
+            <tr><td><code>475</code></td><td>4,7 MΩ</td><td>4,7 µF</td><td>—</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="result-note">Cùng một mã, ba trị số khác nhau hoàn toàn. Vì thế bước đầu tiên luôn là <b>xác định đang cầm linh kiện gì</b> — bằng ký hiệu R/C/L trên mạch in, bằng hình dáng, hoặc bằng phép đo thang Ω — rồi mới tra mã.</p>
+    </div>
+
+    <!-- 5.5 ĐO & AN TOÀN -->
+    <div class="subpanel" id="sub-k-test">
+      <h3 class="blockhead">Dùng đồng hồ nào cho linh kiện nào</h3>
+      <div class="table-scroll">
+        <table class="cmp">
+          <thead><tr><th>Cần biết</th><th>Dụng cụ</th><th>Cách làm</th></tr></thead>
+          <tbody>
+            <tr><td>Trị số điện trở</td><td>Đồng hồ số bất kỳ</td><td>Nhấc một chân khỏi mạch. Chập hai que trước để trừ điện trở que khi đo dưới 10 Ω.</td></tr>
+            <tr><td>Điện dung</td><td>Đồng hồ có thang F, hoặc LCR</td><td>Xả tụ trước. Đồng hồ thường đo tốt từ 1 nF trở lên; dưới mức đó phải dùng LCR.</td></tr>
+            <tr><td><b>ESR của tụ hoá</b></td><td>Máy đo ESR chuyên dụng</td><td>Đo được ngay trên mạch. Đây là phép đo quan trọng nhất khi sửa nguồn — quan trọng hơn cả đo điện dung.</td></tr>
+            <tr><td>Điện cảm</td><td>Bắt buộc dùng LCR</td><td>Đồng hồ vạn năng thường <b>không</b> đo được µH. Thang Ω chỉ cho biết cuộn còn thông hay đã đứt.</td></tr>
+            <tr><td>Tụ còn sống hay chập</td><td>Thang Ω hoặc thang diode</td><td>Số đo vọt lên rồi trả về ∞ là tụ còn nạp được. Đứng yên ở 0 Ω là chập. Đứng yên ở ∞ với tụ lớn là đứt.</td></tr>
+            <tr><td>Rò rỉ ở áp cao</td><td>Nguồn có hạn dòng + đồng hồ</td><td>Nhiều tụ chỉ rò khi đã nạp gần điện áp làm việc — ở mức 9 V của đồng hồ thì vẫn cho kết quả &ldquo;tốt&rdquo;.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="blockhead">Đo trong mạch — bốn điều luôn đúng</h3>
+      <div class="hint-box">
+        <span class="lbl">Trước khi kết luận linh kiện hỏng</span>
+        <ul class="tight">
+          <li><b>Tắt nguồn và xả hết tụ.</b> Đo điện trở khi mạch còn điện là hỏng đồng hồ, và số đo thì vô nghĩa.</li>
+          <li>Mọi phép đo trong mạch đều bị phần còn lại mắc song song kéo xuống. Trị số đo được <b>nhỏ hơn</b> mã in là bình thường; <b>lớn hơn</b> mã in thì linh kiện chắc chắn có vấn đề.</li>
+          <li>Bán dẫn trong mạch dẫn ở 0,5–0,7 V nên thang Ω của đồng hồ có thể tự kích chúng dẫn, cho ra con số lạ. Nghi ngờ thì nhấc một chân.</li>
+          <li>Nhiều linh kiện chỉ lộ lỗi khi nóng. Sấy nhẹ bằng máy khò ở nhiệt độ thấp hoặc xịt lạnh từng vùng là cách tìm ra lỗi chập chờn.</li>
+        </ul>
+      </div>
+
+      <h3 class="blockhead">Dấu hiệu hỏng theo từng họ linh kiện</h3>
+      <div class="table-scroll">
+        <table class="cmp">
+          <thead><tr><th>Linh kiện</th><th>Hỏng kiểu gì</th><th>Nhìn thấy gì</th><th>Đo ra sao</th></tr></thead>
+          <tbody>
+            <tr><td><b>Điện trở</b></td><td>Đứt, trôi trị số</td><td>Thân đổi màu, cháy sém, nứt</td><td>∞, hoặc lớn hơn trị số danh định</td></tr>
+            <tr><td><b>Tụ hoá nhôm</b></td><td>Khô (ESR tăng, mất điện dung), chập, rò</td><td><b>Phồng đầu, rỉ dịch nâu ở chân</b>, đế nhựa bị đẩy phồng</td><td>Điện dung hụt nhiều, ESR cao gấp mấy lần con mới</td></tr>
+            <tr><td><b>Tụ gốm</b></td><td>Nứt gây chập</td><td>Vết nứt chéo rất mảnh, nhiều khi phải soi kính lúp</td><td>Vài Ω đến vài trăm Ω thay vì ∞ — hay gây hiện tượng nguồn bị kéo sụp</td></tr>
+            <tr><td><b>Tantalum</b></td><td>Chập và cháy</td><td>Nổ đen một góc, có mùi khét</td><td>Gần 0 Ω</td></tr>
+            <tr><td><b>Tụ an toàn X2</b></td><td>Giảm điện dung theo tuổi</td><td>Nhìn ngoài vẫn bình thường</td><td>Đo còn 60–70% trị số ghi trên vỏ là đã hết tác dụng lọc</td></tr>
+            <tr><td><b>Cuộn cảm</b></td><td>Đứt ngầm, chập vòng</td><td>Thường vẫn nguyên vẹn; cháy đen thì do lỗi ở nơi khác</td><td>Đứt: ∞. Chập vòng: vẫn thông nhưng LCR cho trị số hụt</td></tr>
+            <tr><td><b>Hạt ferrite</b></td><td>Đứt do quá dòng</td><td>Nứt hoặc vỡ đôi</td><td>Thang Ω ra ∞ thay vì gần 0</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="blockhead">Quy tắc thay thế chung</h3>
+      <div class="hint-box">
+        <span class="lbl">Ba câu hỏi trước khi hàn con mới vào</span>
+        <ul class="tight">
+          <li><b>Trị số có đúng không?</b> Ở mạch lọc nguồn thì lớn hơn một cỡ vẫn chạy; ở mạch định thời, lọc và cộng hưởng thì phải đúng, vì trị số đó là kết quả tính toán.</li>
+          <li><b>Mức chịu đựng có bằng hoặc hơn không?</b> Điện áp, công suất, dòng, nhiệt độ — tất cả chỉ được bằng hoặc cao hơn, không bao giờ thấp hơn.</li>
+          <li><b>Có phải linh kiện đặc biệt không?</b> Cầu chì trở, tụ an toàn lớp X/Y, NTC hạn dòng, MOV, trở non-inductive, tụ low-ESR — sáu loại này nhìn giống linh kiện thường nhưng thay bừa là mất chức năng bảo vệ hoặc làm mạch chạy sai.</li>
+          <li>Linh kiện cháy đen gần như luôn là hậu quả. Tìm và sửa nguyên nhân trước, nếu không con mới cũng đi theo con cũ.</li>
+          <li>Thay xong thì cấp nguồn qua bóng đèn sợi đốt nối tiếp, hoặc qua nguồn có hạn dòng, trong lần chạy thử đầu tiên.</li>
+        </ul>
+      </div>
+
+      <h3 class="blockhead">An toàn</h3>
+      <div class="hint-box warn">
+        <span class="lbl">Những điều không được bỏ qua khi sửa mạch nối lưới</span>
+        <ul class="tight">
+          <li><b>Tụ lọc nguồn giữ điện rất lâu sau khi rút phích.</b> Tụ 400 V trong nguồn xung có thể giữ mức áp chết người hàng phút. Đo trước, xả qua trở vài kΩ/5 W, rồi đo lại.</li>
+          <li>Không xả tụ bằng cách chập tua-vít — hồ quang làm hỏng tụ, bắn kim loại nóng và có thể gây bỏng mắt.</li>
+          <li>Tụ nối vào lưới bắt buộc là <b>lớp X hoặc Y có chứng nhận</b>. Tụ film thường ghi 630 V một chiều <b>không</b> thay thế được: tụ an toàn được thiết kế để hỏng theo kiểu hở mạch, tụ thường hỏng theo kiểu chập và gây cháy.</li>
+          <li>Tụ hoá và tantalum lắp ngược cực sẽ nổ. Kiểm tra chiều trước khi cấp nguồn: vạch trên tụ hoá nhôm là cực <b>âm</b>, vạch trên tụ tantalum là cực <b>dương</b>.</li>
+          <li>Không dùng linh kiện tháo từ mạch cũ cho vị trí liên quan đến an toàn (cầu chì trở, tụ X/Y, MOV, NTC hạn dòng).</li>
+          <li>Mạch nguồn không cách ly thì toàn bộ phần sơ cấp mang điện lưới — kể cả mát của nó. Phải dùng biến áp cách ly khi cắm que đo dao động ký vào.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>Công cụ tính theo đúng bảng mã trong Sổ Tra Tụ &amp; Trở · Phần cuộn cảm theo quy ước EIA và MIL-STD-1285 · Phần kiến thức theo chuẩn EIA/IEC · Số liệu là giá trị điển hình theo chuẩn EIA/JIS — với linh kiện quan trọng, đo lại bằng LCR hoặc tra datasheet đúng series.</footer>
+
+<script>
+'use strict';
+
+/* ============ BẢNG DỮ LIỆU ============ */
+
+var CAP_TOLERANCE = {
+  A:{small:'±0,05 pF',big:null}, B:{small:'±0,1 pF',big:'±0,1%'}, C:{small:'±0,25 pF',big:'±0,25%'},
+  D:{small:'±0,5 pF',big:'±0,5%'}, F:{small:'±1 pF',big:'±1%'}, G:{small:'±2 pF',big:'±2%'},
+  H:{small:null,big:'±3%'}, J:{small:null,big:'±5%'}, K:{small:null,big:'±10%'}, M:{small:null,big:'±20%'},
+  N:{small:null,big:'±30%'}, Q:{small:null,big:'+30% / −10%'}, T:{small:null,big:'+50% / −10%'},
+  S:{small:null,big:'+50% / −20%'}, Z:{small:null,big:'+80% / −20%'}, P:{small:null,big:'+100% / −0%'}
+};
+var CAP_VOLT_LETTERS = {A:1.0,B:1.25,C:1.6,D:2.0,E:2.5,F:3.15,G:4.0,H:5.0,J:6.3,K:8.0,V:3.5,W:4.5};
+var EIA198_LETTERS = {A:1.0,B:1.1,C:1.2,D:1.3,E:1.5,F:1.6,G:1.8,H:2.0,J:2.2,K:2.4,L:2.7,M:3.0,N:3.3,P:3.6,Q:3.9,R:4.3,S:4.7,T:5.1,U:5.6,V:6.2,W:6.8,X:7.5,Y:8.2,Z:9.1};
+var EIA198_MULT = {'0':1,'1':10,'2':100,'3':1000,'4':1e4,'5':1e5,'8':0.01,'9':0.1};
+var EIA96_VALUES = {1:100,2:102,3:105,4:107,5:110,6:113,7:115,8:118,9:121,10:124,11:127,12:130,13:133,14:137,15:140,16:143,17:147,18:150,19:154,20:158,21:162,22:165,23:169,24:174,25:178,26:182,27:187,28:191,29:196,30:200,31:205,32:210,33:215,34:221,35:226,36:232,37:237,38:243,39:249,40:255,41:261,42:267,43:274,44:280,45:287,46:294,47:301,48:309,49:316,50:324,51:332,52:340,53:348,54:357,55:365,56:374,57:383,58:392,59:402,60:412,61:422,62:432,63:442,64:453,65:464,66:475,67:487,68:499,69:511,70:523,71:536,72:549,73:562,74:576,75:590,76:604,77:619,78:634,79:649,80:665,81:681,82:698,83:715,84:732,85:750,86:768,87:787,88:806,89:825,90:845,91:866,92:887,93:909,94:931,95:953,96:976};
+var EIA96_MULT = {Z:0.001,Y:0.01,R:0.01,X:0.1,S:0.1,A:1,B:10,H:10,C:100,D:1000,E:10000,F:100000};
+/* Chữ số hệ số nhân của mã tụ 3–4 chữ số (EIA/IEC): 8 = ×0,01 và 9 = ×0,1 */
+var CAP_MULT_DIGIT = {'0':1,'1':10,'2':100,'3':1e3,'4':1e4,'5':1e5,'6':1e6,'7':1e7,'8':0.01,'9':0.1};
+/* Chữ thay dấu phẩy — tụ điện (IEC 60062), quy về pF. M chỉ hợp lệ khi gõ chữ m thường (mF) */
+var CAP_SUB_MULT = {P:1, R:1, N:1e3, U:1e6, M:1e9};
+/* Chữ thay dấu phẩy — điện trở (IEC 60062), quy về Ω. m thường / L = mΩ */
+var RES_SUB_MULT = {L:1e-3, R:1, K:1e3, M:1e6, G:1e9, T:1e12};
+var CLASS2_LOW = {X:-55,Y:-30,Z:10};
+var CLASS2_HIGH = {'2':45,'4':65,'5':85,'6':105,'7':125,'8':150,'9':200};
+var CLASS2_CHANGE = {A:'±1,0%',B:'±1,5%',C:'±2,2%',D:'±3,3%',E:'±4,7%',F:'±7,5%',P:'±10%',R:'±15%',S:'±22%',T:'+22%/−33%',U:'+22%/−56%',V:'+22%/−82%'};
+var CLASS1_NAMES = {
+  C0G:'Ổn định nhất, 0 ±30 ppm/°C, tổn hao thấp, không piezo (tên EIA)',
+  NP0:'Tên MIL cũ của C0G — 0 ppm/°C',
+  U2J:'−750 ±120 ppm/°C, tương đương N750',
+  P100:'+100 ppm/°C, dùng bù nhiệt trong mạch dao động',
+  N750:'−750 ppm/°C, bù trôi tần cho mạch LC',
+  N1500:'−1500 ppm/°C, bù trôi tần cho mạch LC',
+  SL:'+350…−1000 ppm/°C (mã JIS, dải rộng)'
+};
+var RES_COLORS = [
+  {key:'black',vi:'Đen',hex:'#000000',digit:0,mult:1,tol:null,temp:'250 ppm/°C'},
+  {key:'brown',vi:'Nâu',hex:'#7a4a1e',digit:1,mult:10,tol:'±1%',temp:'100 ppm/°C'},
+  {key:'red',vi:'Đỏ',hex:'#cc2222',digit:2,mult:100,tol:'±2%',temp:'50 ppm/°C'},
+  {key:'orange',vi:'Cam',hex:'#e8760f',digit:3,mult:1e3,tol:'±0,05%',temp:'15 ppm/°C'},
+  {key:'yellow',vi:'Vàng',hex:'#e8c419',digit:4,mult:1e4,tol:'±0,02%',temp:'25 ppm/°C'},
+  {key:'green',vi:'Xanh lá',hex:'#2a8f3f',digit:5,mult:1e5,tol:'±0,5%',temp:'20 ppm/°C'},
+  {key:'blue',vi:'Xanh dương',hex:'#2158b8',digit:6,mult:1e6,tol:'±0,25%',temp:'10 ppm/°C'},
+  {key:'violet',vi:'Tím',hex:'#7a3fa8',digit:7,mult:1e7,tol:'±0,1%',temp:'5 ppm/°C'},
+  {key:'grey',vi:'Xám',hex:'#8b8b8b',digit:8,mult:1e8,tol:'±0,01%',temp:'1 ppm/°C'},
+  {key:'white',vi:'Trắng',hex:'#ffffff',digit:9,mult:1e9,tol:null,temp:null},
+  {key:'gold',vi:'Vàng kim',hex:'#c9a227',digit:null,mult:0.1,tol:'±5%',temp:null},
+  {key:'silver',vi:'Bạc',hex:'#b8b8b8',digit:null,mult:0.01,tol:'±10%',temp:null},
+  {key:'none',vi:'Không vạch',hex:'transparent',digit:null,mult:null,tol:'±20%',temp:null}
+];
+function colorByKey(k){ for (var i=0;i<RES_COLORS.length;i++) if (RES_COLORS[i].key===k) return RES_COLORS[i]; return null; }
+
+/* ============ ĐỊNH DẠNG ============ */
+
+function formatVN(num, maxDecimals){
+  maxDecimals = maxDecimals===undefined?4:maxDecimals;
+  if (num===null||num===undefined||!isFinite(num)) return '—';
+  var neg = num<0; num = Math.abs(num);
+  var rounded = parseFloat(num.toPrecision(6));
+  var str = rounded.toString();
+  if (str.indexOf('e')>-1||str.indexOf('E')>-1) str = rounded.toFixed(Math.min(maxDecimals,10));
+  var parts = str.split('.'); var intPart=parts[0], decPart=parts[1];
+  intPart = intPart.replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+  var result = intPart;
+  if (decPart){ decPart = decPart.slice(0,maxDecimals).replace(/0+$/,''); if (decPart) result += ',' + decPart; }
+  return (neg?'-':'') + result;
+}
+function capFormat(pF){
+  var nF=pF/1000, uF=pF/1e6, mF=pF/1e9, primary;
+  if (pF<1000) primary = formatVN(pF)+' pF';
+  else if (nF<1000) primary = formatVN(nF)+' nF';
+  else if (uF<1000) primary = formatVN(uF)+' µF';
+  else primary = formatVN(mF)+' mF';
+  return {pF:pF, nF:nF, uF:uF, mF:mF, primary:primary};
+}
+function resFormat(ohms){
+  var mOhm=ohms*1000, k=ohms/1e3, M=ohms/1e6, G=ohms/1e9, primary;
+  if (ohms===0) primary = '0 Ω';
+  else if (ohms<1) primary = formatVN(mOhm)+' mΩ';
+  else if (ohms<1000) primary = formatVN(ohms)+' Ω';
+  else if (k<1000) primary = formatVN(k)+' kΩ';
+  else if (M<1000) primary = formatVN(M)+' MΩ';
+  else primary = formatVN(G)+' GΩ';
+  return {ohms:ohms, mOhm:mOhm, k:k, M:M, G:G, primary:primary};
+}
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ============ PHÂN TÍCH MÃ (GIẢI MÃ XUÔI) ============ */
+
+/* raw = chuỗi giữ nguyên hoa/thường, cùng độ dài và cùng chỉ số với s (đã viết hoa) */
+function parseCapMagnitude(s, raw){
+  if (!s) return null;
+  if (/^\d+$/.test(s)){
+    if (s.length<=2) return {pF:parseInt(s,10), rule:'direct'};
+    if (s.length===3||s.length===4){
+      var sig = parseInt(s.slice(0,s.length-1),10);
+      var d = s.slice(-1);
+      var mult = CAP_MULT_DIGIT[d];
+      if (mult===undefined) return null;
+      return {pF:sig*mult, rule:(s.length===3?'3digit':'4digit'), sig:sig, exp:d, mult:mult};
+    }
+    return null;
+  }
+  var m = s.match(/^(\d*)([RNPUM])(\d*)$/);
+  if (m){
+    var ip=m[1], letter=m[2], fp=m[3];
+    if (!ip && !fp) return null;
+    /* IEC 60062: chỉ chữ m THƯỜNG mới là mili-fara; chữ M hoa là mã dung sai ±20%, không phải bội số */
+    if (letter==='M' && !(raw && raw.charAt(ip.length)==='m')) return null;
+    var multC = CAP_SUB_MULT[letter];
+    var num = parseFloat((ip||'0')+'.'+(fp||'0'));
+    return {pF:num*multC, rule:'sub-'+letter, letter:letter, mult:multC};
+  }
+  return null;
+}
+function parseResMagnitude(s, raw){
+  if (!s) return null;
+  if (/^\d+$/.test(s)){
+    if (/^0+$/.test(s)) return {ohms:0, rule:'zero'};
+    if (s.length===3||s.length===4){
+      var sig=parseInt(s.slice(0,s.length-1),10), exp=parseInt(s.slice(-1),10);
+      return {ohms:sig*Math.pow(10,exp), rule:(s.length===3?'3digit':'4digit'), sig:sig, exp:exp, mult:Math.pow(10,exp)};
+    }
+    return null;
+  }
+  var m = s.match(/^(\d*)([RKMGTL])(\d*)$/);
+  if (m){
+    var ip=m[1], letter=m[2], fp=m[3];
+    if (!ip && !fp) return null;
+    var multR = RES_SUB_MULT[letter];
+    /* chữ m thường = mili-ôm; chữ M hoa = mêga-ôm (IEC 60062) */
+    if (letter==='M' && raw && raw.charAt(ip.length)==='m') multR = 1e-3;
+    var num = parseFloat((ip||'0')+'.'+(fp||'0'));
+    return {ohms:num*multR, rule:'sub-'+letter, letter:letter, mult:multR, milli:(multR===1e-3)};
+  }
+  return null;
+}
+function isValidCapMagStr(s, raw){ return !!parseCapMagnitude(s, raw); }
+function capToleranceText(letter, pF){
+  var t = CAP_TOLERANCE[letter]; if (!t) return null;
+  /* EIA/IEC: từ 10 pF trở xuống ghi dung sai tuyệt đối (pF), trên 10 pF ghi theo % */
+  if (pF<=10) return t.small ? {text:t.small} : {text:null, note:'Chữ '+letter+' không định nghĩa cho tụ từ 10pF trở xuống'};
+  return t.big ? {text:t.big} : {text:null, note:'Chữ '+letter+' không định nghĩa cho tụ trên 10pF'};
+}
+function tryCompound(upper, raw){
+  if (upper.length<4) return null;
+  var vd=upper[0], vl=upper[1];
+  if (!/[0-3]/.test(vd)) return null;
+  if (!(vl in CAP_VOLT_LETTERS)) return null;
+  var rest = upper.slice(2), rawRest = (raw||upper).slice(2), tol=null, magPart=rest, rawMagPart=rawRest;
+  if (rest.length>=2){
+    var last = rest[rest.length-1];
+    if (last in CAP_TOLERANCE){ var cand=rest.slice(0,-1); if (isValidCapMagStr(cand, rawRest.slice(0,-1))){ tol=last; magPart=cand; rawMagPart=rawRest.slice(0,-1); } }
+  }
+  var mag = parseCapMagnitude(magPart, rawMagPart); if (!mag) return null;
+  var voltage = CAP_VOLT_LETTERS[vl]*Math.pow(10,parseInt(vd,10));
+  var tolInfo = tol ? capToleranceText(tol, mag.pF) : null;
+  return {type:'compound', voltage:voltage, mag:mag, tolLetter:tol, tolInfo:tolInfo, voltLetter:vl, voltDigit:vd, magPart:magPart};
+}
+function tryEIA96(upper){
+  var m = upper.match(/^(\d{2})([A-Z])$/); if (!m) return null;
+  var idx=parseInt(m[1],10), letter=m[2];
+  if (!(idx in EIA96_VALUES)||!(letter in EIA96_MULT)) return null;
+  var ohms = EIA96_VALUES[idx]*EIA96_MULT[letter];
+  return {idx:idx, letter:letter, ohms:ohms, tableVal:EIA96_VALUES[idx], mult:EIA96_MULT[letter]};
+}
+function tryEIA198(upper){
+  var m = upper.match(/^([A-Z])(\d)$/); if (!m) return null;
+  var letter=m[1], digit=m[2];
+  if (!(letter in EIA198_LETTERS)||!(digit in EIA198_MULT)) return null;
+  var pF = EIA198_LETTERS[letter]*EIA198_MULT[digit];
+  return {letter:letter, digit:digit, pF:pF, letterVal:EIA198_LETTERS[letter], mult:EIA198_MULT[digit]};
+}
+function tryClass2(upper){
+  if (upper.length!==3) return null;
+  var c1=upper[0], c2=upper[1], c3=upper[2];
+  if (!(c1 in CLASS2_LOW)||!(c2 in CLASS2_HIGH)||!(c3 in CLASS2_CHANGE)) return null;
+  return {low:CLASS2_LOW[c1], high:CLASS2_HIGH[c2], change:CLASS2_CHANGE[c3]};
+}
+function tryTrailingTolerance(upper, raw){
+  if (upper.length<2) return null;
+  var last = upper[upper.length-1]; if (!(last in CAP_TOLERANCE)) return null;
+  var prefix = upper.slice(0,-1); var mag = parseCapMagnitude(prefix, (raw||upper).slice(0,-1)); if (!mag) return null;
+  return {mag:mag, tolLetter:last, tolInfo:capToleranceText(last,mag.pF), prefix:prefix};
+}
+function tryPrefixedDirectVoltage(upper){
+  var m = upper.match(/^([A-Z]*)(\d{3,4})([A-Z])(\d{1,4})(K?V)(AC|DC)?~?$/);
+  if (!m) return null;
+  var prefix=m[1], magStr=m[2], tolLetter=m[3], voltStr=m[4], unit=m[5], vacdc=m[6];
+  if (!(tolLetter in CAP_TOLERANCE)) return null;
+  var mag = parseCapMagnitude(magStr); if (!mag) return null;
+  var isKV = unit==='KV';
+  var voltage = parseInt(voltStr,10) * (isKV?1000:1);
+  return {prefix:prefix, mag:mag, magStr:magStr, tolLetter:tolLetter, tolInfo:capToleranceText(tolLetter,mag.pF), voltage:voltage, voltRaw:voltStr, isKV:isKV, vacdc:vacdc||null};
+}
+function analyze(rawInput){
+  var cleaned = String(rawInput)
+    .replace(/\s+/g,'').replace(/[-_]/g,'')
+    .replace(/[µμ]/g,'u')                 /* µ / μ → u */
+    .replace(/[ΩΩω]/g,'')            /* bỏ ký hiệu Ω nếu người dùng gõ kèm */
+    .replace(/([pnumPNUM])[Ff]$/,'$1');   /* "100nF" → "100n"; giữ nguyên "104F" vì F là mã dung sai ±1% */
+  if (!cleaned) return {cap:[], res:[], material:[], ind:[]};
+  var upper = cleaned.toUpperCase();
+  var cap=[], res=[], material=[], ind=[];
+
+  var c2 = tryClass2(upper);
+  if (c2){ material.push({kind:'class2', low:c2.low, high:c2.high, change:c2.change, code:upper}); }
+  if (CLASS1_NAMES[upper]) material.push({kind:'class1', code:upper, desc:CLASS1_NAMES[upper]});
+
+  if (/^0+$/.test(upper) && upper.length<=4){ res.push({kind:'zero', confidence:'high'}); return {cap:cap, res:res, material:material, ind:ind}; }
+
+  var e96 = tryEIA96(upper); if (e96){ e96.kind='eia96'; e96.confidence='high'; res.push(e96); }
+  var e198 = tryEIA198(upper); if (e198){ e198.kind='eia198'; e198.confidence='high'; cap.push(e198); }
+  var comp = tryCompound(upper, cleaned); if (comp){ comp.kind='compound'; comp.confidence='high'; cap.push(comp); }
+  var trail = tryTrailingTolerance(upper, cleaned);
+  if (trail){
+    trail.kind='trail-tol';
+    /* "100n" / "4u7" kết thúc bằng chữ đơn vị, và "68C"/"01B" trùng dạng mã EIA-96 của điện trở
+       → cách đọc "trị số + chữ dung sai" ở hai trường hợp này chỉ là một khả năng, không chắc chắn */
+    var ambiguousTail = (trail.tolLetter in CAP_SUB_MULT) && !!parseCapMagnitude(upper, cleaned);
+    var ambiguousShort = (trail.mag.rule==='direct');
+    trail.confidence = (ambiguousTail||ambiguousShort) ? 'typical' : 'high';
+    cap.push(trail);
+  }
+  var pv = tryPrefixedDirectVoltage(upper); if (pv){ pv.kind='prefixed-volt'; pv.confidence='high'; cap.push(pv); }
+
+  var mCapSub = upper.match(/^(\d*)([RNPUM])(\d*)$/);
+  if (mCapSub){
+    var letterC = mCapSub[2]; var magC = parseCapMagnitude(upper, cleaned);
+    if (magC){ var exclC=(letterC!=='R'); cap.push({kind:'sub', confidence:exclC?'high':'typical', letter:magC.letter, mag:magC}); }
+  }
+  var mResSub = upper.match(/^(\d*)([RKMGTL])(\d*)$/);
+  if (mResSub){
+    var magR = parseResMagnitude(upper, cleaned);
+    if (magR){ var letterR=mResSub[2]; var exclR=(letterR!=='R'); res.push({kind:'sub', confidence:exclR?'high':'typical', letter:letterR, mag:magR}); }
+  }
+  var decStr = cleaned.replace(',', '.');
+  if (/^\d*\.\d+$/.test(decStr)) cap.push({kind:'decimal', confidence:'high', pF:parseFloat(decStr)*1e6});
+  if (/^\d+$/.test(upper) && !/^0+$/.test(upper)){
+    if (upper.length<=2) cap.push({kind:'plain-direct', confidence:'typical', pF:parseInt(upper,10)});
+    else if (upper.length===3||upper.length===4){
+      var magC2=parseCapMagnitude(upper, cleaned), magR2=parseResMagnitude(upper, cleaned);
+      if (magC2) cap.push({kind:'plain-code', confidence:'typical', pF:magC2.pF, sig:magC2.sig, exp:magC2.exp, mult:magC2.mult, digits:upper.length});
+      if (magR2 && magR2.ohms<=1e9) res.push({kind:'plain-code', confidence:'typical', ohms:magR2.ohms, sig:magR2.sig, exp:magR2.exp, digits:upper.length});
+    }
+  }
+  ind = analyzeInductor(upper, cleaned);
+  return {cap:cap, res:res, material:material, ind:ind};
+}
+
+/* ============ TRA NGƯỢC ============ */
+/* Điện trở: chữ số cuối luôn là số mũ 10^n */
+function toCode3(val, min, max){
+  if (val<=0) return null; var best=null;
+  for (var exp=0; exp<=9; exp++){
+    var sigR = Math.round(val/Math.pow(10,exp));
+    if (sigR<min||sigR>max) continue;
+    var approx = sigR*Math.pow(10,exp); var err = Math.abs(approx-val)/val;
+    if (!best||err<best.err) best={code:String(sigR)+String(exp), approx:approx, err:err};
+  }
+  return best;
+}
+/* Tụ: chữ số cuối theo CAP_MULT_DIGIT — 8 = ×0,01 và 9 = ×0,1 (EIA) */
+function toCapCode(pF, min, max){
+  if (pF<=0) return null; var best=null;
+  for (var d in CAP_MULT_DIGIT){
+    var m = CAP_MULT_DIGIT[d];
+    var sigR = Math.round(pF/m);
+    if (sigR<min||sigR>max) continue;
+    var approx = sigR*m; var err = Math.abs(approx-pF)/pF;
+    if (!best||err<best.err) best={code:String(sigR)+d, approx:approx, err:err};
+  }
+  return best;
+}
+function toCapCode3(pF){ return toCapCode(pF,10,99); }
+function toCapCode4(pF){ return toCapCode(pF,100,999); }
+function toResCode3(ohms){ return toCode3(ohms,10,99); }
+function toResCode4(ohms){ return toCode3(ohms,100,999); }
+/* Chữ thay dấu phẩy theo IEC 60062 */
+function capLetterCode(pF){
+  if (pF<1e3) return formatLetterSub(pF,'p');
+  if (pF<1e6) return formatLetterSub(pF/1e3,'n');
+  if (pF<1e9) return formatLetterSub(pF/1e6,'u');
+  return formatLetterSub(pF/1e9,'m');
+}
+function resLetterCode(ohms){
+  if (ohms<1e3) return formatLetterSub(ohms,'R');
+  if (ohms<1e6) return formatLetterSub(ohms/1e3,'K');
+  if (ohms<1e9) return formatLetterSub(ohms/1e6,'M');
+  return formatLetterSub(ohms/1e9,'G');
+}
+/* Dựng vạch màu trực tiếp từ trị số (cho phép hệ số nhân vàng kim ×0,1 và bạc ×0,01) */
+function colorBandsFor(ohms, bandCount){
+  if (!(ohms>0)) return null;
+  var nd = (bandCount===4) ? 2 : 3;
+  var exp = Math.floor(Math.log(ohms)/Math.LN10 + 1e-9) - (nd-1);
+  var sig = Math.round(ohms/Math.pow(10,exp));
+  if (sig>=Math.pow(10,nd)){ sig=Math.round(sig/10); exp++; }
+  if (exp<-2||exp>9) return null;
+  var digits = String(sig);
+  while (digits.length<nd) digits = '0'+digits;
+  var names=[], i, q;
+  for (i=0;i<nd;i++){
+    var d = parseInt(digits.charAt(i),10), dc=null;
+    for (q=0;q<RES_COLORS.length;q++) if (RES_COLORS[q].digit===d){ dc=RES_COLORS[q]; break; }
+    if (!dc) return null;
+    names.push(dc.vi);
+  }
+  var mv = Math.pow(10,exp), mc=null;
+  for (q=0;q<RES_COLORS.length;q++){
+    var cm = RES_COLORS[q].mult;
+    if (cm!==null && Math.abs(cm-mv)<=mv*1e-9){ mc=RES_COLORS[q]; break; }
+  }
+  if (!mc) return null;
+  names.push(mc.vi);
+  return {names:names, approx:sig*mv, err:Math.abs(sig*mv-ohms)/ohms};
+}
+function toEIA198Reverse(pF){
+  if (pF<=0) return null; var best=null;
+  for (var letter in EIA198_LETTERS){
+    for (var digitStr in EIA198_MULT){
+      var approx = EIA198_LETTERS[letter]*EIA198_MULT[digitStr];
+      var err = Math.abs(approx-pF)/pF;
+      if (!best||err<best.err) best={code:letter+digitStr, approx:approx, err:err};
+    }
+  }
+  return best;
+}
+function toEIA96Reverse(ohms){
+  if (ohms<=0) return null; var best=null;
+  for (var letter in EIA96_MULT){
+    var mult = EIA96_MULT[letter];
+    var candidateTableVal = ohms/mult;
+    if (candidateTableVal<50||candidateTableVal>1050) continue;
+    var bestIdx=1, bestDiff=Infinity;
+    for (var i=1;i<=96;i++){ var diff=Math.abs(EIA96_VALUES[i]-candidateTableVal); if (diff<bestDiff){bestDiff=diff; bestIdx=i;} }
+    var approx = EIA96_VALUES[bestIdx]*mult; var err=Math.abs(approx-ohms)/ohms;
+    if (!best||err<best.err) best={code:String(bestIdx).length<2?('0'+bestIdx):String(bestIdx), letter:letter, approx:approx, err:err};
+  }
+  if (best) best.code = best.code + best.letter;
+  return best;
+}
+function toVoltCode(volts){
+  var candidates=[];
+  for (var letter in CAP_VOLT_LETTERS){
+    /* V (3,5) và W (4,5) là hai mã ngoại lệ của JIS, chỉ tồn tại ở dạng 1V/2V, 1W/2W */
+    var lo = (letter==='V'||letter==='W') ? 1 : 0;
+    var hi = (letter==='V'||letter==='W') ? 2 : 3;
+    for (var digit=lo; digit<=hi; digit++) candidates.push({code:String(digit)+letter, approx:CAP_VOLT_LETTERS[letter]*Math.pow(10,digit)});
+  }
+  candidates.sort(function(a,b){return a.approx-b.approx;});
+  var atLeast=null;
+  for (var i=0;i<candidates.length;i++){ if (candidates[i].approx>=volts-1e-9){ atLeast=candidates[i]; break; } }
+  if (!atLeast) atLeast = candidates[candidates.length-1];
+  var nearest = candidates[0];
+  for (var j=1;j<candidates.length;j++){ if (Math.abs(candidates[j].approx-volts)<Math.abs(nearest.approx-volts)) nearest=candidates[j]; }
+  return {atLeast:atLeast, nearest:nearest};
+}
+function formatLetterSub(value, letter){
+  var rounded = parseFloat(value.toPrecision(3));
+  var parts = rounded.toString().split('.'); var ip=parts[0], fp=parts[1]||'';
+  fp = fp.replace(/0+$/,'');
+  if (ip==='0') ip='';
+  /* 1 kΩ ghi là "1K0" chứ không phải "1K" — luôn giữ đủ 2 chữ số có nghĩa khi phần nguyên chỉ có 1 chữ số */
+  if (!fp) return ip.length===1 ? (ip+letter+'0') : ((ip||'0')+letter);
+  return ip+letter+fp;
+}
+function parseVNNumber(str){
+  if (typeof str!=='string') return NaN;
+  str = str.trim(); if (!str) return NaN;
+  if (str.indexOf(',')>-1) str = str.replace(/\./g,'').replace(',', '.');
+  return parseFloat(str);
+}
+
+/* ============ RENDER: TAB 1 GIẢI MÃ ============ */
+
+function segHTML(colorVar, big, label, detail){
+  return '<span class="seg" style="--seg:var('+colorVar+')"><b>'+esc(big)+'</b><i><em>'+esc(label)+'</em>'+esc(detail)+'</i></span>';
+}
+/* Dải quy đổi: cùng một trị số tụ hiển thị đồng thời ở pF, nF và µF */
+function capUnitsHTML(pF){
+  if (!isFinite(pF)||pF<=0) return '';
+  var main = pF<1000 ? 'pF' : (pF<1e6 ? 'nF' : (pF<1e9 ? 'µF' : 'mF'));
+  var items = [{u:'pF',v:pF},{u:'nF',v:pF/1e3},{u:'µF',v:pF/1e6}];
+  if (pF>=1e9) items.push({u:'mF',v:pF/1e9});
+  var h = '<span class="uconv-lbl">Quy đổi</span>';
+  for (var i=0;i<items.length;i++){
+    h += '<span class="'+(items[i].u===main?'is-main':'')+'"><b>'+formatVN(items[i].v,10)+'</b> '+items[i].u+'</span>';
+  }
+  return '<div class="uconv">'+h+'</div>';
+}
+function badgeHTML(conf){
+  return conf==='high' ? '<span class="badge high">Khả năng cao</span>' : '<span class="badge typical">Cách đọc phổ biến</span>';
+}
+function tolLine(tolInfo){
+  if (!tolInfo) return '—';
+  if (tolInfo.text) return tolInfo.text;
+  return tolInfo.note || '—';
+}
+
+function renderCompound(c){
+  var cf = capFormat(c.mag.pF);
+  var segs = segHTML('--danger', c.voltDigit+c.voltLetter, 'Điện áp', formatVN(CAP_VOLT_LETTERS[c.voltLetter])+' × '+Math.pow(10,parseInt(c.voltDigit,10))+' = '+formatVN(c.voltage)+' V');
+  segs += segHTML('--info', c.magPart, 'Điện dung', cf.primary + (c.mag.rule==='direct' ? ' (đọc trực tiếp)' : ''));
+  if (c.tolLetter) segs += segHTML('--ok', c.tolLetter, 'Dung sai', tolLine(c.tolInfo));
+  var big = formatVN(c.voltage)+' V · '+cf.primary + (c.tolLetter && c.tolInfo && c.tolInfo.text ? ' · '+c.tolInfo.text : '');
+  return '<div class="result-card cap"><div class="result-head">'+badgeHTML('high')+'<h3>Mã ghép điện áp'+(c.tolLetter?' + điện dung + dung sai':' + điện dung')+' — TỤ ĐIỆN</h3></div>'+
+    '<div class="decode">'+segs+'</div><div class="big-value">'+big+'</div>'+capUnitsHTML(c.mag.pF)+
+    '<p class="result-note">Chỉ tụ điện mới in mã điện áp kèm theo, nên cách đọc này gần như chắc chắn đúng — không áp dụng cho điện trở.</p></div>';
+}
+function renderEIA198(e){
+  var cf = capFormat(e.pF);
+  var segs = segHTML('--info', e.letter, 'Trị số', e.letter+' = '+formatVN(e.letterVal));
+  segs += segHTML('--accent', e.digit, 'Số mũ', '×'+formatVN(e.mult)+' (pF)');
+  return '<div class="result-card cap"><div class="result-head">'+badgeHTML('high')+'<h3>Mã MLCC 2 ký tự EIA-198 — TỤ ĐIỆN</h3></div>'+
+    '<div class="decode">'+segs+'</div><div class="big-value">'+cf.primary+'</div>'+capUnitsHTML(e.pF)+
+    '<p class="result-note">Kiểu mã này chỉ dùng cho tụ gốm dán quá nhỏ để in đủ 3 chữ số.</p></div>';
+}
+function renderTrailTol(t){
+  var cf = capFormat(t.mag.pF);
+  var ruleLabel = t.mag.rule==='direct' ? 'đọc trực tiếp' : (t.mag.rule==='3digit'||t.mag.rule==='4digit') ? (t.mag.sig+' × '+formatVN(t.mag.mult)) : 'chữ thay dấu phẩy';
+  var segs = segHTML('--info', t.prefix, 'Điện dung', cf.primary+' ('+ruleLabel+')');
+  segs += segHTML('--ok', t.tolLetter, 'Dung sai', tolLine(t.tolInfo));
+  var big = cf.primary + (t.tolInfo && t.tolInfo.text ? ' · '+t.tolInfo.text : '');
+  return '<div class="result-card cap"><div class="result-head">'+badgeHTML(t.confidence||'high')+'<h3>Mã điện dung + chữ dung sai — TỤ ĐIỆN</h3></div>'+
+    '<div class="decode">'+segs+'</div><div class="big-value">'+big+'</div>'+capUnitsHTML(t.mag.pF)+
+    '<p class="result-note">Điện trở dán không dùng quy ước thêm chữ dung sai vào cuối mã số, nên cách đọc tụ điện hợp lý hơn hẳn ở đây.</p></div>';
+}
+function renderPrefixedVolt(p){
+  var cf = capFormat(p.mag.pF);
+  var segs = '';
+  if (p.prefix) segs += segHTML('--ink-3', p.prefix, 'Tiền tố hãng/dòng', 'Mã series riêng của nhà sản xuất, không phải trị số — bỏ qua khi đọc');
+  segs += segHTML('--info', p.magStr, 'Điện dung', cf.primary);
+  segs += segHTML('--ok', p.tolLetter, 'Dung sai', tolLine(p.tolInfo));
+  segs += segHTML('--danger', p.voltRaw+(p.isKV?'KV':'V'), 'Điện áp (ghi thẳng)', formatVN(p.voltage)+' V'+(p.vacdc?(' '+p.vacdc):''));
+  var big = cf.primary + ' · ' + (p.tolInfo&&p.tolInfo.text?p.tolInfo.text:p.tolLetter) + ' · ' + formatVN(p.voltage) + 'V' + (p.vacdc?(' '+p.vacdc):'');
+  var note;
+  if (!p.isKV && p.voltage===275){
+    note = 'Điện áp 275V ghi thẳng (không theo mã EIA) gần như chắc chắn là tụ an toàn <b>X2</b> (chống nhiễu lưới điện AC) — xem mục D1 trong sổ tra: chỉ thay bằng tụ X2 khác, cùng trị số, có dấu chứng nhận (VDE/ENEC/UL/CQC), không dùng tụ DC thường thay vào.';
+  } else if (p.isKV || p.voltage>=1000){
+    note = 'Mức '+formatVN(p.voltage)+'V thuộc dải tụ gốm/đĩa cao áp (thường gặp trong snubber, nguồn cao áp, lò vi sóng, mạch cao áp CRT/tia X) — khác nhóm tụ an toàn X/Y. Thay đúng bằng tụ có điện áp bằng hoặc cao hơn, và cẩn trọng vì tụ cao áp có thể vẫn còn tích điện nguy hiểm sau khi ngắt nguồn (xem mục D3).';
+  } else {
+    note = 'Điện áp ghi thẳng bằng số (không theo mã chữ+số EIA) là kiểu ghi đặc trưng của tụ màng dùng trực tiếp trên lưới AC. Kiểm tra thân tụ xem có ghi X1/X2/Y1/Y2 và dấu chứng nhận an toàn không trước khi thay.';
+  }
+  return '<div class="result-card cap"><div class="result-head">'+badgeHTML('high')+'<h3>Tiền tố hãng + điện dung + dung sai + điện áp ghi thẳng — TỤ ĐIỆN</h3></div>'+
+    '<div class="decode">'+segs+'</div><div class="big-value">'+big+'</div>'+capUnitsHTML(p.mag.pF)+
+    '<p class="result-note">'+note+'</p></div>';
+}
+function renderEIA96(e){
+  var rf = resFormat(e.ohms);
+  var segs = segHTML('--info', String(e.idx).length<2?('0'+e.idx):String(e.idx), 'Tra bảng E96', 'mã '+(String(e.idx).length<2?('0'+e.idx):String(e.idx))+' → '+e.tableVal);
+  segs += segHTML('--accent', e.letter, 'Hệ số nhân', '×'+formatVN(e.mult));
+  return '<div class="result-card res"><div class="result-head">'+badgeHTML('high')+'<h3>Điện trở dán EIA-96 ±1% — ĐIỆN TRỞ</h3></div>'+
+    '<div class="decode">'+segs+'</div><div class="big-value">'+rf.primary+' ±1%</div>'+
+    '<p class="result-note">Kiểu 2 số + 1 chữ này là quy ước riêng của điện trở dán chính xác, tụ điện không dùng.</p></div>';
+}
+function renderZero(){
+  return '<div class="result-card res"><div class="result-head">'+badgeHTML('high')+'<h3>Điện trở 0 Ω (cầu nối) — ĐIỆN TRỞ</h3></div>'+
+    '<div class="big-value">0 Ω</div><p class="result-note">Không phải điện trở thực, chỉ là cầu nối dây trên board.</p></div>';
+}
+function renderSubCap(s){
+  var cf = capFormat(s.mag.pF);
+  var conf = s.confidence;
+  var noteMap = {
+    N:'Chuẩn IEC 60062: chữ n thay dấu phẩy và cho biết đơn vị nF.',
+    P:'Chuẩn IEC 60062: chữ p thay dấu phẩy và cho biết đơn vị pF.',
+    U:'Chuẩn IEC 60062: chữ µ (gõ là u) thay dấu phẩy và cho biết đơn vị µF.',
+    M:'Chuẩn IEC 60062: chữ <b>m thường</b> thay dấu phẩy và cho biết đơn vị mF (1 mF = 1.000 µF). Chữ M hoa <b>không</b> phải bội số của tụ — đó là mã dung sai ±20%.',
+    R:'Chữ R thay dấu phẩy là biến thể ngoài IEC, dùng được cho cả tụ lẫn điện trở nên dễ nhầm. Trên tụ gốm MLCC nó thường mang nghĩa pF (4R7 = 4,7 pF), nhưng trên tụ tantalum/hoá dán thì lại là µF (4R7 = 4,7 µF). Phải xem loại tụ mới kết luận được — và đối chiếu thêm kết quả điện trở bên dưới nếu có.'
+  };
+  var title = s.letter==='M' ? 'Chữ m thay dấu phẩy (mF)' : 'Chữ '+s.letter+' thay dấu phẩy';
+  return '<div class="result-card cap"><div class="result-head">'+badgeHTML(conf)+'<h3>'+title+' — TỤ ĐIỆN</h3></div>'+
+    '<div class="big-value">'+cf.primary+'</div>'+capUnitsHTML(s.mag.pF)+'<p class="result-note">'+noteMap[s.letter]+'</p></div>';
+}
+function renderSubRes(s){
+  var rf = resFormat(s.mag.ohms);
+  var conf = s.confidence;
+  var noteMap = {
+    R:'Chuẩn IEC 60062: chữ R thay dấu phẩy, bội số ×1 (Ω). Chữ này dùng được cho cả điện trở lẫn tụ — xem thêm kết quả tụ điện bên dưới nếu có.',
+    K:'Chuẩn IEC 60062: chữ K thay dấu phẩy, bội số ×1.000 (kΩ). Chỉ điện trở dùng cách ghi này.',
+    M:'Chuẩn IEC 60062: chữ <b>M hoa</b> thay dấu phẩy, bội số ×1.000.000 (MΩ) — <b>không phải</b> mΩ. Muốn chỉ mili-ôm thì phải viết chữ <b>m thường</b> (2m5 = 2,5 mΩ) hoặc dùng chữ L.',
+    G:'Chuẩn IEC 60062: chữ G thay dấu phẩy, bội số ×10⁹ (GΩ) — chỉ gặp ở điện trở cách điện/đo lường siêu cao.',
+    T:'Chuẩn IEC 60062: chữ T thay dấu phẩy, bội số ×10¹² (TΩ) — chỉ gặp ở điện trở đo lường siêu cao.',
+    L:'Chữ L thay dấu phẩy chỉ điện trở shunt siêu nhỏ, bội số ×0,001 (mΩ). Nhiều hãng ghi kiểu tương đương bằng chữ m thường, hoặc bằng R (R010 = 10 mΩ).'
+  };
+  var note = s.mag.milli && s.letter==='M'
+    ? 'Bạn gõ chữ <b>m thường</b> nên đây là mili-ôm theo IEC 60062. Nếu trên thân linh kiện in chữ <b>M hoa</b> thì trị số phải đọc là '+resFormat(s.mag.ohms*1e9).primary+'.'
+    : noteMap[s.letter];
+  var title = (s.mag.milli && s.letter==='M') ? 'Chữ m thay dấu phẩy (mΩ)' : 'Chữ '+s.letter+' thay dấu phẩy';
+  return '<div class="result-card res"><div class="result-head">'+badgeHTML(conf)+'<h3>'+title+' — ĐIỆN TRỞ</h3></div>'+
+    '<div class="big-value">'+rf.primary+'</div><p class="result-note">'+note+'</p></div>';
+}
+function renderDecimal(d){
+  var cf = capFormat(d.pF);
+  return '<div class="result-card cap"><div class="result-head">'+badgeHTML('high')+'<h3>Số thập phân trần (ngầm định µF) — TỤ ĐIỆN</h3></div>'+
+    '<div class="big-value">'+cf.primary+'</div>'+capUnitsHTML(d.pF)+'<p class="result-note">Điện trở không dùng cách ghi số thập phân trần này.</p></div>';
+}
+function renderPlainCap(p){
+  var cf = capFormat(p.pF);
+  var ruleLabel = p.sig!==undefined ? (p.sig+' × '+formatVN(p.mult)+' pF') : 'đọc trực tiếp pF';
+  var extra = (p.mult===0.01||p.mult===0.1) ? ' Chữ số cuối là <b>'+p.exp+'</b>, theo quy ước EIA đây là hệ số nhân ×'+formatVN(p.mult)+' chứ không phải 10<sup>'+p.exp+'</sup> — quy ước riêng của tụ điện, dùng để ghi các trị số dưới 10 pF.' : '';
+  return '<div class="result-card cap"><div class="result-head">'+badgeHTML('typical')+'<h3>Đọc như TỤ ĐIỆN</h3></div>'+
+    '<div class="big-value">'+cf.primary+'</div>'+capUnitsHTML(p.pF)+'<p class="result-note">Theo công thức '+ruleLabel+'.'+extra+'</p></div>';
+}
+function renderPlainRes(p){
+  var rf = resFormat(p.ohms);
+  var ruleLabel = p.sig+' × 10^'+p.exp+' Ω';
+  return '<div class="result-card res"><div class="result-head">'+badgeHTML('typical')+'<h3>Đọc như ĐIỆN TRỞ</h3></div>'+
+    '<div class="big-value">'+rf.primary+'</div><p class="result-note">Theo công thức '+ruleLabel+'. Mã số giống hệt bên tụ điện — chỉ khác đơn vị gốc (Ω thay vì pF), vì vậy cần biết chắc bạn đang cầm linh kiện nào.</p></div>';
+}
+function renderPlainDirect(p){
+  var cf = capFormat(p.pF);
+  return '<div class="result-card cap"><div class="result-head">'+badgeHTML('typical')+'<h3>Đọc như TỤ ĐIỆN (1–2 chữ số, đọc trực tiếp)</h3></div>'+
+    '<div class="big-value">'+cf.primary+'</div>'+capUnitsHTML(p.pF)+'<p class="result-note">Điện trở không có quy ước đọc trực tiếp 1–2 chữ số kiểu này trong sổ tra.</p></div>';
+}
+function renderClass2(m){
+  return '<div class="result-card material"><div class="result-head"><span class="badge high">Mã vật liệu, không phải trị số</span><h3>Gốm Class 2 — '+esc(m.code)+'</h3></div>'+
+    '<div class="big-value">'+m.low+'…+'+m.high+' °C · '+m.change+'</div>'+
+    '<p class="result-note">Đây là mã đặc tính nhiệt của lớp điện môi (giống X7R, Y5V…), không cho biết trị số điện dung. Trị số thật nằm ở mã số in kèm trên cùng con tụ.</p></div>';
+}
+function renderClass1(m){
+  return '<div class="result-card material"><div class="result-head"><span class="badge high">Mã vật liệu, không phải trị số</span><h3>Gốm Class 1 — '+esc(m.code)+'</h3></div>'+
+    '<div class="big-value">'+esc(m.desc)+'</div>'+
+    '<p class="result-note">Đây là tên nhóm điện môi ổn định nhất (như C0G/NP0), không cho biết trị số điện dung.</p></div>';
+}
+
+function renderDecodeResults(input){
+  var out = document.getElementById('decodeResults');
+  var trimmed = input.trim();
+  if (!trimmed){ out.innerHTML=''; return; }
+  var r = analyze(trimmed);
+  var html = '';
+  var any = r.cap.length || r.res.length || r.material.length || r.ind.length;
+  if (!any){
+    html = '<div class="no-match"><b>Chưa nhận ra cách đọc chuẩn nào cho "'+esc(trimmed)+'"</b>Nếu mã có tiền tố dòng sản phẩm lẫn cả số (VD <code>MKP61</code>, <code>CBB21</code>), công cụ cố tình không đoán để tránh sai — hãy bỏ phần tiền tố đó đi và chỉ nhập phần còn lại (mã điện dung + dung sai + điện áp). Ngoài ra thử đối chiếu lại mã trên thân linh kiện, hoặc xem các kiểu mã được hỗ trợ bên dưới.</div>';
+    out.innerHTML = html; return;
+  }
+  var order = {compound:0, eia198:0, 'prefixed-volt':0, 'trail-tol':1, eia96:0, zero:0, sub:2, decimal:1, 'plain-code':3, 'plain-direct':3};
+  function rank(x){ return (x.confidence==='high'?0:10) + (order[x.kind]===undefined?9:order[x.kind]); }
+  var capSorted = r.cap.slice().sort(function(a,b){return rank(a)-rank(b);});
+  var resSorted = r.res.slice().sort(function(a,b){return rank(a)-rank(b);});
+
+  for (var i=0;i<capSorted.length;i++){
+    var c = capSorted[i];
+    if (c.kind==='compound') html+=renderCompound(c);
+    else if (c.kind==='eia198') html+=renderEIA198(c);
+    else if (c.kind==='trail-tol') html+=renderTrailTol(c);
+    else if (c.kind==='prefixed-volt') html+=renderPrefixedVolt(c);
+    else if (c.kind==='sub') html+=renderSubCap(c);
+    else if (c.kind==='decimal') html+=renderDecimal(c);
+    else if (c.kind==='plain-code') html+=renderPlainCap(c);
+    else if (c.kind==='plain-direct') html+=renderPlainDirect(c);
+  }
+  for (var j=0;j<resSorted.length;j++){
+    var rr = resSorted[j];
+    if (rr.kind==='eia96') html+=renderEIA96(rr);
+    else if (rr.kind==='zero') html+=renderZero();
+    else if (rr.kind==='sub') html+=renderSubRes(rr);
+    else if (rr.kind==='plain-code') html+=renderPlainRes(rr);
+  }
+  html += renderIndCards(r.ind);
+  for (var k=0;k<r.material.length;k++){
+    var m = r.material[k];
+    if (m.kind==='class2') html+=renderClass2(m);
+    else if (m.kind==='class1') html+=renderClass1(m);
+  }
+  out.innerHTML = html;
+}
+
+/* ============ RENDER: TAB 2 TRA NGƯỢC ============ */
+
+function row(k, v, approx){
+  return '<div class="row"><span class="k">'+k+'</span><span class="v">'+v+(approx?'<span class="approx">'+approx+'</span>':'')+'</span></div>';
+}
+function pctErr(err){ return err<0.0005 ? '' : ('≈ sai lệch '+(err*100).toFixed(1)+'%'); }
+
+function updateCapReverse(){
+  var valStr = document.getElementById('capVal').value;
+  var val = parseVNNumber(valStr);
+  var unit = document.getElementById('capUnit').value;
+  var voltStr = document.getElementById('capVolt').value;
+  var volt = parseVNNumber(voltStr);
+  var tol = document.getElementById('capTol').value;
+  var out = document.getElementById('capRevOut');
+  if (!isFinite(val) || val<=0){ out.innerHTML = '<div class="empty-state">Nhập trị số điện dung hợp lệ.</div>'; return; }
+
+  var pF;
+  if (unit==='pF') pF = val; else if (unit==='nF') pF = val*1000; else pF = val*1e6;
+
+  var html = capUnitsHTML(pF);
+  html += '<div class="kv-out">';
+  if (pF < 100 && pF === Math.round(pF)){
+    html += row('Mã ngắn (đọc trực tiếp, ≤ 2 chữ số)', String(Math.round(pF)));
+  }
+  html += row('Ký hiệu chữ thay dấu phẩy (IEC 60062)', esc(capLetterCode(pF)));
+  if (pF < 1000) html += row('Biến thể chữ R (hay gặp trên MLCC)', esc(formatLetterSub(pF,'R')));
+
+  var c3 = toCapCode3(pF);
+  if (c3) html += row('Mã 3 chữ số', c3.code, pctErr(c3.err));
+  var c4 = toCapCode4(pF);
+  if (c4) html += row('Mã 4 chữ số (chính xác hơn)', c4.code, pctErr(c4.err));
+  var e198 = toEIA198Reverse(pF);
+  if (e198 && e198.err < 0.08) html += row('Mã MLCC EIA-198', e198.code, pctErr(e198.err));
+
+  var voltCodeStr = '', voltPart = '';
+  if (isFinite(volt) && volt>0){
+    var vc = toVoltCode(volt);
+    html += row('Mã điện áp gần đúng nhất', vc.nearest.code, formatVN(vc.nearest.approx)+' V');
+    if (vc.atLeast.code !== vc.nearest.code) html += row('Mã điện áp an toàn tối thiểu (≥ giá trị nhập)', vc.atLeast.code, formatVN(vc.atLeast.approx)+' V');
+    voltCodeStr = vc.atLeast.code; voltPart = formatVN(vc.atLeast.approx)+'V';
+  }
+  html += '</div>';
+
+  var magCode = c3 ? c3.code : (c4 ? c4.code : capLetterCode(pF));
+  var fullCode = (voltCodeStr?voltCodeStr:'') + magCode + (tol||'');
+  if (voltCodeStr || tol){
+    html += '<div class="big-value" style="margin-top:14px">Mã đầy đủ gợi ý: '+esc(fullCode)+'</div>';
+    var noteParts = [];
+    if (voltPart) noteParts.push('Điện áp ≥ '+voltPart+' — nên chọn dư thêm 20–50% so với điện áp làm việc thực tế.');
+    if (tol){
+      var ti = capToleranceText(tol, pF);
+      noteParts.push('Dung sai '+tol+' = '+(ti&&ti.text?ti.text:(ti&&ti.note?ti.note:'—'))+(pF<=10?' (từ 10 pF trở xuống, chuẩn EIA ghi dung sai theo pF chứ không theo %).':'.'));
+    }
+    if (noteParts.length) html += '<p class="result-note">'+noteParts.join(' ')+'</p>';
+  }
+  out.innerHTML = html;
+}
+
+function updateResReverse(){
+  var valStr = document.getElementById('resVal').value;
+  var val = parseVNNumber(valStr);
+  var unit = document.getElementById('resUnit').value;
+  var out = document.getElementById('resRevOut');
+  if (!isFinite(val) || val<=0){ out.innerHTML = '<div class="empty-state">Nhập trị số điện trở hợp lệ.</div>'; return; }
+  var ohms;
+  if (unit==='ohm') ohms = val; else if (unit==='kohm') ohms = val*1e3; else ohms = val*1e6;
+
+  var html = '<div class="kv-out">';
+  html += row('Ký hiệu chữ thay dấu phẩy (IEC 60062)', esc(resLetterCode(ohms)));
+  if (ohms < 1) html += row('Biến thể mΩ (điện trở shunt)', esc(formatLetterSub(ohms*1000,'L'))+' / '+esc(formatLetterSub(ohms*1000,'m')));
+  var c3 = toResCode3(ohms); if (c3) html += row('Mã 3 chữ số (±5%/±10% dán)', c3.code, pctErr(c3.err));
+  var c4 = toResCode4(ohms); if (c4) html += row('Mã 4 chữ số (±1% dán)', c4.code, pctErr(c4.err));
+  /* Bảng E96 chỉ cách nhau ~2,4% nên sai lệch lớn hơn 3% nghĩa là trị số nằm ngoài dải mã hoá được */
+  var e96 = toEIA96Reverse(ohms); if (e96 && e96.err<0.03) html += row('Mã EIA-96 (±1%, chuẩn nhất)', e96.code, pctErr(e96.err));
+
+  var b4 = colorBandsFor(ohms, 4);
+  if (b4) html += row('Vạch màu 4 vạch (±5%)', b4.names.join(' – ')+' – Vàng kim', pctErr(b4.err));
+  var b5 = colorBandsFor(ohms, 5);
+  if (b5) html += row('Vạch màu 5 vạch (±1%)', b5.names.join(' – ')+' – Nâu', pctErr(b5.err));
+  html += '</div>';
+  out.innerHTML = html;
+}
+
+/* ============ RENDER: TAB 3 VẠCH MÀU ĐIỆN TRỞ ============ */
+
+var bandState = { count:5, colors:['brown','black','black','red','brown'] };
+var DIGIT_COLORS = RES_COLORS.filter(function(c){return c.digit!==null;});
+var MULT_COLORS = RES_COLORS.filter(function(c){return c.mult!==null;});
+var TOL_COLORS = RES_COLORS.filter(function(c){return c.tol!==null;});
+var TEMP_COLORS = RES_COLORS.filter(function(c){return c.temp!==null;});
+
+function bandRoles(count){
+  if (count===4) return ['digit','digit','mult','tol'];
+  if (count===6) return ['digit','digit','digit','mult','tol','temp'];
+  return ['digit','digit','digit','mult','tol'];
+}
+function rolePalette(role){
+  if (role==='digit') return DIGIT_COLORS;
+  if (role==='mult') return MULT_COLORS;
+  if (role==='tol') return TOL_COLORS;
+  return TEMP_COLORS;
+}
+function roleLabel(role, idx, total){
+  if (role==='digit') return 'Vạch '+(idx+1)+' — chữ số';
+  if (role==='mult') return 'Vạch '+(idx+1)+' — hệ số nhân';
+  if (role==='tol') return 'Vạch '+(idx+1)+' — dung sai';
+  return 'Vạch '+(idx+1)+' — hệ số nhiệt';
+}
+
+function renderBandRows(){
+  var roles = bandRoles(bandState.count);
+  if (bandState.colors.length !== roles.length){
+    var defaults4 = ['brown','black','red','gold'];
+    var defaults5 = ['brown','black','black','red','brown'];
+    var defaults6 = ['brown','black','black','red','brown','brown'];
+    bandState.colors = (bandState.count===4?defaults4:bandState.count===6?defaults6:defaults5).slice();
+  }
+  var html = '';
+  for (var i=0;i<roles.length;i++){
+    var pal = rolePalette(roles[i]);
+    html += '<div class="band-row"><span class="band-row-label">'+roleLabel(roles[i], i, roles.length)+'</span><div class="swatches" data-band-idx="'+i+'">';
+    for (var j=0;j<pal.length;j++){
+      var c = pal[j];
+      var sel = bandState.colors[i]===c.key ? ' selected' : '';
+      html += '<button type="button" class="swatch-btn'+sel+'" data-color="'+c.key+'" data-band-idx="'+i+'" style="--sw:'+c.hex+'" title="'+c.vi+'" aria-label="'+c.vi+'"></button>';
+    }
+    html += '</div></div>';
+  }
+  document.getElementById('bandRows').innerHTML = html;
+  renderResistorVisual();
+  computeColorResult();
+}
+function renderResistorVisual(){
+  var roles = bandRoles(bandState.count);
+  var body = document.getElementById('resistorBody');
+  var html = '';
+  for (var i=0;i<roles.length;i++){
+    var c = colorByKey(bandState.colors[i]);
+    var bg = c ? (c.key==='none' ? 'repeating-linear-gradient(45deg,var(--surface-2),var(--surface-2) 3px,var(--rule) 3px,var(--rule) 6px)' : c.hex) : '#ccc';
+    html += '<div class="rband" style="background:'+bg+'"></div>';
+  }
+  body.innerHTML = html;
+}
+function computeColorResult(){
+  var roles = bandRoles(bandState.count);
+  var el = document.getElementById('colorResult');
+  var digits = '', mult = null, tol = null, temp = null;
+  for (var i=0;i<roles.length;i++){
+    var c = colorByKey(bandState.colors[i]);
+    if (!c){ el.innerHTML = '<div class="meta">Chọn đủ màu cho từng vạch.</div>'; return; }
+    if (roles[i]==='digit') digits += String(c.digit);
+    if (roles[i]==='mult') mult = c.mult;
+    if (roles[i]==='tol') tol = c.tol;
+    if (roles[i]==='temp') temp = c.temp;
+  }
+  if (mult===null || digits===''){ el.innerHTML = '<div class="meta">Chọn đủ màu cho từng vạch.</div>'; return; }
+  var ohms = parseInt(digits,10) * mult;
+  var rf = resFormat(ohms);
+  var html = '<div class="val">'+rf.primary+'</div>';
+  html += '<div class="meta">Dung sai '+(tol||'—')+(temp?(' · Hệ số nhiệt '+temp):'')+'</div>';
+  el.innerHTML = html;
+}
+
+/* ============ CUỘN CẢM: DỮ LIỆU, ĐỌC MÃ, TÍNH TOÁN ============ */
+
+/* Dung sai cuộn cảm (EIA): từ 10 nH trở xuống ghi tuyệt đối theo nH, trên 10 nH ghi theo % */
+var IND_TOLERANCE = {
+  B:{small:'±0,1 nH',big:null}, C:{small:'±0,2 nH',big:null}, S:{small:'±0,3 nH',big:null},
+  D:{small:'±0,5 nH',big:null}, F:{small:'±1 nH',big:'±1%'}, G:{small:null,big:'±2%'},
+  H:{small:null,big:'±3%'}, J:{small:null,big:'±5%'}, K:{small:null,big:'±10%'},
+  M:{small:null,big:'±20%'}, N:{small:null,big:'±30%'}
+};
+/* Chữ thay dấu phẩy của cuộn cảm, quy về nH: R = µH, N = nH */
+var IND_SUB_MULT = {R:1e3, N:1};
+var IND_UNIT_TO_NH = {nH:1, uH:1e3, mH:1e6, H:1e9};
+/* Hệ số nhân vạch màu cuộn cảm (đơn vị µH) và bảng dung sai riêng của cuộn cảm */
+var IND_MULT_KEYS = ['black','brown','red','orange','yellow','gold','silver'];
+var IND_TOL_KEYS  = ['brown','red','orange','yellow','gold','silver','none'];
+var IND_TOL_BY_COLOR = {brown:'±1%', red:'±2%', orange:'±3%', yellow:'±4%', gold:'±5%', silver:'±10%', none:'±20%'};
+
+function indFormat(nH){
+  var uH=nH/1e3, mH=nH/1e6, H=nH/1e9, primary;
+  if (nH<1000) primary = formatVN(nH)+' nH';
+  else if (uH<1000) primary = formatVN(uH)+' µH';
+  else if (mH<1000) primary = formatVN(mH)+' mH';
+  else primary = formatVN(H)+' H';
+  return {nH:nH, uH:uH, mH:mH, H:H, primary:primary};
+}
+function indUnitsHTML(nH){
+  if (!isFinite(nH)||nH<=0) return '';
+  var main = nH<1000 ? 'nH' : (nH<1e6 ? 'µH' : (nH<1e9 ? 'mH' : 'H'));
+  var items = [{u:'nH',v:nH},{u:'µH',v:nH/1e3},{u:'mH',v:nH/1e6}];
+  if (nH>=1e6) items.push({u:'H',v:nH/1e9});
+  var h = '<span class="uconv-lbl">Quy đổi</span>';
+  for (var i=0;i<items.length;i++){
+    h += '<span class="'+(items[i].u===main?'is-main':'')+'"><b>'+formatVN(items[i].v,10)+'</b> '+items[i].u+'</span>';
+  }
+  return '<div class="uconv">'+h+'</div>';
+}
+function freqFormat(hz){
+  if (!isFinite(hz)||hz<=0) return '—';
+  if (hz<1e3) return formatVN(hz)+' Hz';
+  if (hz<1e6) return formatVN(hz/1e3)+' kHz';
+  if (hz<1e9) return formatVN(hz/1e6)+' MHz';
+  return formatVN(hz/1e9)+' GHz';
+}
+function timeFormat(s){
+  if (!isFinite(s)||s<=0) return '—';
+  if (s>=1) return formatVN(s)+' s';
+  if (s>=1e-3) return formatVN(s*1e3)+' ms';
+  if (s>=1e-6) return formatVN(s*1e6)+' µs';
+  return formatVN(s*1e9)+' ns';
+}
+function energyFormat(J){
+  if (!isFinite(J)||J<=0) return '—';
+  if (J>=1) return formatVN(J)+' J';
+  if (J>=1e-3) return formatVN(J*1e3)+' mJ';
+  if (J>=1e-6) return formatVN(J*1e6)+' µJ';
+  return formatVN(J*1e9)+' nJ';
+}
+
+/* Mã 3–4 chữ số của cuộn cảm: 2 (hoặc 3) số đầu × 10^số cuối.
+   Đơn vị ngầm định là µH ở cuộn cảm công suất, nH ở cuộn cảm chip cao tần — trả về cả hai. */
+function parseIndMagnitude(s, raw){
+  if (!s) return null;
+  if (/^\d+$/.test(s)){
+    if (/^0+$/.test(s)) return null;
+    /* mã 1–2 chữ số chỉ có ở cuộn cảm cao tần và không bao giờ có số 0 dẫn đầu
+       — chặn ở đây để mã điện trở dán kiểu 01B không bị đọc lây thành cuộn cảm */
+    if (s.length<=2) return /^0/.test(s) ? null : {nH:parseInt(s,10), rule:'direct'};
+    if (s.length===3||s.length===4){
+      var sig = parseInt(s.slice(0,s.length-1),10);
+      var exp = parseInt(s.slice(-1),10);
+      var uH = sig*Math.pow(10,exp);
+      return {nH:uH*1e3, altNH:uH, rule:(s.length===3?'3digit':'4digit'), sig:sig, exp:exp, mult:Math.pow(10,exp)};
+    }
+    return null;
+  }
+  var m = s.match(/^(\d*)([RN])(\d*)$/);
+  if (m){
+    var ip=m[1], letter=m[2], fp=m[3];
+    if (!ip && !fp) return null;
+    var num = parseFloat((ip||'0')+'.'+(fp||'0'));
+    return {nH:num*IND_SUB_MULT[letter], rule:'sub-'+letter, letter:letter};
+  }
+  return null;
+}
+function indToleranceText(letter, nH){
+  var t = IND_TOLERANCE[letter]; if (!t) return null;
+  if (nH<=10) return t.small ? {text:t.small} : (t.big ? {text:t.big} : {text:null, note:'Chữ '+letter+' không định nghĩa cho cuộn cảm cỡ này'});
+  return t.big ? {text:t.big} : {text:null, note:'Chữ '+letter+' chỉ dùng cho cuộn cảm từ 10 nH trở xuống'};
+}
+function tryIndTrailingTolerance(upper, raw){
+  if (upper.length<2) return null;
+  var last = upper[upper.length-1]; if (!(last in IND_TOLERANCE)) return null;
+  /* "10N" đọc là 10 nH (chữ N thay dấu phẩy) hợp lý hơn là "10 ±30%" — bỏ cách đọc dung sai ở đây */
+  if ((last in IND_SUB_MULT) && parseIndMagnitude(upper, raw)) return null;
+  var prefix = upper.slice(0,-1);
+  var mag = parseIndMagnitude(prefix, (raw||upper).slice(0,-1)); if (!mag) return null;
+  return {mag:mag, tolLetter:last, tolInfo:indToleranceText(last, mag.nH), prefix:prefix};
+}
+/* Gom mọi cách đọc theo cuộn cảm của một mã — dùng chung cho tab Giải mã và tab Cuộn cảm */
+function analyzeInductor(upper, cleaned){
+  var ind = [];
+  var trail = tryIndTrailingTolerance(upper, cleaned);
+  if (trail){ trail.kind='trail-tol'; ind.push(trail); }
+  if (/^(\d*)([RN])(\d*)$/.test(upper)){
+    var magS = parseIndMagnitude(upper, cleaned);
+    if (magS) ind.push({kind:'sub', letter:magS.letter, mag:magS});
+  }
+  if (/^\d+$/.test(upper) && !/^0+$/.test(upper)){
+    var magP = parseIndMagnitude(upper, cleaned);
+    if (magP) ind.push({kind:(magP.rule==='direct'?'plain-direct':'plain-code'), mag:magP});
+  }
+  return ind;
+}
+
+/* ---- Thẻ kết quả cuộn cảm ---- */
+function badgeIndHTML(){ return '<span class="badge ind">Nếu là cuộn cảm</span>'; }
+function indAltNote(mag){
+  if (mag.altNH===undefined) return '';
+  return ' Cùng mã này, nếu là <b>cuộn cảm chip cao tần</b> thì đơn vị ngầm định là nH, đọc thành <b>'+indFormat(mag.altNH).primary+'</b>.';
+}
+function renderIndPlain(p){
+  var f = indFormat(p.mag.nH);
+  var segs = segHTML('--ind', String(p.mag.sig), 'Trị số', p.mag.sig+' (các chữ số đầu)');
+  segs += segHTML('--accent', String(p.mag.exp), 'Số mũ', '×10'+'^'+p.mag.exp+' = ×'+formatVN(p.mag.mult));
+  return '<div class="result-card ind"><div class="result-head">'+badgeIndHTML()+'<h3>Mã '+(p.mag.rule==='3digit'?'3':'4')+' chữ số — CUỘN CẢM</h3></div>'+
+    '<div class="decode">'+segs+'</div><div class="big-value">'+f.primary+'</div>'+indUnitsHTML(p.mag.nH)+
+    '<p class="result-note">Theo công thức '+p.mag.sig+' × '+formatVN(p.mag.mult)+' = '+f.primary+'.'+indAltNote(p.mag)+'</p></div>';
+}
+function renderIndDirect(p){
+  var f = indFormat(p.mag.nH);
+  return '<div class="result-card ind"><div class="result-head">'+badgeIndHTML()+'<h3>Mã 1–2 chữ số, đọc trực tiếp — CUỘN CẢM</h3></div>'+
+    '<div class="big-value">'+f.primary+'</div>'+indUnitsHTML(p.mag.nH)+
+    '<p class="result-note">Cuộn cảm chip cao tần in 1–2 chữ số thì đọc thẳng theo nH.</p></div>';
+}
+function renderIndSub(s){
+  var f = indFormat(s.mag.nH);
+  var noteMap = {
+    R:'Trên cuộn cảm, chữ <b>R</b> thay dấu phẩy và cho biết đơn vị <b>µH</b> — khác hẳn điện trở (R = Ω) và tụ MLCC (R thường là pF). Cùng mã <code>4R7</code>: cuộn cảm 4,7 µH, điện trở 4,7 Ω, tụ tantalum 4,7 µF.',
+    N:'Chữ <b>N</b> thay dấu phẩy và cho biết đơn vị <b>nH</b>, hay gặp ở cuộn cảm chip cao tần. Đừng nhầm với chữ n của tụ điện (nF) — chênh nhau đúng một triệu lần về bản chất linh kiện.'
+  };
+  return '<div class="result-card ind"><div class="result-head">'+badgeIndHTML()+'<h3>Chữ '+s.letter+' thay dấu phẩy — CUỘN CẢM</h3></div>'+
+    '<div class="big-value">'+f.primary+'</div>'+indUnitsHTML(s.mag.nH)+
+    '<p class="result-note">'+noteMap[s.letter]+'</p></div>';
+}
+function renderIndTrail(t){
+  var f = indFormat(t.mag.nH);
+  var ruleLabel = t.mag.rule==='direct' ? 'đọc trực tiếp nH'
+    : (t.mag.rule==='3digit'||t.mag.rule==='4digit') ? (t.mag.sig+' × '+formatVN(t.mag.mult)+' µH') : 'chữ thay dấu phẩy';
+  var segs = segHTML('--ind', t.prefix, 'Điện cảm', f.primary+' ('+ruleLabel+')');
+  segs += segHTML('--ok', t.tolLetter, 'Dung sai', t.tolInfo ? (t.tolInfo.text || t.tolInfo.note || '—') : '—');
+  var big = f.primary + (t.tolInfo && t.tolInfo.text ? ' · '+t.tolInfo.text : '');
+  return '<div class="result-card ind"><div class="result-head">'+badgeIndHTML()+'<h3>Mã điện cảm + chữ dung sai — CUỘN CẢM</h3></div>'+
+    '<div class="decode">'+segs+'</div><div class="big-value">'+big+'</div>'+indUnitsHTML(t.mag.nH)+
+    '<p class="result-note">Cuộn cảm nguồn hay gặp nhất là chữ <b>K</b> (±10%) và <b>M</b> (±20%).'+indAltNote(t.mag)+'</p></div>';
+}
+function renderIndCards(list){
+  var html = '';
+  for (var i=0;i<list.length;i++){
+    var x = list[i];
+    if (x.kind==='trail-tol') html += renderIndTrail(x);
+    else if (x.kind==='sub') html += renderIndSub(x);
+    else if (x.kind==='plain-code') html += renderIndPlain(x);
+    else if (x.kind==='plain-direct') html += renderIndDirect(x);
+  }
+  return html;
+}
+
+/* ---- Tab Cuộn cảm: ô "có mã, cần trị số" ---- */
+function updateIndDecode(){
+  var el = document.getElementById('indDecIn');
+  var out = document.getElementById('indDecOut');
+  var trimmed = (el.value||'').trim();
+  if (!trimmed){ out.innerHTML=''; return; }
+  var cleaned = trimmed.replace(/\s+/g,'').replace(/[-_]/g,'').replace(/[µμ]/g,'u').replace(/[uU][hH]$/,'').replace(/[nN][hH]$/,'');
+  var list = analyzeInductor(cleaned.toUpperCase(), cleaned);
+  if (!list.length){
+    out.innerHTML = '<div class="no-match"><b>Chưa nhận ra mã cuộn cảm nào từ "'+esc(trimmed)+'"</b>Cuộn cảm chỉ dùng vài kiểu mã: 3–4 chữ số, chữ R hoặc N thay dấu phẩy, kèm một chữ dung sai ở cuối. Nếu trên thân có ghi Ω hoặc "@100MHz" thì đó là hạt ferrite chứ không phải cuộn cảm.</div>';
+    return;
+  }
+  out.innerHTML = renderIndCards(list);
+}
+
+/* ---- Tab Cuộn cảm: ô "có trị số, cần mã" ---- */
+function indColorBandsFor(uH, bandCount){
+  if (!(uH>0)) return null;
+  var nd = (bandCount===4) ? 2 : 3;
+  var exp = Math.floor(Math.log(uH)/Math.LN10 + 1e-9) - (nd-1);
+  var sig = Math.round(uH/Math.pow(10,exp));
+  if (sig>=Math.pow(10,nd)){ sig=Math.round(sig/10); exp++; }
+  if (exp<-2||exp>4) return null;
+  var digits = String(sig);
+  while (digits.length<nd) digits = '0'+digits;
+  var names=[], i, q;
+  for (i=0;i<nd;i++){
+    var d = parseInt(digits.charAt(i),10), dc=null;
+    for (q=0;q<RES_COLORS.length;q++) if (RES_COLORS[q].digit===d){ dc=RES_COLORS[q]; break; }
+    if (!dc) return null;
+    names.push(dc.vi);
+  }
+  var mv = Math.pow(10,exp), mc=null;
+  for (q=0;q<IND_MULT_KEYS.length;q++){
+    var cc = colorByKey(IND_MULT_KEYS[q]);
+    if (cc && cc.mult!==null && Math.abs(cc.mult-mv)<=mv*1e-9){ mc=cc; break; }
+  }
+  if (!mc) return null;
+  names.push(mc.vi);
+  return {names:names, approx:sig*mv, err:Math.abs(sig*mv-uH)/uH};
+}
+function updateIndReverse(){
+  var val = parseVNNumber(document.getElementById('indRevVal').value);
+  var unit = document.getElementById('indRevUnit').value;
+  var out = document.getElementById('indRevOut');
+  if (!isFinite(val) || val<=0){ out.innerHTML = '<div class="empty-state">Nhập trị số điện cảm hợp lệ.</div>'; return; }
+  var nH = val * IND_UNIT_TO_NH[unit];
+  var uH = nH/1e3;
+
+  var html = indUnitsHTML(nH);
+  html += '<div class="kv-out">';
+  var c3 = toCode3(uH,10,99);
+  if (c3) html += row('Mã 3 chữ số (quy ước µH)', c3.code, pctErr(c3.err));
+  var c4 = toCode3(uH,100,999);
+  if (c4) html += row('Mã 4 chữ số (quy ước µH)', c4.code, pctErr(c4.err));
+  var n3 = toCode3(nH,10,99);
+  if (n3 && nH<1e6) html += row('Mã 3 chữ số (quy ước nH, chip cao tần)', n3.code, pctErr(n3.err));
+  /* chữ R chỉ dùng cho dải dưới 100 µH, chữ N cho dải dưới 1 µH — ngoài dải đó hãng dùng mã 3 chữ số */
+  if (uH>=0.1 && uH<10) html += row('Ký hiệu chữ R (µH)', esc(formatLetterSub(uH,'R')));
+  if (nH<100) html += row('Ký hiệu chữ N (nH)', esc(formatLetterSub(nH,'N')));
+  if (nH<100 && nH===Math.round(nH)) html += row('Đọc trực tiếp (1–2 chữ số, nH)', String(nH));
+
+  var b4 = indColorBandsFor(uH,4);
+  if (b4) html += row('Vạch màu 4 vạch (±10% bạc)', b4.names.join(' – ')+' – Bạc', pctErr(b4.err));
+  var b5 = indColorBandsFor(uH,5);
+  if (b5) html += row('Vạch màu 5 vạch (±10% bạc)', b5.names.join(' – ')+' – Bạc', pctErr(b5.err));
+  html += '</div>';
+
+  var base = c3 ? c3.code : (c4 ? c4.code : (nH<100 ? formatLetterSub(nH,'N') : formatLetterSub(uH,'R')));
+  html += '<div class="big-value" style="margin-top:14px">Mã đầy đủ gợi ý: '+esc(base)+'K</div>';
+  html += '<p class="result-note">Chữ <b>K</b> ở cuối là dung sai ±10%, mức phổ thông nhất của cuộn cảm nguồn — đổi thành J (±5%) hoặc M (±20%) tuỳ yêu cầu. Khi đi mua vẫn phải nêu thêm dòng bão hoà I<sub>sat</sub> và kích thước vỏ, vì mã trên thân không chứa hai thông tin đó.</p>';
+  out.innerHTML = html;
+}
+
+/* ---- Tab Cuộn cảm: vạch màu ---- */
+var indBandState = { count:4, colors:['brown','black','black','silver'] };
+
+function indBandRoles(count){
+  return count===5 ? ['digit','digit','digit','mult','tol'] : ['digit','digit','mult','tol'];
+}
+function indRolePalette(role){
+  var keys, i, arr=[];
+  if (role==='digit') return DIGIT_COLORS;
+  keys = (role==='mult') ? IND_MULT_KEYS : IND_TOL_KEYS;
+  for (i=0;i<keys.length;i++) arr.push(colorByKey(keys[i]));
+  return arr;
+}
+function indRoleLabel(role, idx){
+  if (role==='digit') return 'Vạch '+(idx+1)+' — chữ số';
+  if (role==='mult') return 'Vạch '+(idx+1)+' — hệ số nhân (µH)';
+  return 'Vạch '+(idx+1)+' — dung sai';
+}
+function renderIndBandRows(){
+  var roles = indBandRoles(indBandState.count);
+  if (indBandState.colors.length !== roles.length){
+    indBandState.colors = (indBandState.count===5)
+      ? ['brown','black','black','black','silver']
+      : ['brown','black','black','silver'];
+  }
+  var html = '';
+  for (var i=0;i<roles.length;i++){
+    var pal = indRolePalette(roles[i]);
+    html += '<div class="band-row"><span class="band-row-label">'+indRoleLabel(roles[i], i)+'</span><div class="swatches">';
+    for (var j=0;j<pal.length;j++){
+      var c = pal[j];
+      var sub = roles[i]==='mult' ? ('×'+formatVN(c.mult)) : (roles[i]==='tol' ? IND_TOL_BY_COLOR[c.key] : String(c.digit));
+      var sel = indBandState.colors[i]===c.key ? ' selected' : '';
+      html += '<button type="button" class="swatch-btn'+sel+'" data-color="'+c.key+'" data-band-idx="'+i+'" style="--sw:'+c.hex+'" title="'+c.vi+' — '+sub+'" aria-label="'+c.vi+' — '+sub+'"></button>';
+    }
+    html += '</div></div>';
+  }
+  document.getElementById('indBandRows').innerHTML = html;
+  renderIndVisual();
+  computeIndColorResult();
+}
+function renderIndVisual(){
+  var roles = indBandRoles(indBandState.count);
+  var body = document.getElementById('indBody');
+  var html = '<div class="rband wide" style="background:#b8b8b8" title="Vạch bạc rộng — báo đơn vị µH"></div>';
+  for (var i=0;i<roles.length;i++){
+    var c = colorByKey(indBandState.colors[i]);
+    var bg = c ? (c.key==='none' ? 'repeating-linear-gradient(45deg,var(--surface-2),var(--surface-2) 3px,var(--rule) 3px,var(--rule) 6px)' : c.hex) : '#ccc';
+    html += '<div class="rband" style="background:'+bg+'"></div>';
+  }
+  body.innerHTML = html;
+}
+function computeIndColorResult(){
+  var roles = indBandRoles(indBandState.count);
+  var el = document.getElementById('indColorResult');
+  var digits='', mult=null, tol=null;
+  for (var i=0;i<roles.length;i++){
+    var c = colorByKey(indBandState.colors[i]);
+    if (!c){ el.innerHTML = '<div class="meta">Chọn đủ màu cho từng vạch.</div>'; return; }
+    if (roles[i]==='digit') digits += String(c.digit);
+    if (roles[i]==='mult') mult = c.mult;
+    if (roles[i]==='tol') tol = IND_TOL_BY_COLOR[c.key];
+  }
+  if (mult===null || digits===''){ el.innerHTML = '<div class="meta">Chọn đủ màu cho từng vạch.</div>'; return; }
+  var uH = parseInt(digits,10) * mult;
+  var f = indFormat(uH*1e3);
+  el.innerHTML = '<div class="val">'+f.primary+'</div><div class="meta">Dung sai '+(tol||'—')+' · vạch bạc rộng đầu trái báo đơn vị µH</div>'+indUnitsHTML(uH*1e3);
+}
+
+/* ---- Tab Cuộn cảm: máy tính ---- */
+function updateIndCalc(){
+  var L_nH = parseVNNumber(document.getElementById('cL').value) * IND_UNIT_TO_NH[document.getElementById('cLUnit').value];
+  var conv = document.getElementById('cLConv');
+  var okL = isFinite(L_nH) && L_nH>0;
+  conv.innerHTML = okL ? indUnitsHTML(L_nH) : '<div class="empty-state">Nhập trị số điện cảm hợp lệ.</div>';
+  var L = okL ? L_nH*1e-9 : NaN;   /* henry */
+
+  /* 1. Cảm kháng */
+  var fEl = parseVNNumber(document.getElementById('cFreq').value);
+  var fMul = parseFloat(document.getElementById('cFreqUnit').value);
+  var f = fEl*fMul;
+  var xlOut = document.getElementById('cXlOut');
+  if (okL && isFinite(f) && f>0){
+    var xl = 2*Math.PI*f*L;
+    var html = '<div class="big-value">X<sub>L</sub> = '+resFormat(xl).primary+'</div><div class="kv-out">';
+    html += row('Tần số góc ω = 2πf', formatVN(2*Math.PI*f)+' rad/s');
+    var std = [50, 1e3, 1e4, 1e5, 1e6, 1e7];
+    for (var i=0;i<std.length;i++) html += row('X<sub>L</sub> tại '+freqFormat(std[i]), resFormat(2*Math.PI*std[i]*L).primary);
+    html += '</div><p class="result-note">Ở một chiều cuộn cảm gần như nối tắt (chỉ còn DCR), tần số càng cao càng cản mạnh — đó là lý do cuộn cảm chặn được nhiễu cao tần mà vẫn cho dòng nguồn đi qua.</p>';
+    xlOut.innerHTML = html;
+  } else xlOut.innerHTML = '<div class="empty-state">Nhập tần số hợp lệ.</div>';
+
+  /* 2. Cộng hưởng LC */
+  var cVal = parseVNNumber(document.getElementById('cCap').value);
+  var cUnit = document.getElementById('cCapUnit').value;
+  var cFarad = cVal * (cUnit==='pF'?1e-12:(cUnit==='nF'?1e-9:1e-6));
+  var resoOut = document.getElementById('cResoOut');
+  if (okL && isFinite(cFarad) && cFarad>0){
+    var f0 = 1/(2*Math.PI*Math.sqrt(L*cFarad));
+    var z0 = Math.sqrt(L/cFarad);
+    var h2 = '<div class="big-value">f₀ = '+freqFormat(f0)+'</div><div class="kv-out">';
+    h2 += row('Trở kháng đặc trưng Z₀ = √(L/C)', resFormat(z0).primary);
+    h2 += row('Tại f₀ thì X<sub>L</sub> = X<sub>C</sub>', resFormat(2*Math.PI*f0*L).primary);
+    h2 += row('Chu kỳ dao động T = 1/f₀', timeFormat(1/f0));
+    h2 += '</div><p class="result-note">Muốn dời tần số cộng hưởng: f₀ tỉ lệ nghịch với căn bậc hai của L·C, nên tăng L hoặc C lên 4 lần thì f₀ giảm đúng một nửa.</p>';
+    resoOut.innerHTML = h2;
+  } else resoOut.innerHTML = '<div class="empty-state">Nhập điện dung hợp lệ.</div>';
+
+  /* 3. Năng lượng và hằng số thời gian */
+  var I = parseVNNumber(document.getElementById('cI').value);
+  var R = parseVNNumber(document.getElementById('cR').value);
+  var enOut = document.getElementById('cEnergyOut');
+  if (okL && (isFinite(I)||isFinite(R))){
+    var h3 = '<div class="kv-out">';
+    if (isFinite(I) && I>0) h3 += row('Năng lượng tích trữ W = ½LI²', energyFormat(0.5*L*I*I));
+    if (isFinite(R) && R>0){
+      var tau = L/R;
+      h3 += row('Hằng số thời gian τ = L/R', timeFormat(tau));
+      h3 += row('Dòng đạt 63% sau', timeFormat(tau));
+      h3 += row('Coi như ổn định sau 5τ', timeFormat(5*tau));
+    }
+    if (isFinite(I) && I>0) h3 += row('Áp tự cảm khi ngắt dòng này trong 1 µs', formatVN(L*I/1e-6)+' V');
+    h3 += '</div><p class="result-note">Con số áp tự cảm giải thích vì sao ngắt dòng qua cuộn dây mà không có diode dập thì transistor hoặc tiếp điểm bị đánh thủng: v = L·di/dt, ngắt càng nhanh áp càng cao.</p>';
+    enOut.innerHTML = h3;
+  } else enOut.innerHTML = '<div class="empty-state">Nhập dòng hoặc điện trở hợp lệ.</div>';
+
+  /* 4. Ghép hai cuộn */
+  var L2_nH = parseVNNumber(document.getElementById('cL2').value) * IND_UNIT_TO_NH[document.getElementById('cL2Unit').value];
+  var comboOut = document.getElementById('cComboOut');
+  if (okL && isFinite(L2_nH) && L2_nH>0){
+    var ser = L_nH + L2_nH;
+    var par = (L_nH*L2_nH)/(L_nH+L2_nH);
+    comboOut.innerHTML = '<div class="kv-out">'+
+      row('Nối tiếp', indFormat(ser).primary)+
+      row('Song song', indFormat(par).primary)+
+      '</div>';
+  } else comboOut.innerHTML = '<div class="empty-state">Nhập trị số cuộn thứ hai.</div>';
+
+  /* 5. Lõi xuyến theo A_L */
+  var AL = parseVNNumber(document.getElementById('cAl').value);
+  var torOut = document.getElementById('cToroidOut');
+  if (okL && isFinite(AL) && AL>0){
+    var nExact = Math.sqrt(L_nH/AL);
+    var nRound = Math.max(1, Math.round(nExact));
+    var lGot = AL*nRound*nRound;
+    torOut.innerHTML = '<div class="big-value">'+nRound+' vòng</div><div class="kv-out">'+
+      row('Số vòng lý thuyết', formatVN(nExact,2)+' vòng')+
+      row('Điện cảm thực tế với '+nRound+' vòng', indFormat(lGot).primary, pctErr(Math.abs(lGot-L_nH)/L_nH))+
+      row('Nếu quấn '+(nRound+1)+' vòng', indFormat(AL*(nRound+1)*(nRound+1)).primary)+
+      '</div><p class="result-note">A<sub>L</sub> tra theo mã lõi trong datasheet (lõi ferrite thường vài trăm đến vài nghìn nH/vòng², lõi bột sắt vài chục). Điện cảm tỉ lệ với bình phương số vòng nên chỉ cần thêm/bớt vài vòng là trị số đổi rõ rệt.</p>';
+  } else torOut.innerHTML = '<div class="empty-state">Nhập hệ số A<sub>L</sub> của lõi.</div>';
+
+  /* 6. Cuộn một lớp lõi không khí — công thức Wheeler */
+  var dmm = parseVNNumber(document.getElementById('cCoilD').value);
+  var lmm = parseVNNumber(document.getElementById('cCoilLen').value);
+  var coilOut = document.getElementById('cCoilOut');
+  if (okL && isFinite(dmm) && dmm>0 && isFinite(lmm) && lmm>0){
+    var r = dmm/20, len = lmm/10;               /* cm */
+    var uHtarget = L_nH/1e3;
+    var nCoil = Math.sqrt(uHtarget*(9*r+10*len)/(0.394*r*r));
+    var nC = Math.max(1, Math.round(nCoil));
+    var lBack = 0.394*r*r*nC*nC/(9*r+10*len);
+    var wire = nC*Math.PI*dmm/1000;             /* mét */
+    var warn = (len < 0.4*r) ? '<p class="result-note"><b>Cuộn quá ngắn so với đường kính</b> (ℓ &lt; 0,4·r) nên công thức Wheeler sai số lớn — kéo dài cuộn ra hoặc dùng cách tính theo A<sub>L</sub>.</p>' : '';
+    coilOut.innerHTML = '<div class="big-value">'+nC+' vòng</div><div class="kv-out">'+
+      row('Số vòng lý thuyết', formatVN(nCoil,2)+' vòng')+
+      row('Điện cảm thực tế với '+nC+' vòng', indFormat(lBack*1e3).primary, pctErr(Math.abs(lBack*1e3-L_nH)/L_nH))+
+      row('Chiều dài dây cần dùng (xấp xỉ)', formatVN(wire,3)+' m')+
+      row('Bước quấn — đường kính dây phải nhỏ hơn mức này', formatVN(lmm/nC,3)+' mm')+
+      '</div>'+warn;
+  } else coilOut.innerHTML = '<div class="empty-state">Nhập đường kính và chiều dài cuộn.</div>';
+}
+
+/* ============ WIRING ============ */
+
+document.addEventListener('DOMContentLoaded', function(){
+  var codeInput = document.getElementById('codeInput');
+  var timer;
+  codeInput.addEventListener('input', function(){ clearTimeout(timer); timer = setTimeout(function(){ renderDecodeResults(codeInput.value); }, 120); });
+  codeInput.value = '2J52J';
+  renderDecodeResults(codeInput.value);
+
+  var tabBtns = document.querySelectorAll('.tab-btn');
+  for (var t=0;t<tabBtns.length;t++){
+    tabBtns[t].addEventListener('click', function(){
+      var tab = this.getAttribute('data-tab');
+      for (var a=0;a<tabBtns.length;a++) tabBtns[a].classList.remove('active');
+      this.classList.add('active');
+      var panels = document.querySelectorAll('.tabpanel');
+      for (var p=0;p<panels.length;p++) panels[p].classList.remove('active');
+      document.getElementById('tab-'+tab).classList.add('active');
+    });
+  }
+
+  ['capVal','capUnit','capVolt','capTol'].forEach(function(id){
+    document.getElementById(id).addEventListener('input', updateCapReverse);
+    document.getElementById(id).addEventListener('change', updateCapReverse);
+  });
+  ['resVal','resUnit'].forEach(function(id){
+    document.getElementById(id).addEventListener('input', updateResReverse);
+    document.getElementById(id).addEventListener('change', updateResReverse);
+  });
+  updateCapReverse();
+  updateResReverse();
+
+  var bcBtns = document.querySelectorAll('.bc-btn');
+  for (var bc=0; bc<bcBtns.length; bc++){
+    bcBtns[bc].addEventListener('click', function(){
+      for (var x=0;x<bcBtns.length;x++) bcBtns[x].classList.remove('active');
+      this.classList.add('active');
+      bandState.count = parseInt(this.getAttribute('data-count'),10);
+      bandState.colors = [];
+      renderBandRows();
+    });
+  }
+  document.getElementById('bandRows').addEventListener('click', function(e){
+    var btn = e.target.closest ? e.target.closest('.swatch-btn') : null;
+    if (!btn) return;
+    var idx = parseInt(btn.getAttribute('data-band-idx'),10);
+    var color = btn.getAttribute('data-color');
+    bandState.colors[idx] = color;
+    renderBandRows();
+  });
+
+  renderBandRows();
+
+  /* ---- Thanh chuyển mục con: dùng chung cho tab cuộn cảm và tab kiến thức ---- */
+  function wireSubnav(navId, tabId){
+    var subBtns = document.querySelectorAll('#'+navId+' .sub-btn');
+    for (var sb=0; sb<subBtns.length; sb++){
+      subBtns[sb].addEventListener('click', function(){
+        for (var sx=0; sx<subBtns.length; sx++) subBtns[sx].classList.remove('active');
+        this.classList.add('active');
+        var subs = document.querySelectorAll('#'+tabId+' .subpanel');
+        for (var sp=0; sp<subs.length; sp++) subs[sp].classList.remove('active');
+        document.getElementById('sub-'+this.getAttribute('data-sub')).classList.add('active');
+      });
+    }
+  }
+  wireSubnav('indSubnav','tab-inductor');
+  wireSubnav('knowSubnav','tab-know');
+
+  var indIn = document.getElementById('indDecIn');
+  var indTimer;
+  indIn.addEventListener('input', function(){ clearTimeout(indTimer); indTimer = setTimeout(updateIndDecode, 120); });
+  indIn.value = '101';
+  updateIndDecode();
+
+  ['indRevVal','indRevUnit'].forEach(function(id){
+    document.getElementById(id).addEventListener('input', updateIndReverse);
+    document.getElementById(id).addEventListener('change', updateIndReverse);
+  });
+  updateIndReverse();
+
+  var ibcBtns = document.querySelectorAll('.ibc-btn');
+  for (var ib=0; ib<ibcBtns.length; ib++){
+    ibcBtns[ib].addEventListener('click', function(){
+      for (var ix=0; ix<ibcBtns.length; ix++) ibcBtns[ix].classList.remove('active');
+      this.classList.add('active');
+      indBandState.count = parseInt(this.getAttribute('data-count'),10);
+      indBandState.colors = [];
+      renderIndBandRows();
+    });
+  }
+  document.getElementById('indBandRows').addEventListener('click', function(e){
+    var btn = e.target.closest ? e.target.closest('.swatch-btn') : null;
+    if (!btn) return;
+    indBandState.colors[parseInt(btn.getAttribute('data-band-idx'),10)] = btn.getAttribute('data-color');
+    renderIndBandRows();
+  });
+  renderIndBandRows();
+
+  ['cL','cLUnit','cFreq','cFreqUnit','cCap','cCapUnit','cI','cR','cL2','cL2Unit','cAl','cCoilD','cCoilLen'].forEach(function(id){
+    document.getElementById(id).addEventListener('input', updateIndCalc);
+    document.getElementById(id).addEventListener('change', updateIndCalc);
+  });
+  updateIndCalc();
+});
+</script>
+</body>
+</html>

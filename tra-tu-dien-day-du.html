@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sổ Tra Tụ &amp; Trở</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --ground:#e9edf1;
+  --surface:#ffffff;
+  --surface-2:#f4f7f9;
+  --ink:#0f1a23;
+  --ink-2:#3c4b59;
+  --ink-3:#69798a;
+  --rule:#ccd6de;
+  --rule-strong:#9aabb9;
+  --band:#0e3350;
+  --band-ink:#f2f8fc;
+  --band-eyebrow:#8fc4e8;
+  --head-title:#0e3350;
+  --accent:#a9640f;
+  --accent-ink:#1b1206;
+  --accent-soft:#fbf1e0;
+  --danger:#9e1f18;
+  --danger-soft:#fbebe9;
+  --ok:#1a6045;
+  --ok-soft:#e8f3ee;
+  --info:#10556d;
+  --info-soft:#e5f0f4;
+  --th-ink:#0e3350;
+  --shadow:0 1px 2px rgba(15,26,35,.06),0 8px 24px rgba(15,26,35,.07);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0c1218;
+    --surface:#141d25;
+    --surface-2:#1a242e;
+    --ink:#e5ecf2;
+    --ink-2:#aebdc9;
+    --ink-3:#7d8d9b;
+    --rule:#28343f;
+    --rule-strong:#41525f;
+    --band:#12314a;
+    --band-ink:#dcebf7;
+    --band-eyebrow:#7fb2d8;
+    --head-title:#e5ecf2;
+    --accent:#e0a24a;
+    --accent-ink:#1b1206;
+    --accent-soft:#261d10;
+    --danger:#ef8d84;
+    --danger-soft:#2a1513;
+    --ok:#63c79c;
+    --ok-soft:#0f2219;
+    --info:#6dbdd6;
+    --info-soft:#0d222a;
+    --th-ink:#6dbdd6;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0c1218;
+  --surface:#141d25;
+  --surface-2:#1a242e;
+  --ink:#e5ecf2;
+  --ink-2:#aebdc9;
+  --ink-3:#7d8d9b;
+  --rule:#28343f;
+  --rule-strong:#41525f;
+  --band:#12314a;
+  --band-ink:#dcebf7;
+  --band-eyebrow:#7fb2d8;
+  --head-title:#e5ecf2;
+  --accent:#e0a24a;
+  --accent-ink:#1b1206;
+  --accent-soft:#261d10;
+  --danger:#ef8d84;
+  --danger-soft:#2a1513;
+  --ok:#63c79c;
+  --ok-soft:#0f2219;
+  --info:#6dbdd6;
+  --info-soft:#0d222a;
+  --th-ink:#6dbdd6;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+
+body{
+  background:var(--ground);
+  color:var(--ink);
+  font-family:'Be Vietnam Pro',system-ui,'Segoe UI',sans-serif;
+  font-size:15px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+
+/* ============ SHELL ============ */
+.wrap{max-width:1240px;margin:0 auto;padding:0 18px 72px}
+
+.masthead{
+  background:var(--band);
+  color:var(--band-ink);
+  padding:34px 24px 26px;
+  border-bottom:5px solid var(--accent);
+}
+.masthead-in{max-width:1240px;margin:0 auto}
+.masthead .eyebrow{
+  font-size:11.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--band-eyebrow);margin:0 0 8px;
+}
+.masthead h1{
+  font-family:Bitter,Georgia,serif;font-weight:800;
+  font-size:clamp(28px,4.6vw,46px);line-height:1.05;letter-spacing:-.015em;
+  margin:0;text-wrap:balance;color:var(--band-ink);
+}
+.masthead .sub{margin:12px 0 0;max-width:66ch;font-size:15px;color:var(--band-ink);opacity:.86}
+.masthead .scope{margin:16px 0 0;display:flex;flex-wrap:wrap;gap:8px}
+.masthead .scope span{
+  font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11.5px;font-weight:600;
+  letter-spacing:.06em;padding:4px 9px;border:1px solid rgba(143,196,232,.42);border-radius:2px;
+  color:var(--band-eyebrow);
+}
+
+/* ============ NAV + TÌM KIẾM ============ */
+nav{
+  position:sticky;top:0;z-index:20;
+  background:var(--surface);border-bottom:1px solid var(--rule);
+  padding:8px 18px;margin-bottom:26px;
+}
+.nav-in{max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:8px}
+.nav-bar{display:flex;gap:8px;align-items:stretch}
+#q{
+  flex:1;min-width:0;font-family:inherit;font-size:16px;line-height:1.2;
+  padding:8px 12px;min-height:42px;color:var(--ink);
+  background:var(--surface-2);border:1px solid var(--rule);border-radius:3px;
+}
+#q::placeholder{color:var(--ink-3)}
+#toc-btn{
+  display:none;align-items:center;flex:none;
+  font-family:inherit;font-size:13px;font-weight:600;color:var(--ink-2);
+  padding:0 14px;min-height:42px;cursor:pointer;
+  background:var(--surface-2);border:1px solid var(--rule);border-radius:3px;
+}
+#q-status{margin:0;font-size:12.5px;color:var(--ink-3)}
+nav ul{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0;padding:0}
+nav a{
+  display:flex;align-items:center;text-decoration:none;
+  font-size:12.5px;font-weight:600;color:var(--ink-2);
+  padding:6px 11px;min-height:34px;border:1px solid var(--rule);border-radius:2px;
+}
+nav a:hover{color:var(--ink);border-color:var(--rule-strong);background:var(--surface-2)}
+nav a b{font-family:'IBM Plex Mono',monospace;color:var(--accent);margin-right:6px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+
+/* ============ PART HEADERS ============ */
+.part{
+  scroll-margin-top:64px;margin:38px 0 18px;display:flex;align-items:baseline;gap:14px;
+  border-bottom:2px solid var(--band);padding-bottom:8px;flex-wrap:wrap;
+}
+.part-letter{font-family:Bitter,Georgia,serif;font-weight:800;font-size:34px;line-height:1;color:var(--accent)}
+.part h2{
+  font-family:Bitter,Georgia,serif;font-weight:700;font-size:20px;letter-spacing:-.01em;
+  margin:0;color:var(--head-title);text-wrap:balance;
+}
+.part .part-note{margin-left:auto;font-size:12.5px;color:var(--ink-3);text-align:right}
+
+/* ============ CARDS ============ */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(440px,1fr));gap:16px;align-items:start}
+.grid.sub-3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.grid.sub-2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.grid.sub-mini{grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+@media (max-width:520px){.grid{grid-template-columns:1fr}}
+
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:4px;box-shadow:var(--shadow);overflow:hidden}
+.card.span2{grid-column:1/-1}
+.card-head{
+  background:var(--band);color:var(--band-ink);
+  padding:9px 14px;display:flex;align-items:center;gap:10px;
+  border-bottom:3px solid var(--accent);
+}
+.card-head .no{
+  font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;
+  background:var(--accent);color:var(--accent-ink);padding:1px 7px;border-radius:2px;flex:none;
+}
+.card-head h3{font-family:Bitter,Georgia,serif;font-size:14.5px;font-weight:700;margin:0;text-wrap:balance;color:var(--band-ink)}
+.card-body{padding:14px}
+.card-body > *:first-child{margin-top:0}
+.card-body > *:last-child{margin-bottom:0}
+.card-body p{margin:0 0 10px;color:var(--ink-2);font-size:14px}
+
+/* ============ TABLES ============ */
+.tbl-scroll{overflow-x:auto;margin:0 0 12px;border:1px solid var(--rule);border-radius:3px}
+table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+th,td{border-bottom:1px solid var(--rule);padding:6px 9px;text-align:left;vertical-align:top;color:var(--ink-2)}
+th{
+  background:var(--surface-2);color:var(--th-ink);font-weight:600;font-size:11.5px;
+  letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even) td{background:var(--surface-2)}
+td.c,th.c{text-align:center}
+td code,.mono,code{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12.5px;font-weight:600;color:var(--ink)}
+td strong{color:var(--ink)}
+.dim{color:var(--ink-3)}
+
+.sw{display:inline-block;width:13px;height:13px;margin-right:7px;vertical-align:-2px;border-radius:2px;box-shadow:0 0 0 1px var(--rule-strong)}
+
+/* ============ CALLOUTS ============ */
+.note,.warn,.tip{font-size:13.2px;line-height:1.5;padding:10px 12px;border-radius:3px;border-left:3px solid;margin:12px 0}
+.note{background:var(--info-soft);border-color:var(--info);color:var(--ink-2)}
+.warn{background:var(--danger-soft);border-color:var(--danger);color:var(--ink-2)}
+.tip{background:var(--accent-soft);border-color:var(--accent);color:var(--ink-2)}
+.note b,.warn b,.tip b{color:var(--ink)}
+.note .lbl,.warn .lbl,.tip .lbl{display:block;font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;margin-bottom:4px}
+.note .lbl{color:var(--info)}.warn .lbl{color:var(--danger)}.tip .lbl{color:var(--accent)}
+
+/* ============ DECODER ============ */
+.decode{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 12px}
+.seg{
+  flex:1 1 90px;background:var(--surface-2);border:1px solid var(--rule);
+  border-bottom:3px solid var(--seg,var(--accent));border-radius:3px;padding:8px 10px;text-align:center;
+}
+.seg b{display:block;font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;color:var(--seg,var(--accent));letter-spacing:.04em}
+.seg i{display:block;font-style:normal;font-size:11.5px;color:var(--ink-3);margin-top:3px;line-height:1.35}
+.seg i em{display:block;font-style:normal;color:var(--ink);font-weight:600;font-size:12.5px}
+
+/* ============ LISTS ============ */
+ul.tight,ol.tight{margin:0 0 12px;padding-left:19px;font-size:13.8px;color:var(--ink-2)}
+ul.tight li,ol.tight li{margin-bottom:6px}
+ul.tight li strong,ol.tight li strong{color:var(--ink)}
+ol.rules{counter-reset:r;list-style:none;padding-left:0;margin:0}
+ol.rules li{counter-increment:r;position:relative;padding-left:32px;margin-bottom:9px;font-size:13.8px;color:var(--ink-2)}
+ol.rules li::before{
+  content:counter(r);position:absolute;left:0;top:1px;
+  font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;
+  width:21px;height:21px;line-height:21px;text-align:center;
+  background:var(--accent);color:var(--accent-ink);border-radius:50%;
+}
+ol.rules li strong{color:var(--ink)}
+
+/* ============ FORMULA ============ */
+.fx{background:var(--surface-2);border:1px solid var(--rule);border-left:3px solid var(--info);border-radius:3px;padding:9px 12px;margin:0 0 9px}
+.fx code{display:block;font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:var(--ink);line-height:1.5}
+.fx span{display:block;font-size:12.3px;color:var(--ink-3);margin-top:4px}
+
+/* ============ KEYVAL ============ */
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:0 0 12px}
+.kv div{background:var(--surface-2);border:1px solid var(--rule);border-radius:3px;padding:8px 10px}
+.kv dt{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+.kv dd{margin:2px 0 0;font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;color:var(--ink)}
+
+footer{
+  max-width:1240px;margin:44px auto 0;padding-top:16px;border-top:1px solid var(--rule);
+  font-size:12.5px;color:var(--ink-3);display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;
+}
+
+/* ============ ĐIỆN THOẠI ============ */
+@media (max-width:700px){
+  .wrap{padding:0 12px 84px}
+  .masthead{padding:24px 14px 20px}
+  .masthead .sub{font-size:14px}
+  .masthead .scope{gap:6px}
+  .masthead .scope span{font-size:10.5px;padding:3px 7px}
+  nav{padding:8px 12px;margin-bottom:20px}
+  #toc-btn{display:inline-flex}
+  nav ul{display:none}
+  nav ul.open{display:flex}
+  nav a{flex:1 1 44%;min-height:42px}
+  .part{scroll-margin-top:120px;margin:28px 0 14px}
+  .part-letter{font-size:28px}
+  .part h2{font-size:18px}
+  .part .part-note{display:none}
+  .grid{gap:12px}
+  .grid.sub-3,.grid.sub-2{grid-template-columns:1fr}
+  .grid.sub-mini{grid-template-columns:1fr 1fr}
+  .card-head{padding:10px 12px}
+  .card-body{padding:12px}
+  table{font-size:12.5px}
+  th,td{padding:6px 7px}
+  th{font-size:10.5px;letter-spacing:.04em}
+  .seg{flex:1 1 100%}
+  .fx code{font-size:14px}
+  .kv{grid-template-columns:1fr 1fr}
+  ol.rules li,ul.tight li{font-size:14px}
+  footer{flex-direction:column;gap:6px}
+}
+@media (max-width:400px){
+  nav a{flex:1 1 100%}
+  .grid.sub-mini{grid-template-columns:1fr}
+}
+
+/* thu gọn từng mục trên màn hình nhỏ */
+.card.collapsible > .card-head{cursor:pointer;-webkit-user-select:none;user-select:none}
+.card.collapsible > .card-head::after{content:'▾';margin-left:auto;flex:none;font-size:13px;opacity:.85}
+.card.collapsible[data-open="1"] > .card-head::after{content:'▴'}
+.card.collapsible > .card-head:focus-visible{outline:2px solid var(--accent);outline-offset:-3px}
+
+/* nút lên đầu trang */
+#top{
+  position:fixed;right:14px;bottom:14px;z-index:30;
+  width:46px;height:46px;border-radius:50%;cursor:pointer;
+  font-size:19px;line-height:1;color:var(--band-ink);
+  background:var(--band);border:1px solid var(--rule-strong);
+  box-shadow:var(--shadow);
+}
+
+@media print{
+  body{background:#fff;color:#000;font-size:10.5px}
+  nav,#top{display:none}
+  .card-body[hidden]{display:block!important}
+  .card.collapsible > .card-head::after{content:''}
+  .card,.part{break-inside:avoid}
+  .masthead{background:#fff;border-bottom:3px solid #000}
+  .masthead h1,.masthead .sub,.masthead .eyebrow,.masthead .scope span{color:#000}
+  .card-head{background:#fff;border-bottom:2px solid #000}
+  .card-head h3{color:#000}
+  .card-head .no{background:#000;color:#fff}
+}
+</style>
+
+<header class="masthead">
+  <div class="masthead-in">
+    <p class="eyebrow">Bảng tra bàn thợ · Tụ điện &amp; Điện trở</p>
+    <h1>Sổ Tra Tụ &amp; Trở</h1>
+    <p class="sub">Đọc mọi kiểu mã in trên thân tụ và điện trở, hiểu thông số quyết định linh kiện dùng được ở đâu, và biết thay đúng con nào khi sửa nguồn, audio và thiết bị dân dụng.</p>
+    <div class="scope">
+      <span>MÃ MÀU</span><span>MÃ SỐ</span><span>DUNG SAI</span><span>ĐIỆN ÁP EIA</span>
+      <span>HỆ SỐ NHIỆT</span><span>DC BIAS</span><span>SMD &amp; TANTALUM</span><span>X2/Y2</span>
+      <span>TỤ NGẬM</span><span>EIA-96</span><span>CÔNG SUẤT W</span><span>FUSIBLE</span>
+      <span>CÔNG THỨC</span><span>ĐO &amp; CHẨN ĐOÁN</span>
+    </div>
+  </div>
+</header>
+
+<nav aria-label="Mục lục và tìm kiếm">
+  <div class="nav-in">
+    <div class="nav-bar">
+      <label class="sr-only" for="q">Tìm trong bảng tra</label>
+      <input id="q" type="search" inputmode="search" autocomplete="off" spellcheck="false" placeholder="Tìm nhanh: 104, X7R, 2A, EIA-96, tu ngam, fusible…">
+      <button id="toc-btn" type="button" aria-expanded="false" aria-controls="toc">Mục lục</button>
+    </div>
+    <ul id="toc">
+      <li><a href="#pa"><b>A</b>Đọc mã tụ</a></li>
+      <li><a href="#pb"><b>B</b>Vật liệu &amp; hệ số nhiệt</a></li>
+      <li><a href="#pc"><b>C</b>Vỏ tụ &amp; phân cực</a></li>
+      <li><a href="#pd"><b>D</b>Tụ AC &amp; an toàn</a></li>
+      <li><a href="#pe"><b>E</b>Công thức tụ</a></li>
+      <li><a href="#pf"><b>F</b>Đo &amp; thay tụ</a></li>
+      <li><a href="#pg"><b>G</b>Đọc mã điện trở</a></li>
+      <li><a href="#ph"><b>H</b>Công suất &amp; chủng loại</a></li>
+      <li><a href="#pi"><b>I</b>Công thức điện trở</a></li>
+      <li><a href="#pj"><b>J</b>Đo &amp; thay điện trở</a></li>
+    </ul>
+    <p id="q-status" role="status" hidden></p>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- ══════ PHẦN A ══════ -->
+<div class="part" id="pa">
+  <span class="part-letter">A</span>
+  <h2>Đọc mã trên thân tụ</h2>
+  <span class="part-note">Từ vạch màu cũ đến mã 2 ký tự trên MLCC 0402</span>
+</div>
+
+<div class="grid">
+
+  <div class="card">
+    <div class="card-head"><span class="no">A1</span><h3>Mã màu tụ màng / tụ kẹo (4–5 vạch)</h3></div>
+    <div class="card-body">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>Màu</th><th class="c">Chữ số 1–2</th><th class="c">Hệ số nhân (pF)</th><th class="c">Dung sai</th><th class="c">Điện áp</th></tr></thead>
+        <tbody>
+          <tr><td><span class="sw" style="background:#000"></span>Đen</td><td class="c">0</td><td class="c">×1</td><td class="c">±20%</td><td class="c dim">–</td></tr>
+          <tr><td><span class="sw" style="background:#7a4a1e"></span>Nâu</td><td class="c">1</td><td class="c">×10</td><td class="c">±1%</td><td class="c">100 V</td></tr>
+          <tr><td><span class="sw" style="background:#cc2222"></span>Đỏ</td><td class="c">2</td><td class="c">×100</td><td class="c">±2%</td><td class="c">250 V</td></tr>
+          <tr><td><span class="sw" style="background:#e8760f"></span>Cam</td><td class="c">3</td><td class="c">×1.000</td><td class="c dim">–</td><td class="c dim">–</td></tr>
+          <tr><td><span class="sw" style="background:#e8c419"></span>Vàng</td><td class="c">4</td><td class="c">×10.000</td><td class="c dim">–</td><td class="c">400 V</td></tr>
+          <tr><td><span class="sw" style="background:#2a8f3f"></span>Xanh lá</td><td class="c">5</td><td class="c">×100.000</td><td class="c">±5%</td><td class="c dim">–</td></tr>
+          <tr><td><span class="sw" style="background:#2158b8"></span>Xanh dương</td><td class="c">6</td><td class="c">×1.000.000</td><td class="c dim">–</td><td class="c">630 V</td></tr>
+          <tr><td><span class="sw" style="background:#7a3fa8"></span>Tím</td><td class="c">7</td><td class="c dim">–</td><td class="c dim">–</td><td class="c dim">–</td></tr>
+          <tr><td><span class="sw" style="background:#8b8b8b"></span>Xám</td><td class="c">8</td><td class="c">×0,01</td><td class="c">+80% / −20%</td><td class="c dim">–</td></tr>
+          <tr><td><span class="sw" style="background:#fff"></span>Trắng</td><td class="c">9</td><td class="c">×0,1</td><td class="c">±10%</td><td class="c dim">–</td></tr>
+          <tr><td><span class="sw" style="background:#c9a227"></span>Vàng kim</td><td class="c dim">–</td><td class="c dim">–</td><td class="c">±5%</td><td class="c dim">–</td></tr>
+          <tr><td><span class="sw" style="background:#b8b8b8"></span>Bạc</td><td class="c dim">–</td><td class="c dim">–</td><td class="c">±10%</td><td class="c dim">–</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p><strong>Thứ tự đọc</strong> (từ vạch sát mép nhất đi xuống): vạch 1–2 = chữ số → vạch 3 = hệ số nhân → vạch 4 = dung sai → vạch 5 = điện áp. Kết quả luôn ra <b>pF</b>.</p>
+      <div class="note">
+        <span class="lbl">Thực tế</span>
+        Tụ vạch màu gần như chỉ còn gặp trên thiết bị trước thập niên 1990 (radio, TV đèn, ampli cổ). Tụ màng bán hiện nay đều <b>in số</b> — thấy vạch màu trên thân tròn 2 chân thì khả năng cao đó là <b>điện trở</b>, không phải tụ.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="no">A2</span><h3>Mã số 3 chữ số — công thức AB × 10<sup>C</sup> pF</h3></div>
+    <div class="card-body">
+      <div class="decode">
+        <span class="seg" style="--seg:var(--info)"><b>1 0</b><i><em>Chữ số</em>= 10</i></span>
+        <span class="seg" style="--seg:var(--accent)"><b>4</b><i><em>Số mũ</em>× 10⁴</i></span>
+        <span class="seg" style="--seg:var(--ok)"><b>=</b><i><em>100.000 pF</em>100 nF = 0,1 µF</i></span>
+      </div>
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th class="c">Mã</th><th class="c">pF</th><th class="c">nF</th><th class="c">µF</th></tr></thead>
+        <tbody>
+          <tr><td class="c"><code>101</code></td><td class="c">100</td><td class="c">0,1</td><td class="c dim">–</td></tr>
+          <tr><td class="c"><code>221</code></td><td class="c">220</td><td class="c">0,22</td><td class="c dim">–</td></tr>
+          <tr><td class="c"><code>102</code></td><td class="c">1.000</td><td class="c">1</td><td class="c">0,001</td></tr>
+          <tr><td class="c"><code>222</code></td><td class="c">2.200</td><td class="c">2,2</td><td class="c">0,0022</td></tr>
+          <tr><td class="c"><code>472</code></td><td class="c">4.700</td><td class="c">4,7</td><td class="c">0,0047</td></tr>
+          <tr><td class="c"><code>103</code></td><td class="c">10.000</td><td class="c">10</td><td class="c">0,01</td></tr>
+          <tr><td class="c"><code>223</code></td><td class="c">22.000</td><td class="c">22</td><td class="c">0,022</td></tr>
+          <tr><td class="c"><code>473</code></td><td class="c">47.000</td><td class="c">47</td><td class="c">0,047</td></tr>
+          <tr><td class="c"><code>104</code></td><td class="c">100.000</td><td class="c">100</td><td class="c">0,1</td></tr>
+          <tr><td class="c"><code>224</code></td><td class="c">220.000</td><td class="c">220</td><td class="c">0,22</td></tr>
+          <tr><td class="c"><code>474</code></td><td class="c">470.000</td><td class="c">470</td><td class="c">0,47</td></tr>
+          <tr><td class="c"><code>105</code></td><td class="c">1.000.000</td><td class="c">1.000</td><td class="c">1</td></tr>
+          <tr><td class="c"><code>225</code></td><td class="c">2.200.000</td><td class="c">2.200</td><td class="c">2,2</td></tr>
+          <tr><td class="c"><code>106</code></td><td class="c">10.000.000</td><td class="c">10.000</td><td class="c">10</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="warn">
+        <span class="lbl">Bẫy hay nhầm nhất</span>
+        <b>220 không phải 220 pF.</b> Ba chữ số thì số cuối luôn là số mũ: <code>220</code> = 22 × 10⁰ = <b>22 pF</b>; muốn 220 pF phải ghi <code>221</code>. Tương tự <code>100</code> = 10 pF, <code>470</code> = 47 pF.
+      </div>
+      <div class="note">
+        <span class="lbl">Khi nào KHÔNG áp dụng</span>
+        Chỉ 1–2 chữ số thì đọc thẳng ra pF (<code>47</code> = 47 pF, <code>8</code> = 8 pF). Tụ hoá và tụ ngậm ghi thẳng <b>µF</b>, không dùng công thức này.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="no">A3</span><h3>Các kiểu ghi khác: R · n · p · u · 4 chữ số</h3></div>
+    <div class="card-body">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>Kiểu ghi</th><th>Quy tắc</th><th>Ví dụ</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Chữ thay dấu phẩy</strong></td><td>Chữ đứng ở vị trí dấu phẩy <em>và</em> cho biết đơn vị: <code>p</code>=pF, <code>n</code>=nF, <code>u</code>/<code>µ</code>=µF, <code>R</code>=pF</td><td><code>4R7</code>=4,7 pF · <code>0R5</code>=0,5 pF · <code>p47</code>=0,47 pF · <code>4n7</code>=4,7 nF · <code>1n5</code>=1,5 nF · <code>u47</code>=0,47 µF · <code>1u</code>=1 µF</td></tr>
+          <tr><td><strong>4 chữ số</strong></td><td>3 số đầu có nghĩa, số cuối là số mũ — dùng cho trị số chính xác</td><td><code>1002</code>=100×10²=10.000 pF=10 nF · <code>4703</code>=470×10³=470 nF</td></tr>
+          <tr><td><strong>Số thập phân trần</strong></td><td>Trên tụ màng / tụ kẹo, đơn vị ngầm là µF</td><td><code>.1</code>=0,1 µF · <code>.022</code>=22 nF · <code>0.47</code>=470 nF</td></tr>
+          <tr><td><strong>Mã 2 ký tự (EIA-198)</strong></td><td>MLCC quá nhỏ để in 3 số: chữ = trị số, số = số mũ (pF)</td><td><code>S3</code>=4,7×10³=4,7 nF · <code>J3</code>=2,2 nF · <code>A1</code>=10 pF</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p style="font-size:13px"><strong>Bảng chữ của mã 2 ký tự.</strong> Số đi kèm: <code>0</code>=×1, <code>1</code>=×10, <code>2</code>=×100, <code>3</code>=×1.000, <code>4</code>=×10⁴, <code>5</code>=×10⁵, <code>8</code>=×0,01, <code>9</code>=×0,1.</p>
+      <div class="tbl-scroll">
+      <table>
+        <tbody>
+          <tr><td class="c"><code>A</code> 1,0</td><td class="c"><code>B</code> 1,1</td><td class="c"><code>C</code> 1,2</td><td class="c"><code>D</code> 1,3</td><td class="c"><code>E</code> 1,5</td><td class="c"><code>F</code> 1,6</td><td class="c"><code>G</code> 1,8</td><td class="c"><code>H</code> 2,0</td></tr>
+          <tr><td class="c"><code>J</code> 2,2</td><td class="c"><code>K</code> 2,4</td><td class="c"><code>L</code> 2,7</td><td class="c"><code>M</code> 3,0</td><td class="c"><code>N</code> 3,3</td><td class="c"><code>P</code> 3,6</td><td class="c"><code>Q</code> 3,9</td><td class="c"><code>R</code> 4,3</td></tr>
+          <tr><td class="c"><code>S</code> 4,7</td><td class="c"><code>T</code> 5,1</td><td class="c"><code>U</code> 5,6</td><td class="c"><code>V</code> 6,2</td><td class="c"><code>W</code> 6,8</td><td class="c"><code>X</code> 7,5</td><td class="c"><code>Y</code> 8,2</td><td class="c"><code>Z</code> 9,1</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="tip">
+        <span class="lbl">Mẹo</span>
+        Rất nhiều MLCC dán <b>không in gì cả</b>. Không đoán — nhấc ra đo bằng LCR, hoặc tra sơ đồ đúng model. Đo tại chỗ luôn sai vì các tụ song song cộng dồn.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="no">A4</span><h3>Dung sai (chữ cái) — bảng đầy đủ</h3></div>
+    <div class="card-body">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th class="c">Mã</th><th class="c">Tụ &lt; 10 pF</th><th class="c">Tụ ≥ 10 pF</th><th>Hay gặp ở</th></tr></thead>
+        <tbody>
+          <tr><td class="c"><code>A</code></td><td class="c">±0,05 pF</td><td class="c dim">–</td><td>Tụ RF chính xác</td></tr>
+          <tr><td class="c"><code>B</code></td><td class="c">±0,1 pF</td><td class="c">±0,1%</td><td>C0G/NP0</td></tr>
+          <tr><td class="c"><code>C</code></td><td class="c">±0,25 pF</td><td class="c">±0,25%</td><td>C0G/NP0</td></tr>
+          <tr><td class="c"><code>D</code></td><td class="c">±0,5 pF</td><td class="c">±0,5%</td><td>C0G, mica</td></tr>
+          <tr><td class="c"><code>F</code></td><td class="c">±1 pF</td><td class="c"><strong>±1%</strong></td><td>Tụ màng chính xác</td></tr>
+          <tr><td class="c"><code>G</code></td><td class="c">±2 pF</td><td class="c"><strong>±2%</strong></td><td>Tụ màng, C0G</td></tr>
+          <tr><td class="c"><code>H</code></td><td class="c dim">–</td><td class="c">±3%</td><td>Hiếm</td></tr>
+          <tr><td class="c"><code>J</code></td><td class="c dim">–</td><td class="c"><strong>±5%</strong></td><td>Tụ màng, tụ gốm tốt</td></tr>
+          <tr><td class="c"><code>K</code></td><td class="c dim">–</td><td class="c"><strong>±10%</strong></td><td>Phổ biến nhất (X7R)</td></tr>
+          <tr><td class="c"><code>M</code></td><td class="c dim">–</td><td class="c"><strong>±20%</strong></td><td>Tụ gốm rẻ, tụ hoá</td></tr>
+          <tr><td class="c"><code>N</code></td><td class="c dim">–</td><td class="c">±30%</td><td>Hiếm</td></tr>
+          <tr><td class="c"><code>Q</code></td><td class="c dim">–</td><td class="c">+30% / −10%</td><td>Tụ hoá</td></tr>
+          <tr><td class="c"><code>T</code></td><td class="c dim">–</td><td class="c">+50% / −10%</td><td>Tụ hoá</td></tr>
+          <tr><td class="c"><code>S</code></td><td class="c dim">–</td><td class="c">+50% / −20%</td><td>Tụ hoá</td></tr>
+          <tr><td class="c"><code>Z</code></td><td class="c dim">–</td><td class="c"><strong>+80% / −20%</strong></td><td>Y5V, Z5U</td></tr>
+          <tr><td class="c"><code>P</code></td><td class="c dim">–</td><td class="c">+100% / −0%</td><td>Tụ hoá cỡ lớn</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="note">
+        <span class="lbl">Đọc đúng</span>
+        Cùng một chữ có <b>hai nghĩa</b>: dưới 10 pF là sai số tuyệt đối tính bằng pF, từ 10 pF trở lên là phần trăm. Ví dụ <code>4R7D</code> = 4,7 pF ±0,5 pF, còn <code>103D</code> = 10 nF ±0,5%.
+      </div>
+    </div>
+  </div>
+
+  <div class="card span2">
+    <div class="card-head"><span class="no">A5</span><h3>Điện áp định mức — bảng mã EIA/JIS đầy đủ &amp; cách giải mã</h3></div>
+    <div class="card-body">
+      <p>Mã điện áp gồm <b>1 chữ số + 1 chữ cái</b>: chữ cái cho trị số, chữ số cho số mũ (số con số 0 thêm vào).</p>
+      <div class="grid sub-3">
+        <div>
+          <div class="tbl-scroll">
+          <table>
+            <thead><tr><th class="c">Chữ</th><th class="c">Trị</th><th class="c">Chữ</th><th class="c">Trị</th></tr></thead>
+            <tbody>
+              <tr><td class="c"><code>A</code></td><td class="c">1,0</td><td class="c"><code>H</code></td><td class="c">5,0</td></tr>
+              <tr><td class="c"><code>B</code></td><td class="c">1,25</td><td class="c"><code>J</code></td><td class="c">6,3</td></tr>
+              <tr><td class="c"><code>C</code></td><td class="c">1,6</td><td class="c"><code>K</code></td><td class="c">8,0</td></tr>
+              <tr><td class="c"><code>D</code></td><td class="c">2,0</td><td class="c"><code>V</code></td><td class="c">3,5</td></tr>
+              <tr><td class="c"><code>E</code></td><td class="c">2,5</td><td class="c"><code>W</code></td><td class="c">4,5</td></tr>
+              <tr><td class="c"><code>F</code></td><td class="c">3,15</td><td class="c"><code>G</code></td><td class="c">4,0</td></tr>
+            </tbody>
+          </table>
+          </div>
+          <div class="tbl-scroll">
+          <table>
+            <thead><tr><th class="c">Số</th><th class="c">Nhân</th><th class="c">Số</th><th class="c">Nhân</th></tr></thead>
+            <tbody>
+              <tr><td class="c"><code>0</code></td><td class="c">×1</td><td class="c"><code>2</code></td><td class="c">×100</td></tr>
+              <tr><td class="c"><code>1</code></td><td class="c">×10</td><td class="c"><code>3</code></td><td class="c">×1.000</td></tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+        <div class="tbl-scroll">
+        <table>
+          <thead><tr><th class="c">Mã</th><th class="c">VDC</th><th class="c">Mã</th><th class="c">VDC</th></tr></thead>
+          <tbody>
+            <tr><td class="c"><code>0G</code></td><td class="c">4</td><td class="c"><code>1V</code></td><td class="c">35</td></tr>
+            <tr><td class="c"><code>0J</code></td><td class="c">6,3</td><td class="c"><code>1W</code></td><td class="c">45</td></tr>
+            <tr><td class="c"><code>1A</code></td><td class="c">10</td><td class="c"><code>1H</code></td><td class="c"><strong>50</strong></td></tr>
+            <tr><td class="c"><code>1C</code></td><td class="c">16</td><td class="c"><code>1J</code></td><td class="c">63</td></tr>
+            <tr><td class="c"><code>1D</code></td><td class="c">20</td><td class="c"><code>1K</code></td><td class="c">80</td></tr>
+            <tr><td class="c"><code>1E</code></td><td class="c">25</td><td class="c"><code>2A</code></td><td class="c"><strong>100</strong></td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="tbl-scroll">
+        <table>
+          <thead><tr><th class="c">Mã</th><th class="c">VDC</th><th class="c">Mã</th><th class="c">VDC</th></tr></thead>
+          <tbody>
+            <tr><td class="c"><code>2B</code></td><td class="c">125</td><td class="c"><code>2V</code></td><td class="c">350</td></tr>
+            <tr><td class="c"><code>2C</code></td><td class="c">160</td><td class="c"><code>2G</code></td><td class="c"><strong>400</strong></td></tr>
+            <tr><td class="c"><code>2D</code></td><td class="c">200</td><td class="c"><code>2W</code></td><td class="c">450</td></tr>
+            <tr><td class="c"><code>2E</code></td><td class="c"><strong>250</strong></td><td class="c"><code>2H</code></td><td class="c">500</td></tr>
+            <tr><td class="c"><code>2F</code></td><td class="c">315</td><td class="c"><code>2J</code></td><td class="c"><strong>630</strong></td></tr>
+            <tr><td class="c"><code>2K</code></td><td class="c">800</td><td class="c"><code>3A</code></td><td class="c">1000</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+      <div class="decode">
+        <span class="seg" style="--seg:var(--danger)"><b>2A</b><i><em>Điện áp</em>1,0 × 100 = 100 VDC</i></span>
+        <span class="seg" style="--seg:var(--info)"><b>104</b><i><em>Dung lượng</em>10 × 10⁴ pF = 100 nF</i></span>
+        <span class="seg" style="--seg:var(--ok)"><b>J</b><i><em>Dung sai</em>±5%</i></span>
+      </div>
+      <div class="warn">
+        <span class="lbl">Volt DC không phải volt AC</span>
+        Con số ghi trên tụ luôn là <b>VDC</b> trừ khi in rõ "VAC" hoặc "~". Tụ 400 VDC <b>không</b> dùng được cho lưới 220 VAC (đỉnh 311 V, chưa kể xung sét). Muốn mắc vào lưới điện phải dùng tụ an toàn <b>X2/Y2 ghi 275 VAC</b> — xem mục D1.
+      </div>
+    </div>
+  </div>
+
+  <div class="card span2">
+    <div class="card-head"><span class="no">A6</span><h3>Quy đổi nhanh &amp; tra ngược trị số → mã</h3></div>
+    <div class="card-body">
+      <dl class="kv">
+        <div><dt>Cơ bản</dt><dd>1000 pF = 1 nF</dd></div>
+        <div><dt>Cơ bản</dt><dd>1000 nF = 1 µF</dd></div>
+        <div><dt>Cơ bản</dt><dd>1 µF = 1.000.000 pF</dd></div>
+        <div><dt>Chiều đổi</dt><dd>pF ÷1000 → nF ÷1000 → µF</dd></div>
+      </dl>
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th class="c">Trị số</th><th class="c">Mã in</th><th class="c">Trị số</th><th class="c">Mã in</th><th class="c">Trị số</th><th class="c">Mã in</th></tr></thead>
+        <tbody>
+          <tr><td class="c">10 pF</td><td class="c"><code>100</code></td><td class="c">1 nF</td><td class="c"><code>102</code></td><td class="c">100 nF</td><td class="c"><code>104</code></td></tr>
+          <tr><td class="c">22 pF</td><td class="c"><code>220</code></td><td class="c">2,2 nF</td><td class="c"><code>222</code></td><td class="c">220 nF</td><td class="c"><code>224</code></td></tr>
+          <tr><td class="c">33 pF</td><td class="c"><code>330</code></td><td class="c">3,3 nF</td><td class="c"><code>332</code></td><td class="c">330 nF</td><td class="c"><code>334</code></td></tr>
+          <tr><td class="c">47 pF</td><td class="c"><code>470</code></td><td class="c">4,7 nF</td><td class="c"><code>472</code></td><td class="c">470 nF</td><td class="c"><code>474</code></td></tr>
+          <tr><td class="c">100 pF</td><td class="c"><code>101</code></td><td class="c">10 nF</td><td class="c"><code>103</code></td><td class="c">1 µF</td><td class="c"><code>105</code></td></tr>
+          <tr><td class="c">220 pF</td><td class="c"><code>221</code></td><td class="c">22 nF</td><td class="c"><code>223</code></td><td class="c">2,2 µF</td><td class="c"><code>225</code></td></tr>
+          <tr><td class="c">470 pF</td><td class="c"><code>471</code></td><td class="c">47 nF</td><td class="c"><code>473</code></td><td class="c">10 µF</td><td class="c"><code>106</code></td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════ PHẦN B ══════ -->
+<div class="part" id="pb">
+  <span class="part-letter">B</span>
+  <h2>Vật liệu &amp; hệ số nhiệt</h2>
+  <span class="part-note">Phần quyết định tụ dùng được ở đâu — không chỉ là trị số</span>
+</div>
+
+<div class="grid">
+
+  <div class="card">
+    <div class="card-head"><span class="no">B1</span><h3>Tụ gốm Class 2 (X7R, Y5V…) — giải mã 3 ký tự</h3></div>
+    <div class="card-body">
+      <div class="decode">
+        <span class="seg" style="--seg:var(--info)"><b>X</b><i><em>Nhiệt độ thấp</em>−55 °C</i></span>
+        <span class="seg" style="--seg:var(--danger)"><b>7</b><i><em>Nhiệt độ cao</em>+125 °C</i></span>
+        <span class="seg" style="--seg:var(--ok)"><b>R</b><i><em>Biến thiên</em>±15%</i></span>
+      </div>
+      <div class="grid sub-mini">
+        <div class="tbl-scroll">
+          <table>
+            <thead><tr><th class="c">Ký tự 1</th><th class="c">T thấp</th></tr></thead>
+            <tbody>
+              <tr><td class="c"><code>X</code></td><td class="c">−55 °C</td></tr>
+              <tr><td class="c"><code>Y</code></td><td class="c">−30 °C</td></tr>
+              <tr><td class="c"><code>Z</code></td><td class="c">+10 °C</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="tbl-scroll">
+          <table>
+            <thead><tr><th class="c">Ký tự 2</th><th class="c">T cao</th></tr></thead>
+            <tbody>
+              <tr><td class="c"><code>2</code></td><td class="c">+45 °C</td></tr>
+              <tr><td class="c"><code>4</code></td><td class="c">+65 °C</td></tr>
+              <tr><td class="c"><code>5</code></td><td class="c">+85 °C</td></tr>
+              <tr><td class="c"><code>6</code></td><td class="c">+105 °C</td></tr>
+              <tr><td class="c"><code>7</code></td><td class="c">+125 °C</td></tr>
+              <tr><td class="c"><code>8</code></td><td class="c">+150 °C</td></tr>
+              <tr><td class="c"><code>9</code></td><td class="c">+200 °C</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="tbl-scroll">
+          <table>
+            <thead><tr><th class="c">Ký tự 3</th><th class="c">Biến thiên</th></tr></thead>
+            <tbody>
+              <tr><td class="c"><code>A</code></td><td class="c">±1,0%</td></tr>
+              <tr><td class="c"><code>B</code></td><td class="c">±1,5%</td></tr>
+              <tr><td class="c"><code>C</code></td><td class="c">±2,2%</td></tr>
+              <tr><td class="c"><code>D</code></td><td class="c">±3,3%</td></tr>
+              <tr><td class="c"><code>E</code></td><td class="c">±4,7%</td></tr>
+              <tr><td class="c"><code>F</code></td><td class="c">±7,5%</td></tr>
+              <tr><td class="c"><code>P</code></td><td class="c">±10%</td></tr>
+              <tr><td class="c"><code>R</code></td><td class="c">±15%</td></tr>
+              <tr><td class="c"><code>S</code></td><td class="c">±22%</td></tr>
+              <tr><td class="c"><code>T</code></td><td class="c">+22 / −33%</td></tr>
+              <tr><td class="c"><code>U</code></td><td class="c">+22 / −56%</td></tr>
+              <tr><td class="c"><code>V</code></td><td class="c">+22 / −82%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th class="c">Mã</th><th class="c">Dải nhiệt</th><th class="c">Biến thiên</th><th>Dùng ở đâu</th></tr></thead>
+        <tbody>
+          <tr><td class="c"><strong>X7R</strong></td><td class="c">−55…+125</td><td class="c">±15%</td><td>Chuẩn công nghiệp: decoupling, bypass, lọc chung</td></tr>
+          <tr><td class="c"><strong>X5R</strong></td><td class="c">−55…+85</td><td class="c">±15%</td><td>Như X7R nhưng chịu nhiệt kém hơn; hay dùng cho MLCC dung lượng lớn</td></tr>
+          <tr><td class="c"><strong>X7S</strong></td><td class="c">−55…+125</td><td class="c">±22%</td><td>Đổi độ ổn định lấy dung lượng cao trong cùng cỡ vỏ</td></tr>
+          <tr><td class="c"><strong>X8R</strong></td><td class="c">−55…+150</td><td class="c">±15%</td><td>Gần động cơ, khoang máy nóng, đèn công suất</td></tr>
+          <tr><td class="c"><strong>Y5V</strong></td><td class="c">−30…+85</td><td class="c">+22/−82%</td><td>Rẻ tiền, chỉ nên làm tụ bypass không quan trọng</td></tr>
+          <tr><td class="c"><strong>Z5U</strong></td><td class="c">+10…+85</td><td class="c">+22/−56%</td><td>Tương tự Y5V, không dùng nơi lạnh</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="warn">
+        <span class="lbl">Không thay bừa</span>
+        Không thay C0G/NP0 bằng X7R hay Y5V trong <b>mạch dao động, lọc tần số, định thời, âm sắc</b> — trị số sẽ trôi theo nhiệt độ và điện áp, mạch chạy sai tần. Chiều ngược lại thì luôn được.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="no">B2</span><h3>Tụ gốm Class 1 (C0G/NP0, U2J, N750…)</h3></div>
+    <div class="card-body">
+      <p>Class 1 không đo bằng "% biến thiên" mà bằng <b>hệ số nhiệt ppm/°C</b>. Đây là loại ổn định nhất, dung lượng nhỏ (thường ≤ 100 nF), gần như không có DC bias và không lão hoá.</p>
+      <div class="decode">
+        <span class="seg" style="--seg:var(--info)"><b>C</b><i><em>Trị số</em>0,0 ppm</i></span>
+        <span class="seg" style="--seg:var(--accent)"><b>0</b><i><em>Nhân</em>× −1</i></span>
+        <span class="seg" style="--seg:var(--ok)"><b>G</b><i><em>Sai số</em>±30 ppm/°C</i></span>
+      </div>
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th class="c">Mã</th><th class="c">Hệ số nhiệt</th><th>Ghi chú</th></tr></thead>
+        <tbody>
+          <tr><td class="c"><strong>C0G</strong></td><td class="c">0 ±30 ppm/°C</td><td>Tên EIA. Ổn định nhất, tổn hao thấp, không piezo</td></tr>
+          <tr><td class="c"><strong>NP0</strong></td><td class="c">0 ppm/°C</td><td>Tên MIL cũ của cùng loại — "Negative-Positive-Zero"</td></tr>
+          <tr><td class="c"><strong>U2J</strong></td><td class="c">−750 ±120 ppm/°C</td><td>Tương đương N750</td></tr>
+          <tr><td class="c"><strong>P100</strong></td><td class="c">+100 ppm/°C</td><td>Dùng bù nhiệt trong mạch dao động</td></tr>
+          <tr><td class="c"><strong>N750 / N1500</strong></td><td class="c">−750 / −1500 ppm/°C</td><td>Bù trôi tần cho mạch LC (radio, VCO)</td></tr>
+          <tr><td class="c"><strong>SL</strong></td><td class="c">+350…−1000 ppm/°C</td><td>Mã JIS, dải rộng, chỉ dùng nơi không quan trọng</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="tip">
+        <span class="lbl">Nhận biết khi sửa</span>
+        Trong mạch cộng hưởng, phân tần loa, PLL — thấy tụ nhỏ ở chỗ kén tần số thì mặc định phải thay bằng <b>C0G/NP0</b>, không lấy tụ gốm thường "cùng trị số" cho nhanh.
+      </div>
+    </div>
+  </div>
+
+  <div class="card span2">
+    <div class="card-head"><span class="no">B3</span><h3>So sánh các họ tụ — chọn đúng chất liệu</h3></div>
+    <div class="card-body">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>Họ tụ</th><th class="c">Dải trị số</th><th class="c">Điện áp</th><th class="c">Phân cực</th><th class="c">ESR</th><th class="c">Ổn định</th><th>Việc của nó</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Gốm Class 1</strong><br><span class="dim">C0G/NP0</span></td><td class="c">0,5 pF – 100 nF</td><td class="c">16 V – 3 kV</td><td class="c">Không</td><td class="c">Rất thấp</td><td class="c">Xuất sắc</td><td>Dao động, lọc tần số, timing, RF, bù nhiệt</td></tr>
+          <tr><td><strong>Gốm Class 2</strong><br><span class="dim">X7R, X5R, Y5V</span></td><td class="c">100 pF – 100 µF</td><td class="c">4 V – 2 kV</td><td class="c">Không</td><td class="c">Rất thấp</td><td class="c">Kém (DC bias)</td><td>Decoupling, bypass, lọc nhiễu — chỗ không cần chính xác</td></tr>
+          <tr><td><strong>Màng PET</strong><br><span class="dim">MKT, "tụ kẹo"</span></td><td class="c">1 nF – 10 µF</td><td class="c">50 – 1000 V</td><td class="c">Không</td><td class="c">Thấp</td><td class="c">Tốt</td><td>Liên lạc audio, lọc, mạch RC, thay tụ gốm khi cần ổn định</td></tr>
+          <tr><td><strong>Màng PP</strong><br><span class="dim">MKP, CBB</span></td><td class="c">100 pF – 100 µF</td><td class="c">100 – 2000 V</td><td class="c">Không</td><td class="c">Rất thấp</td><td class="c">Xuất sắc</td><td>Snubber, mạch xung, phân tần loa, tụ ngậm động cơ, tụ AC</td></tr>
+          <tr><td><strong>Mica bạc</strong></td><td class="c">1 pF – 10 nF</td><td class="c">100 – 1000 V</td><td class="c">Không</td><td class="c">Rất thấp</td><td class="c">Xuất sắc</td><td>RF công suất, mạch chuẩn tần, thiết bị đo</td></tr>
+          <tr><td><strong>Tantalum</strong></td><td class="c">0,1 – 470 µF</td><td class="c">4 – 50 V</td><td class="c"><b>Có (+)</b></td><td class="c">Thấp</td><td class="c">Tốt</td><td>Lọc nguồn cục bộ nơi chật; <b>cháy nếu cắm ngược hoặc quá áp</b></td></tr>
+          <tr><td><strong>Hoá nhôm</strong><br><span class="dim">"tụ hoá"</span></td><td class="c">0,1 µF – 100 mF</td><td class="c">4 – 550 V</td><td class="c"><b>Có (−)</b></td><td class="c">Trung–cao</td><td class="c">Kém, có tuổi thọ</td><td>Lọc nguồn, tích năng lượng — thủ phạm số 1 khi máy hỏng</td></tr>
+          <tr><td><strong>Polymer nhôm</strong><br><span class="dim">solid, "tụ rắn"</span></td><td class="c">10 – 3300 µF</td><td class="c">2 – 100 V</td><td class="c"><b>Có (−)</b></td><td class="c">Cực thấp</td><td class="c">Tốt, bền</td><td>Mainboard, VRM, nguồn xung — thay tụ hoá phồng rất tốt</td></tr>
+          <tr><td><strong>Hoá không cực</strong><br><span class="dim">NP / BP</span></td><td class="c">1 – 100 µF</td><td class="c">50 – 100 V</td><td class="c">Không</td><td class="c">Trung</td><td class="c">Trung</td><td>Phân tần loa, mạch có tín hiệu AC đổi chiều</td></tr>
+          <tr><td><strong>Siêu tụ</strong><br><span class="dim">supercap, EDLC</span></td><td class="c">0,1 – 3000 F</td><td class="c">2,5 – 5,5 V</td><td class="c"><b>Có</b></td><td class="c">Cao</td><td class="c">–</td><td>Nuôi RTC/RAM khi mất điện; không thay được tụ lọc</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card span2">
+    <div class="card-head"><span class="no">B4</span><h3>Bốn cạm bẫy của tụ gốm MLCC mà bảng mã không nói</h3></div>
+    <div class="card-body">
+      <div class="grid sub-2">
+        <div class="warn">
+          <span class="lbl">1 · Sụt dung lượng theo điện áp (DC bias)</span>
+          Tụ Class 2 <b>mất dung lượng khi có điện áp một chiều đặt lên</b>. Một con 10 µF / 6,3 V X5R chạy ở 5 V có thể chỉ còn <b>2–4 µF thật</b>; Y5V còn tệ hơn. Đây là lý do mạch "đủ tụ theo sơ đồ" vẫn bị nhiễu.<br>
+          <b>Xử lý:</b> chọn điện áp định mức gấp <b>2–3 lần</b> điện áp làm việc, hoặc chọn vỏ to hơn cùng trị số. C0G/NP0 và tụ màng không bị.
+        </div>
+        <div class="warn">
+          <span class="lbl">2 · Lão hoá (aging)</span>
+          Gốm Class 2 <b>tự giảm dung lượng theo thời gian</b> — cỡ 2–3% mỗi chu kỳ 10× giờ với X7R, tới ~7% với Y5V. Tụ nằm trong máy 10 năm có thể đã mất 10–15% mà nhìn ngoài vẫn như mới.<br>
+          <b>Ghi nhớ:</b> đo được 82 nF ở con ghi <code>104</code> chưa chắc là hàng giả — có thể chỉ là tụ đã già cộng sai số ±10%.
+        </div>
+        <div class="warn">
+          <span class="lbl">3 · Hiệu ứng áp điện (piezo / microphonic)</span>
+          Gốm Class 2 rung khi có điện áp xoay chiều → <b>board kêu ríu rít</b> ở nguồn xung; ngược lại rung cơ học sinh nhiễu điện trong mạch audio và cảm biến.<br>
+          <b>Xử lý:</b> đổi sang tụ màng hoặc C0G ở đường tín hiệu nhạy; chỗ nguồn thì chia thành nhiều tụ vỏ nhỏ ghép song song.
+        </div>
+        <div class="warn">
+          <span class="lbl">4 · Nứt cơ học (chập ngầm)</span>
+          MLCC dán rất giòn: <b>bẻ board, siết ốc, rơi máy, hàn nóng đột ngột</b> đều làm nứt ngầm bên trong. Vết nứt gây rò rồi chập — thường là nguyên nhân "board chết nguồn mà không thấy gì cháy".<br>
+          <b>Cách tìm:</b> đo trở kháng đường nguồn xuống mass; cấp dòng có giới hạn rồi sờ hoặc soi nhiệt tìm con nóng bất thường.
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════ PHẦN C ══════ -->
+<div class="part" id="pc">
+  <span class="part-letter">C</span>
+  <h2>Vỏ, kích thước, phân cực</h2>
+  <span class="part-note">Nhận dạng con tụ trên tay trước khi đặt mua</span>
+</div>
+
+<div class="grid">
+
+  <div class="card">
+    <div class="card-head"><span class="no">C1</span><h3>Kích thước tụ dán (SMD/MLCC)</h3></div>
+    <div class="card-body">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th class="c">Hệ inch</th><th class="c">Hệ mét</th><th class="c">Kích thước</th><th>Ghi chú thực tế</th></tr></thead>
+        <tbody>
+          <tr><td class="c"><strong>0201</strong></td><td class="c">0603</td><td class="c">0,6 × 0,3 mm</td><td>Nhỏ như hạt bụi — cần kính hiển vi và khò khí nóng</td></tr>
+          <tr><td class="c"><strong>0402</strong></td><td class="c">1005</td><td class="c">1,0 × 0,5 mm</td><td>Rất phổ biến trên điện thoại, laptop</td></tr>
+          <tr><td class="c"><strong>0603</strong></td><td class="c">1608</td><td class="c">1,6 × 0,8 mm</td><td>Hàn tay được; cỡ phổ thông của board tiêu dùng</td></tr>
+          <tr><td class="c"><strong>0805</strong></td><td class="c">2012</td><td class="c">2,0 × 1,25 mm</td><td>Cỡ dễ hàn tay nhất, hay dùng thay thế chữa cháy</td></tr>
+          <tr><td class="c"><strong>1206</strong></td><td class="c">3216</td><td class="c">3,2 × 1,6 mm</td><td>Trị số lớn hoặc điện áp cao</td></tr>
+          <tr><td class="c"><strong>1210</strong></td><td class="c">3225</td><td class="c">3,2 × 2,5 mm</td><td>Tụ 10–22 µF, tụ nguồn</td></tr>
+          <tr><td class="c"><strong>1812</strong></td><td class="c">4532</td><td class="c">4,5 × 3,2 mm</td><td>Nguồn xung, điện áp cao</td></tr>
+          <tr><td class="c"><strong>2220</strong></td><td class="c">5750</td><td class="c">5,7 × 5,0 mm</td><td>Công suất, snubber, cao áp</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="note">
+        <span class="lbl">Dễ nhầm</span>
+        Con số <code>0805</code>, <code>1206</code> in trên cuộn hoặc túi linh kiện là <b>cỡ vỏ</b>, không phải trị số. Trị số nằm ở dòng bên dưới, ví dụ <code>0805 / 104 / 50V / X7R / K</code>.
+      </div>
+      <div class="tip">
+        <span class="lbl">Thay chữa cháy</span>
+        Thiếu đúng cỡ thì <b>được dùng vỏ nhỏ hơn</b> nếu trị số và điện áp đủ (chỉ khó hàn hơn). Dùng vỏ to hơn thì phải chắc là không chạm linh kiện bên cạnh.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="no">C2</span><h3>Tantalum SMD — mã vỏ &amp; quy tắc hạ áp</h3></div>
+    <div class="card-body">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th class="c">Mã vỏ</th><th class="c">Mã EIA</th><th class="c">Kích thước (mm)</th><th>Hay gặp</th></tr></thead>
+        <tbody>
+          <tr><td class="c"><strong>A</strong></td><td class="c">3216</td><td class="c">3,2 × 1,6 × 1,6</td><td>0,1 – 10 µF</td></tr>
+          <tr><td class="c"><strong>B</strong></td><td class="c">3528</td><td class="c">3,5 × 2,8 × 1,9</td><td>1 – 22 µF</td></tr>
+          <tr><td class="c"><strong>C</strong></td><td class="c">6032</td><td class="c">6,0 × 3,2 × 2,5</td><td>10 – 100 µF</td></tr>
+          <tr><td class="c"><strong>D</strong></td><td class="c">7343</td><td class="c">7,3 × 4,3 × 2,8</td><td>22 – 330 µF</td></tr>
+          <tr><td class="c"><strong>E / X</strong></td><td class="c">7343H</td><td class="c">7,3 × 4,3 × 4,1</td><td>100 – 470 µF</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="warn">
+        <span class="lbl">Hai điều bắt buộc nhớ</span>
+        <b>1. Vạch dấu trên tantalum là cực DƯƠNG (+)</b> — ngược hoàn toàn với tụ hoá nhôm, nơi sọc màu là cực ÂM (−). Đây là lỗi cắm ngược phổ biến nhất khi sửa board.<br>
+        <b>2. Chỉ dùng ở ≤ 50% điện áp định mức.</b> Tantalum quá áp hoặc gặp xung dòng lớn sẽ <b>chập rồi cháy thành ngọn lửa</b>, không "chết êm" như tụ hoá. Mạch 5 V phải dùng tụ ≥ 10 V, tốt nhất 16 V.
+      </div>
+      <div class="tip">
+        <span class="lbl">Thay thế</span>
+        Chỗ tantalum cháy, nếu vừa chỗ thì <b>thay bằng MLCC X7R hoặc polymer cùng trị số</b> — bền hơn và không cháy. Nhớ chọn điện áp gấp 2–3 lần vì DC bias (mục B4).
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="no">C3</span><h3>Tụ hoá — đọc thân, phân cực, tuổi thọ</h3></div>
+    <div class="card-body">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>Chi tiết trên vỏ</th><th>Ý nghĩa</th></tr></thead>
+        <tbody>
+          <tr><td>Sọc màu nhạt dọc thân + dấu <code>−</code></td><td>Cực <b>ÂM</b>. Cắm ngược sẽ nổ</td></tr>
+          <tr><td>Chân dài / chân ngắn (tụ mới)</td><td>Dài = <b>DƯƠNG</b>, ngắn = <b>ÂM</b></td></tr>
+          <tr><td>Rãnh chữ <code>K</code>, <code>Y</code>, <code>T</code> hoặc <code>+</code> trên đỉnh</td><td>Van xả áp. Phồng hoặc nứt ở đây = tụ đã chết</td></tr>
+          <tr><td><code>105°C</code> so với <code>85°C</code></td><td>Nhiệt độ tối đa. Trong nguồn, gần tản nhiệt <b>bắt buộc 105 °C</b></td></tr>
+          <tr><td><code>2000h</code> · <code>5000h</code> · <code>10000h</code></td><td>Tuổi thọ ở nhiệt độ định mức</td></tr>
+          <tr><td><code>Low ESR</code> / <code>LOW IMPEDANCE</code></td><td>Dành cho nguồn xung — không thay bằng tụ thường</td></tr>
+          <tr><td>Mã series: <code>KY</code>, <code>ZLH</code>, <code>FR</code>, <code>HE</code>…</td><td>Cho biết dòng sản phẩm và có phải low-ESR hay không</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="fx">
+        <code>Tuổi thọ = Tuổi thọ định mức × 2^((T_đm − T_thực) / 10)</code>
+        <span>Cứ mát hơn 10 °C thì sống gấp đôi. Tụ 105 °C / 2000 h chạy ở 65 °C sống ≈ 2000 × 2⁴ = 32.000 h, tức khoảng 3,6 năm chạy liên tục.</span>
+      </div>
+      <p style="font-size:13px"><strong>Series low-ESR quen mặt:</strong> Panasonic <code>FR / FM / FC</code> · Nichicon <code>HE / HW / HZ / PW</code> · Rubycon <code>ZLH / ZLJ / YXF</code> · Chemi-Con <code>KY / KZE / KZH</code>.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="no">C4</span><h3>Nhận dạng nhanh theo hình dáng</h3></div>
+    <div class="card-body">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>Nhìn thấy</th><th>Là tụ gì</th><th>Đặc điểm cần nhớ</th></tr></thead>
+        <tbody>
+          <tr><td>Đĩa tròn nâu/cam, 2 chân, in <code>104</code></td><td>Gốm đĩa</td><td>Không phân cực, rẻ, đọc theo mã 3 số</td></tr>
+          <tr><td>Hộp vuông dẹt vàng/đỏ/xanh</td><td>Màng MKT/MKP ("tụ kẹo")</td><td>Không phân cực, ổn định, hay ghi kèm mã điện áp</td></tr>
+          <tr><td>Trụ nhôm có sọc dọc</td><td>Hoá nhôm</td><td>Có cực, sọc = ÂM, có tuổi thọ</td></tr>
+          <tr><td>Trụ nhôm lùn, đỉnh phẳng, vỏ bóng</td><td>Polymer rắn</td><td>Có cực, ESR cực thấp, không phồng kiểu tụ nước</td></tr>
+          <tr><td>Khối vuông vàng/cam có vạch một đầu</td><td>Tantalum SMD</td><td>Có cực, vạch = <b>DƯƠNG</b>, kỵ quá áp</td></tr>
+          <tr><td>Chữ nhật gốm nhỏ không in gì</td><td>MLCC dán</td><td>Không phân cực, phải đo mới biết trị số</td></tr>
+          <tr><td>Hộp vuông xanh/ghi ghi <code>X2</code>, <code>275V~</code></td><td>Tụ an toàn X2</td><td>Cắm vào lưới AC, chỉ thay bằng đúng loại</td></tr>
+          <tr><td>Hộp gốm xanh đậm ghi <code>Y2</code>, <code>400V~</code></td><td>Tụ an toàn Y2</td><td>Nối pha ↔ vỏ máy, liên quan an toàn điện giật</td></tr>
+          <tr><td>Trụ nhôm to có 2 cọc vít, ghi <code>µF 450VAC</code></td><td>Tụ ngậm CBB60/65</td><td>Không phân cực, dùng cho động cơ AC</td></tr>
+          <tr><td>Trụ nhựa đen ghi <code>100–400µF 250VAC</code></td><td>Tụ khởi động CD60</td><td>Chỉ đóng điện vài giây, không chạy liên tục</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════ PHẦN D ══════ -->
+<div class="part" id="pd">
+  <span class="part-letter">D</span>
+  <h2>Tụ nối lưới AC &amp; an toàn</h2>
+  <span class="part-note">Nhóm dễ gây tai nạn và cháy nhất — không thay bừa</span>
+</div>
+
+<div class="grid">
+
+  <div class="card span2">
+    <div class="card-head"><span class="no">D1</span><h3>Tụ an toàn lớp X và Y — bảng đầy đủ</h3></div>
+    <div class="card-body">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th class="c">Lớp</th><th>Mắc ở đâu</th><th class="c">Điện áp làm việc</th><th class="c">Chịu xung đỉnh</th><th>Dùng ở đâu</th></tr></thead>
+        <tbody>
+          <tr><td class="c"><strong>X1</strong></td><td>Pha ↔ trung tính</td><td class="c">≤ 760 VAC</td><td class="c">&gt; 2,5 kV … 4 kV</td><td>Công nghiệp, nơi có xung sét mạnh</td></tr>
+          <tr><td class="c"><strong>X2</strong></td><td>Pha ↔ trung tính</td><td class="c">≤ 760 VAC <span class="dim">(thường ghi 275 V)</span></td><td class="c">≤ 2,5 kV</td><td><b>Phổ biến nhất</b> trong đồ dân dụng: lọc nhiễu đầu nguồn, tụ hạ áp cho LED driver</td></tr>
+          <tr><td class="c"><strong>X3</strong></td><td>Pha ↔ trung tính</td><td class="c">≤ 760 VAC</td><td class="c">≤ 1,2 kV</td><td>Ít gặp</td></tr>
+          <tr><td class="c"><strong>Y1</strong></td><td>Pha ↔ vỏ máy / đất</td><td class="c">≤ 500 VAC</td><td class="c">8 kV</td><td>Cách điện kép — thiết bị không nối đất</td></tr>
+          <tr><td class="c"><strong>Y2</strong></td><td>Pha ↔ vỏ máy / đất</td><td class="c">≤ 300 VAC</td><td class="c">5 kV</td><td><b>Phổ biến nhất</b>: nối sơ cấp ↔ thứ cấp trong nguồn xung (con tụ gốm xanh giữa board)</td></tr>
+          <tr><td class="c"><strong>Y3</strong></td><td>Pha ↔ đất</td><td class="c">≤ 250 VAC</td><td class="c">Không thử xung</td><td>Ít gặp</td></tr>
+          <tr><td class="c"><strong>Y4</strong></td><td>Pha ↔ đất</td><td class="c">≤ 150 VAC</td><td class="c">2,5 kV</td><td>Ít gặp</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="warn">
+        <span class="lbl">Nguyên tắc sống còn</span>
+        Tụ X và tụ Y được thiết kế để <b>hỏng theo kiểu an toàn</b>: X hỏng không được gây cháy, Y hỏng phải đứt mạch để không truyền điện ra vỏ máy. Tụ DC thường — kể cả 630 V hay 1 kV — <b>không có tính chất này</b>; thay sai chỗ có thể gây <b>cháy hoặc điện giật chết người</b>.<br>
+        Thay đúng: cùng lớp (X2 ↔ X2, Y2 ↔ Y2), cùng trị số, điện áp ghi <b>VAC</b> bằng hoặc cao hơn, và có dấu chứng nhận (VDE, ENEC, UL, CQC).
+      </div>
+      <div class="note">
+        <span class="lbl">Triệu chứng tụ X2 chết</span>
+        Tụ X2 <b>tụt dung lượng dần</b> theo năm tháng, thường không phồng, không đổi màu. Với các mạch dùng <b>tụ hạ áp</b> (đèn LED, chuông cửa, đồng hồ điện, mạch điều khiển quạt), X2 tụt trị số làm dòng ra giảm → đèn tối dần, chớp, rồi tắt hẳn. Gặp mạch dạng này chết thì <b>đo tụ X2 trước tiên</b>.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="no">D2</span><h3>Tụ ngậm &amp; tụ khởi động (động cơ AC)</h3></div>
+    <div class="card-body">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th class="c">Loại</th><th>Dùng cho</th><th class="c">Trị số</th><th class="c">Điện áp</th><th class="c">Chế độ</th></tr></thead>
+        <tbody>
+          <tr><td class="c"><strong>CBB61</strong></td><td>Quạt trần, quạt bàn, quạt hút</td><td class="c">0,8 – 6 µF</td><td class="c">250–450 VAC</td><td class="c">Chạy liên tục</td></tr>
+          <tr><td class="c"><strong>CBB60</strong></td><td>Máy bơm, máy giặt, mô-tơ nhỏ</td><td class="c">4 – 50 µF</td><td class="c">450 VAC</td><td class="c">Chạy liên tục</td></tr>
+          <tr><td class="c"><strong>CBB65</strong></td><td>Điều hoà, block tủ lạnh, máy nén</td><td class="c">15 – 70 µF</td><td class="c">450 VAC</td><td class="c">Chạy liên tục</td></tr>
+          <tr><td class="c"><strong>CD60</strong></td><td>Tụ <b>khởi động</b> mô-tơ lớn</td><td class="c">50 – 500 µF</td><td class="c">250–330 VAC</td><td class="c"><b>Vài giây</b></td></tr>
+        </tbody>
+      </table>
+      </div>
+      <ul class="tight">
+        <li><strong>Không phân cực.</strong> CBB đều là tụ màng PP; CD60 là tụ hoá không cực.</li>
+        <li><strong>Thay phải đúng µF.</strong> Lệch quá ±5% làm mô-tơ nóng, yếu, ù và giảm tuổi thọ — không "lấy con gần nhất cho xong".</li>
+        <li><strong>Không hoán đổi CD60 với CBB.</strong> CD60 chỉ chịu vài giây mỗi lần đóng điện; cắm chạy liên tục sẽ nổ.</li>
+        <li><strong>Điện áp ghi là VAC</strong> — chỉ thay bằng tụ ghi VAC bằng hoặc cao hơn. 450 VAC là mức an toàn chuẩn cho lưới 220 V.</li>
+        <li><strong>Triệu chứng tụ ngậm yếu:</strong> quạt ù mà không quay, phải gảy cánh mới chạy; mô-tơ nóng và chậm; máy nén ù rồi nhảy rơ-le nhiệt.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="no">D3</span><h3>An toàn: xả tụ trước khi chạm</h3></div>
+    <div class="card-body">
+      <div class="warn">
+        <span class="lbl">Nguy hiểm chết người</span>
+        Tụ lọc chính trong nguồn xung (thường <b>100–470 µF / 400 V</b>) giữ điện <b>nhiều phút đến hàng giờ</b> sau khi rút phích. Khoảng 310 VDC đủ gây giật mạnh và làm hỏng đồng hồ đo.
+      </div>
+      <ol class="rules">
+        <li><strong>Rút điện, chờ, rồi mới mở máy.</strong> Không tin vào việc đèn báo đã tắt.</li>
+        <li><strong>Xả bằng điện trở</strong> 10–100 kΩ / ≥ 2 W bắc qua hai chân tụ trong khoảng 10 giây. <b>Không chập bằng tua vít</b> — hồ quang làm rỗ tua vít, bắn kim loại vào mắt và có thể làm nổ tụ.</li>
+        <li><strong>Đo lại bằng đồng hồ</strong> ở thang DC trước khi đưa tay vào. Dưới 30 V mới coi là an toàn.</li>
+        <li><strong>Tụ X2 ở đầu phích cắm</strong> có thể giữ điện và làm giật khi cầm hai chân phích vừa rút ra.</li>
+        <li><strong>Cực kỳ nguy hiểm:</strong> tụ lò vi sóng (~2100 VAC), tụ đèn flash máy ảnh, tụ cao áp TV CRT. Không mở nếu chưa được huấn luyện.</li>
+      </ol>
+      <div class="fx">
+        <code>t_xả ≈ 5 × R × C</code>
+        <span>Ví dụ 220 µF với điện trở xả 10 kΩ: τ = 2,2 s → xả gần hết sau khoảng 11 giây.</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════ PHẦN E ══════ -->
+<div class="part" id="pe">
+  <span class="part-letter">E</span>
+  <h2>Công thức &amp; chọn trị số</h2>
+  <span class="part-note">Khi sơ đồ không cho sẵn giá trị</span>
+</div>
+
+<div class="grid">
+
+  <div class="card">
+    <div class="card-head"><span class="no">E1</span><h3>Công thức cốt lõi</h3></div>
+    <div class="card-body">
+      <div class="fx">
+        <code>X_C = 1 / (2πfC)</code>
+        <span>Trở kháng của tụ (Ω). Tần số càng cao tụ càng "thông". VD: 100 µF ở 100 Hz → 15,9 Ω; ở 100 kHz → 0,016 Ω.</span>
+      </div>
+      <div class="fx">
+        <code>τ = R × C</code>
+        <span>Hằng số thời gian (giây). Sau 1τ nạp/xả được 63,2%; sau 5τ coi như xong (99,3%). Dùng cho mạch delay, chống dội phím, reset.</span>
+      </div>
+      <div class="fx">
+        <code>E = ½ × C × V²</code>
+        <span>Năng lượng tích (joule). VD: 470 µF nạp 400 V giữ 37,6 J — đủ gây hồ quang lớn.</span>
+      </div>
+      <div class="fx">
+        <code>I = C × dV/dt</code>
+        <span>Dòng qua tụ tỉ lệ với tốc độ đổi điện áp — giải thích vì sao tụ chặn DC và cho AC đi qua.</span>
+      </div>
+      <div class="fx">
+        <code>Song song: C = C₁ + C₂ + …<br>Nối tiếp: 1/C = 1/C₁ + 1/C₂ + …</code>
+        <span><b>Ngược với điện trở.</b> Ghép song song để tăng dung lượng; ghép nối tiếp để tăng chịu áp nhưng dung lượng giảm.</span>
+      </div>
+      <div class="note">
+        <span class="lbl">Ghép nối tiếp để nâng áp</span>
+        Phải bắc <b>điện trở cân bằng 100–470 kΩ song song với từng tụ</b>. Không có nó, dòng rò chênh nhau sẽ dồn áp vào một con và làm nó nổ. Điện trở này cũng đóng luôn vai trò xả tụ.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="no">E2</span><h3>Chọn tụ lọc nguồn &amp; tụ hạ áp</h3></div>
+    <div class="card-body">
+      <div class="fx">
+        <code>C (µF) ≈ I (A) × 10.000 / V_gợn (V)</code>
+        <span>Cho chỉnh lưu cầu, lưới 50 Hz (mỗi lần nạp cách nhau 10 ms). Lưới 60 Hz thì thay 10.000 bằng 8.330.</span>
+      </div>
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th class="c">Dòng tải</th><th class="c">Gợn 1 V</th><th class="c">Gợn 2 V</th><th class="c">Gợn 5 V</th></tr></thead>
+        <tbody>
+          <tr><td class="c">0,5 A</td><td class="c">4.700 µF</td><td class="c">2.200 µF</td><td class="c">1.000 µF</td></tr>
+          <tr><td class="c">1 A</td><td class="c">10.000 µF</td><td class="c">4.700 µF</td><td class="c">2.200 µF</td></tr>
+          <tr><td class="c">2 A</td><td class="c">22.000 µF</td><td class="c">10.000 µF</td><td class="c">4.700 µF</td></tr>
+          <tr><td class="c">5 A</td><td class="c">47.000 µF</td><td class="c">22.000 µF</td><td class="c">10.000 µF</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="fx">
+        <code>I_ra ≈ 2πf × C × V_AC</code>
+        <span>Dòng của <b>mạch tụ hạ áp</b> (đèn LED, chuông cửa). VD: 0,47 µF X2 ở 220 V / 50 Hz cho khoảng 32 mA. Dùng để tính lại tụ khi đổi sang đèn LED công suất khác.</span>
+      </div>
+      <div class="tip">
+        <span class="lbl">Kinh nghiệm bàn thợ</span>
+        Tăng tụ lọc chính <b>tối đa +50%</b> so với nguyên bản là an toàn và làm máy êm hơn. Tăng nhiều hơn khiến <b>dòng nạp lúc bật máy vọt lên</b> → đứt cầu chì, cháy diode chỉnh lưu, dính tiếp điểm rơ-le.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="no">E3</span><h3>Tự cộng hưởng: vì sao luôn thấy 100nF cạnh 10µF</h3></div>
+    <div class="card-body">
+      <p>Mỗi tụ thực tế đều có điện cảm ký sinh (ESL) của chân và bản cực. Trên tần số tự cộng hưởng (SRF), tụ <b>hết là tụ và bắt đầu hành xử như cuộn cảm</b> — mất tác dụng lọc.</p>
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>Tụ</th><th class="c">SRF điển hình</th><th>Lọc tốt ở dải</th></tr></thead>
+        <tbody>
+          <tr><td>Hoá nhôm 1000 µF</td><td class="c">vài chục kHz</td><td>Gợn nguồn tần số thấp</td></tr>
+          <tr><td>Tantalum / polymer 10 µF</td><td class="c">vài trăm kHz</td><td>Dao động tải trung bình</td></tr>
+          <tr><td>MLCC 10 µF (0805)</td><td class="c">≈ 2 MHz</td><td>Xung chuyển mạch</td></tr>
+          <tr><td>MLCC 100 nF (0805)</td><td class="c">≈ 15 MHz</td><td>Nhiễu số, sườn xung của IC</td></tr>
+          <tr><td>MLCC 1 nF (0402)</td><td class="c">&gt; 100 MHz</td><td>RF, nhiễu tần số cao</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="note">
+        <span class="lbl">Rút ra khi sửa</span>
+        Con <b>100 nF nằm sát chân nguồn mỗi IC</b> không thay thế được bằng "một con 10 µF to hơn đặt ở xa". Nếu board treo hoặc nhiễu ngẫu nhiên sau khi sửa, hãy kiểm tra đúng những con tụ nhỏ này — kể cả khi chúng trông vẫn còn nguyên (nứt ngầm, mục B4).
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="no">E4</span><h3>Dãy giá trị chuẩn — biết trước cái gì có bán</h3></div>
+    <div class="card-body">
+      <p>Tụ chỉ được sản xuất theo dãy chuẩn. Tính ra trị số lẻ thì lấy giá trị chuẩn gần nhất.</p>
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th class="c">Dãy</th><th>Các trị số (nhân với 10ⁿ)</th><th class="c">Đi kèm</th></tr></thead>
+        <tbody>
+          <tr><td class="c"><strong>E3</strong></td><td class="mono">1,0 · 2,2 · 4,7</td><td class="c">Tụ hoá cỡ lớn</td></tr>
+          <tr><td class="c"><strong>E6</strong></td><td class="mono">1,0 · 1,5 · 2,2 · 3,3 · 4,7 · 6,8</td><td class="c">±20%</td></tr>
+          <tr><td class="c"><strong>E12</strong></td><td class="mono">1,0 · 1,2 · 1,5 · 1,8 · 2,2 · 2,7 · 3,3 · 3,9 · 4,7 · 5,6 · 6,8 · 8,2</td><td class="c">±10%</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p style="font-size:13px"><strong>Tụ hoá bán ngoài chợ</strong> gần như chỉ có: 1 · 2,2 · 3,3 · 4,7 · 10 · 22 · 33 · 47 · 100 · 220 · 330 · 470 · 1000 · 2200 · 3300 · 4700 · 10000 µF.</p>
+      <p style="font-size:13px"><strong>Tụ gốm và tụ màng thông dụng:</strong> 22p · 33p · 47p · 100p · 220p · 470p · 1n · 2,2n · 4,7n · 10n · 22n · 47n · 100n · 220n · 470n · 1µ.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════ PHẦN F ══════ -->
+<div class="part" id="pf">
+  <span class="part-letter">F</span>
+  <h2>Đo, chẩn đoán, thay thế</h2>
+  <span class="part-note">Từ triệu chứng của máy đến con tụ cần thay</span>
+</div>
+
+<div class="grid">
+
+  <div class="card">
+    <div class="card-head"><span class="no">F1</span><h3>Cách đo tụ cho đúng</h3></div>
+    <div class="card-body">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>Muốn biết</th><th>Dụng cụ</th><th>Cách làm</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Dung lượng</strong></td><td>Đồng hồ số có thang µF, LCR</td><td><b>Nhấc một chân ra khỏi board</b>, xả sạch tụ rồi mới đo. Đo tại chỗ luôn sai vì các nhánh song song cộng dồn.</td></tr>
+          <tr><td><strong>Khô, mất trị số</strong></td><td>Thang µF</td><td>So với trị ghi trên thân. Tụ hoá lệch quá <b>−20%</b> coi như hỏng.</td></tr>
+          <tr><td><strong>ESR</strong> — quan trọng nhất với tụ hoá</td><td>Máy đo ESR</td><td>Đo được <b>ngay trên board</b> vì máy dùng xung nhỏ ~100 kHz. Đây là cách bắt tụ hỏng nhanh nhất.</td></tr>
+          <tr><td><strong>Rò, chập</strong></td><td>Thang Ω cao hoặc megomet</td><td>Tụ tốt: kim vọt lên rồi trả về ∞. Kim đứng ở vài chục kΩ = <b>rò</b>. Về 0 = <b>chập</b>.</td></tr>
+          <tr><td><strong>Còn sống không (thô)</strong></td><td>Đồng hồ kim</td><td>Thang ×1k: kim vọt rồi trả về = còn nạp được. Không vọt = đứt hoặc khô.</td></tr>
+          <tr><td><strong>Tụ nhỏ cỡ pF</strong></td><td>LCR chuyên dụng</td><td>Đồng hồ số phổ thông đo dưới ~1 nF rất sai — đừng vội kết luận.</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="warn">
+        <span class="lbl">Trước khi đo</span>
+        <b>Luôn xả tụ trước.</b> Đưa tụ 400 V còn điện vào thang đo µF là cách nhanh nhất để giết đồng hồ.
+      </div>
+      <div class="note">
+        <span class="lbl">Chuẩn so sánh tốt nhất</span>
+        Ngưỡng ESR "đúng" khác nhau theo từng series, không có con số chung. Cách chắc ăn: <b>đo một con tụ mới cùng trị số cùng loại</b> làm mốc; nghi ngờ khi tụ trên máy có ESR lớn hơn <b>2–3 lần</b> con mới.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="no">F2</span><h3>Triệu chứng máy → con tụ cần ngờ</h3></div>
+    <div class="card-body">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>Máy bị gì</th><th>Nghi ngờ</th></tr></thead>
+        <tbody>
+          <tr><td>Nguồn xung không lên, rít nhỏ, đèn nháy rồi tắt</td><td>Tụ nuôi IC nguồn (10–47 µF) khô; tụ lọc thứ cấp ESR cao</td></tr>
+          <tr><td>TV / màn hình sọc ngang, chớp, tự tắt</td><td>Tụ thứ cấp 470–1000 µF / 16–25 V</td></tr>
+          <tr><td>Ampli ù 50–100 Hz</td><td>Tụ lọc nguồn chính khô hoặc mất trị số</td></tr>
+          <tr><td>Audio mất bass, rè, méo tiếng</td><td>Tụ liên lạc rò; tụ hoá trên đường tín hiệu</td></tr>
+          <tr><td>Quạt ù, không tự quay, phải gảy cánh</td><td>Tụ ngậm CBB61 tụt trị số</td></tr>
+          <tr><td>Máy bơm, máy giặt ù rồi nhảy nhiệt</td><td>Tụ ngậm CBB60 / CBB65</td></tr>
+          <tr><td>Đèn LED tối dần rồi chớp, tắt</td><td>Tụ X2 hạ áp tụt trị số; tụ hoá sau chỉnh lưu</td></tr>
+          <tr><td>Mạch hẹn giờ chạy sai thời gian</td><td>Tụ định thời rò — thay bằng tụ màng, không dùng tụ hoá</td></tr>
+          <tr><td>Board treo ngẫu nhiên, nhiễu, reset vặt</td><td>Tụ decoupling 100 nF mất hoặc MLCC nứt ngầm</td></tr>
+          <tr><td>Chết ngay khi cắm điện, nổ cầu chì</td><td>Tụ lọc chính chập; MLCC nứt chập xuống mass</td></tr>
+          <tr><td>Mùi khét, vết đen ở đầu vào AC</td><td>Tụ X2 cháy — thay đúng X2 275 VAC</td></tr>
+          <tr><td>Tụ phồng đầu, rỉ dịch nâu, chân xanh</td><td>Hỏng chắc chắn — thay cả cụm cùng lô, rửa sạch mạch in</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card span2">
+    <div class="card-head"><span class="no">F3</span><h3>Mười quy tắc thay tụ</h3></div>
+    <div class="card-body">
+      <ol class="rules">
+        <li><strong>Dung lượng phải đúng.</strong> Riêng tụ lọc nguồn được phép tăng tối đa +50%. Tụ định thời, tụ lọc tần số, tụ phân tần loa và tụ ngậm động cơ <b>phải đúng trị số</b>.</li>
+        <li><strong>Điện áp bằng hoặc cao hơn</strong>, nên dư 20–50%. Tantalum dư gấp <b>2 lần</b>; gốm Class 2 dư <b>2–3 lần</b> vì DC bias.</li>
+        <li><strong>Ưu tiên 105 °C</strong>, bắt buộc khi tụ nằm gần tản nhiệt, biến áp hoặc sò công suất. Không thay 105 °C bằng 85 °C.</li>
+        <li><strong>Giữ nguyên đặc tính ESR.</strong> Mạch nguồn xung ghi <em>Low ESR</em> phải thay bằng tụ low-ESR. Ngược lại, một số mạch ổn áp LDO đời cũ lại <b>cần ESR tối thiểu</b> mới ổn định — chỗ đó không tự ý nâng cấp lên polymer.</li>
+        <li><strong>Không đổi chất liệu ở mạch nhạy tần.</strong> C0G/NP0 và tụ màng không thay bằng X7R/Y5V trong dao động, lọc, âm sắc.</li>
+        <li><strong>Đúng phân cực.</strong> Tụ hoá: sọc = ÂM. Tantalum: vạch = DƯƠNG. Mạch có tín hiệu đổi chiều phải dùng tụ không cực (NP/BP) hoặc tụ màng.</li>
+        <li><strong>Tụ nối lưới AC chỉ thay bằng tụ an toàn cùng lớp</strong> (X2 ↔ X2, Y2 ↔ Y2), ghi VAC và có dấu chứng nhận. Không bao giờ dùng tụ DC thay vào.</li>
+        <li><strong>Vừa chỗ.</strong> Kiểm tra đường kính, chiều cao và khoảng cách chân trước khi mua — tụ cao quá thì không đậy được nắp máy.</li>
+        <li><strong>Thay theo cụm.</strong> Tụ cùng lô, cùng vị trí nhiệt độ sẽ già cùng nhau. Đã mở máy thì thay hết cụm thay vì phải quay lại lần hai.</li>
+        <li><strong>Dọn sạch hậu quả.</strong> Dịch rò của tụ hoá ăn mòn đồng và làm hở mạch. Rửa sạch, soi lại đường mạch và đo thông mạch quanh chân tụ cũ.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="card span2">
+    <div class="card-head"><span class="no">F4</span><h3>Con tụ đó đang làm nhiệm vụ gì trong mạch</h3></div>
+    <div class="card-body">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>Nhiệm vụ</th><th class="c">Trị số hay gặp</th><th class="c">Loại nên dùng</th><th>Nhận biết trong mạch</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Lọc nguồn (bulk)</strong></td><td class="c">100 µF – 10 mF</td><td class="c">Hoá nhôm, polymer</td><td>Ngay sau cầu diode hoặc sau cuộn lọc</td></tr>
+          <tr><td><strong>Chống nhiễu cục bộ (decoupling)</strong></td><td class="c">100 nF</td><td class="c">X7R / X5R</td><td>Sát chân VCC của mỗi IC</td></tr>
+          <tr><td><strong>Liên lạc tín hiệu (coupling)</strong></td><td class="c">100 nF – 10 µF</td><td class="c">Màng, NP</td><td>Nối tiếp giữa hai tầng khuếch đại</td></tr>
+          <tr><td><strong>Định thời (timing)</strong></td><td class="c">1 nF – 10 µF</td><td class="c">Màng, C0G</td><td>Đi kèm điện trở vào chân IC 555, mạch RC reset</td></tr>
+          <tr><td><strong>Dao động thạch anh</strong></td><td class="c">10 – 33 pF</td><td class="c">C0G / NP0</td><td>Hai bên thạch anh của vi điều khiển</td></tr>
+          <tr><td><strong>Snubber dập xung</strong></td><td class="c">1 – 100 nF</td><td class="c">Màng PP, gốm cao áp</td><td>Song song với công tắc, rơ-le, diode, MOSFET</td></tr>
+          <tr><td><strong>Bootstrap</strong></td><td class="c">100 nF – 10 µF</td><td class="c">Gốm</td><td>Giữa chân HB/HO của IC lái MOSFET nửa cầu</td></tr>
+          <tr><td><strong>Lọc nhiễu lưới (EMI)</strong></td><td class="c">100 nF – 1 µF</td><td class="c"><b>X2 / Y2</b></td><td>Đầu vào AC, cạnh cuộn cản đôi</td></tr>
+          <tr><td><strong>Phân tần loa</strong></td><td class="c">1 – 100 µF</td><td class="c">Màng PP, hoá NP</td><td>Nối tiếp với loa tweeter</td></tr>
+          <tr><td><strong>Ngậm động cơ AC</strong></td><td class="c">1 – 70 µF</td><td class="c">CBB60/61/65</td><td>Nối giữa cuộn chạy và cuộn đề</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════ PHẦN G ══════ -->
+<div class="part" id="pg">
+  <span class="part-letter">G</span>
+  <h2>Đọc mã điện trở</h2>
+  <span class="part-note">Vạch màu, mã số dán và EIA-96</span>
+</div>
+
+<div class="grid">
+
+  <div class="card span2">
+    <div class="card-head"><span class="no">G1</span><h3>Bảng mã màu điện trở — đầy đủ 4 cột</h3></div>
+    <div class="card-body">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>Màu</th><th class="c">Chữ số</th><th class="c">Hệ số nhân</th><th class="c">Dung sai</th><th class="c">Hệ số nhiệt (vạch 6)</th></tr></thead>
+        <tbody>
+          <tr><td><span class="sw" style="background:#000"></span>Đen</td><td class="c">0</td><td class="c">×1 Ω</td><td class="c dim">–</td><td class="c dim">–</td></tr>
+          <tr><td><span class="sw" style="background:#7a4a1e"></span>Nâu</td><td class="c">1</td><td class="c">×10 Ω</td><td class="c"><strong>±1%</strong></td><td class="c">100 ppm/°C</td></tr>
+          <tr><td><span class="sw" style="background:#cc2222"></span>Đỏ</td><td class="c">2</td><td class="c">×100 Ω</td><td class="c"><strong>±2%</strong></td><td class="c">50 ppm/°C</td></tr>
+          <tr><td><span class="sw" style="background:#e8760f"></span>Cam</td><td class="c">3</td><td class="c">×1 kΩ</td><td class="c dim">±0,05%</td><td class="c">15 ppm/°C</td></tr>
+          <tr><td><span class="sw" style="background:#e8c419"></span>Vàng</td><td class="c">4</td><td class="c">×10 kΩ</td><td class="c dim">±0,02%</td><td class="c">25 ppm/°C</td></tr>
+          <tr><td><span class="sw" style="background:#2a8f3f"></span>Xanh lá</td><td class="c">5</td><td class="c">×100 kΩ</td><td class="c">±0,5%</td><td class="c">20 ppm/°C</td></tr>
+          <tr><td><span class="sw" style="background:#2158b8"></span>Xanh dương</td><td class="c">6</td><td class="c">×1 MΩ</td><td class="c">±0,25%</td><td class="c">10 ppm/°C</td></tr>
+          <tr><td><span class="sw" style="background:#7a3fa8"></span>Tím</td><td class="c">7</td><td class="c">×10 MΩ</td><td class="c">±0,1%</td><td class="c">5 ppm/°C</td></tr>
+          <tr><td><span class="sw" style="background:#8b8b8b"></span>Xám</td><td class="c">8</td><td class="c">×100 MΩ</td><td class="c dim">±0,01%</td><td class="c">1 ppm/°C</td></tr>
+          <tr><td><span class="sw" style="background:#fff"></span>Trắng</td><td class="c">9</td><td class="c">×1 GΩ</td><td class="c dim">–</td><td class="c dim">–</td></tr>
+          <tr><td><span class="sw" style="background:#c9a227"></span>Vàng kim</td><td class="c dim">–</td><td class="c">×0,1 (÷10)</td><td class="c"><strong>±5%</strong></td><td class="c dim">–</td></tr>
+          <tr><td><span class="sw" style="background:#b8b8b8"></span>Bạc</td><td class="c dim">–</td><td class="c">×0,01 (÷100)</td><td class="c"><strong>±10%</strong></td><td class="c dim">–</td></tr>
+          <tr><td><span class="sw" style="background:transparent;box-shadow:0 0 0 1px var(--rule-strong)"></span>Không vạch</td><td class="c dim">–</td><td class="c dim">–</td><td class="c">±20%</td><td class="c dim">–</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="note">
+        <span class="lbl">Khác với tụ điện</span>
+        Điện trở <b>không có vạch điện áp</b>. Cột hệ số nhân của điện trở tính bằng <b>Ω</b>, còn của tụ tính bằng <b>pF</b> — đừng dùng lẫn hai bảng.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="no">G2</span><h3>Đọc 4 · 5 · 6 vạch và xác định chiều đọc</h3></div>
+    <div class="card-body">
+      <p><strong>4 vạch</strong> — 2 chữ số + nhân + dung sai. Loại phổ thông ±5%.</p>
+      <div class="decode">
+        <span class="seg" style="--seg:var(--info)"><b>Nâu Đen</b><i><em>Chữ số</em>= 10</i></span>
+        <span class="seg" style="--seg:var(--accent)"><b>Đỏ</b><i><em>Nhân</em>× 100</i></span>
+        <span class="seg" style="--seg:var(--ok)"><b>Kim</b><i><em>1 kΩ</em>±5%</i></span>
+      </div>
+      <p><strong>5 vạch</strong> — 3 chữ số + nhân + dung sai. Loại chính xác ±1%.</p>
+      <div class="decode">
+        <span class="seg" style="--seg:var(--info)"><b>Nâu Đen Đen</b><i><em>Chữ số</em>= 100</i></span>
+        <span class="seg" style="--seg:var(--accent)"><b>Nâu</b><i><em>Nhân</em>× 10</i></span>
+        <span class="seg" style="--seg:var(--ok)"><b>Nâu</b><i><em>1 kΩ</em>±1%</i></span>
+      </div>
+      <p><strong>6 vạch</strong> — như 5 vạch, thêm vạch cuối là <b>hệ số nhiệt</b> (ppm/°C), dùng cho mạch đo lường và chuẩn.</p>
+      <div class="tip">
+        <span class="lbl">Đọc từ đầu nào?</span>
+        <b>1.</b> Vạch <b>vàng kim hoặc bạc</b> luôn là dung sai — đặt nó về bên <b>phải</b>.<br>
+        <b>2.</b> Vạch dung sai thường <b>cách xa</b> nhóm vạch còn lại một khoảng rõ rệt.<br>
+        <b>3.</b> Vạch đầu tiên nằm <b>gần mép thân</b> hơn.<br>
+        <b>4.</b> Đọc ngược cho ra trị số vô lý (ví dụ 91 GΩ) thì chắc chắn là bạn đang cầm ngược.
+      </div>
+      <div class="warn">
+        <span class="lbl">Không chắc thì đo</span>
+        Điện trở cũ bạc màu rất dễ đọc nhầm nâu ↔ đỏ, cam ↔ đỏ. Mã màu chỉ để <b>đoán nhanh</b>; con số cuối cùng phải lấy từ đồng hồ đo.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="no">G3</span><h3>Mã số trên điện trở dán (SMD)</h3></div>
+    <div class="card-body">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>Kiểu mã</th><th>Quy tắc</th><th>Ví dụ</th></tr></thead>
+        <tbody>
+          <tr><td><strong>3 chữ số</strong><br><span class="dim">loại ±5%</span></td><td>2 số đầu có nghĩa, số cuối là số mũ (Ω)</td><td><code>103</code>=10 kΩ · <code>472</code>=4,7 kΩ · <code>220</code>=22 Ω · <code>100</code>=10 Ω</td></tr>
+          <tr><td><strong>4 chữ số</strong><br><span class="dim">loại ±1%</span></td><td>3 số đầu có nghĩa, số cuối là số mũ</td><td><code>1002</code>=100×10²=10 kΩ · <code>4701</code>=470×10=4,7 kΩ</td></tr>
+          <tr><td><strong>Có chữ R</strong></td><td>R thay dấu phẩy, đơn vị Ω</td><td><code>4R7</code>=4,7 Ω · <code>R22</code>=0,22 Ω · <code>0R05</code>=0,05 Ω</td></tr>
+          <tr><td><strong>Có chữ M / L</strong></td><td>Điện trở shunt cực nhỏ: <code>M</code>=miliohm, <code>L</code>=miliohm</td><td><code>2M5</code>=2,5 mΩ · <code>R005</code>=5 mΩ</td></tr>
+          <tr><td><strong>EIA-96</strong><br><span class="dim">2 số + 1 chữ</span></td><td>Số tra bảng E96, chữ là hệ số nhân — xem mục G4</td><td><code>01B</code>=1 kΩ · <code>68C</code>=49,9 kΩ</td></tr>
+          <tr><td><strong>Một vạch / số 0</strong></td><td>Điện trở <b>0 Ω</b> — thực chất là cầu nối dây</td><td><code>0</code> · <code>000</code> · một vạch đen giữa thân</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="warn">
+        <span class="lbl">Bẫy giống bên tụ</span>
+        <code>220</code> trên điện trở dán là <b>22 Ω</b>, không phải 220 Ω. Muốn 220 Ω phải ghi <code>221</code>.
+      </div>
+      <div class="note">
+        <span class="lbl">Điện trở dán không in gì</span>
+        Cỡ 0402 trở xuống thường bỏ trống mặt trên. Phải tra sơ đồ hoặc đo — nhưng nhớ nhấc một chân, vì mạch song song làm số đo nhỏ hơn thực tế.
+      </div>
+    </div>
+  </div>
+
+  <div class="card span2">
+    <div class="card-head"><span class="no">G4</span><h3>Bảng EIA-96 đầy đủ (điện trở dán ±1%)</h3></div>
+    <div class="card-body">
+      <p>Mã gồm <b>2 chữ số + 1 chữ cái</b>: hai chữ số tra ra ba con số có nghĩa trong bảng dưới, chữ cái là hệ số nhân.</p>
+      <div class="decode">
+        <span class="seg" style="--seg:var(--info)"><b>01</b><i><em>Tra bảng</em>= 100</i></span>
+        <span class="seg" style="--seg:var(--accent)"><b>B</b><i><em>Nhân</em>× 10</i></span>
+        <span class="seg" style="--seg:var(--ok)"><b>=</b><i><em>1.000 Ω</em>1 kΩ ±1%</i></span>
+      </div>
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th class="c">Chữ</th><th class="c">Nhân</th><th class="c">Chữ</th><th class="c">Nhân</th><th class="c">Chữ</th><th class="c">Nhân</th><th class="c">Chữ</th><th class="c">Nhân</th><th class="c">Chữ</th><th class="c">Nhân</th></tr></thead>
+        <tbody>
+          <tr><td class="c"><code>Z</code></td><td class="c">×0,001</td><td class="c"><code>Y</code>/<code>R</code></td><td class="c">×0,01</td><td class="c"><code>X</code>/<code>S</code></td><td class="c">×0,1</td><td class="c"><code>A</code></td><td class="c">×1</td><td class="c"><code>B</code>/<code>H</code></td><td class="c">×10</td></tr>
+          <tr><td class="c"><code>C</code></td><td class="c">×100</td><td class="c"><code>D</code></td><td class="c">×1.000</td><td class="c"><code>E</code></td><td class="c">×10.000</td><td class="c"><code>F</code></td><td class="c">×100.000</td><td class="c dim">–</td><td class="c dim">–</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th class="c">Mã</th><th class="c">Trị</th><th class="c">Mã</th><th class="c">Trị</th><th class="c">Mã</th><th class="c">Trị</th><th class="c">Mã</th><th class="c">Trị</th><th class="c">Mã</th><th class="c">Trị</th><th class="c">Mã</th><th class="c">Trị</th></tr></thead>
+        <tbody>
+          <tr><td class="c"><code>01</code></td><td class="c">100</td><td class="c"><code>02</code></td><td class="c">102</td><td class="c"><code>03</code></td><td class="c">105</td><td class="c"><code>04</code></td><td class="c">107</td><td class="c"><code>05</code></td><td class="c">110</td><td class="c"><code>06</code></td><td class="c">113</td></tr>
+          <tr><td class="c"><code>07</code></td><td class="c">115</td><td class="c"><code>08</code></td><td class="c">118</td><td class="c"><code>09</code></td><td class="c">121</td><td class="c"><code>10</code></td><td class="c">124</td><td class="c"><code>11</code></td><td class="c">127</td><td class="c"><code>12</code></td><td class="c">130</td></tr>
+          <tr><td class="c"><code>13</code></td><td class="c">133</td><td class="c"><code>14</code></td><td class="c">137</td><td class="c"><code>15</code></td><td class="c">140</td><td class="c"><code>16</code></td><td class="c">143</td><td class="c"><code>17</code></td><td class="c">147</td><td class="c"><code>18</code></td><td class="c">150</td></tr>
+          <tr><td class="c"><code>19</code></td><td class="c">154</td><td class="c"><code>20</code></td><td class="c">158</td><td class="c"><code>21</code></td><td class="c">162</td><td class="c"><code>22</code></td><td class="c">165</td><td class="c"><code>23</code></td><td class="c">169</td><td class="c"><code>24</code></td><td class="c">174</td></tr>
+          <tr><td class="c"><code>25</code></td><td class="c">178</td><td class="c"><code>26</code></td><td class="c">182</td><td class="c"><code>27</code></td><td class="c">187</td><td class="c"><code>28</code></td><td class="c">191</td><td class="c"><code>29</code></td><td class="c">196</td><td class="c"><code>30</code></td><td class="c">200</td></tr>
+          <tr><td class="c"><code>31</code></td><td class="c">205</td><td class="c"><code>32</code></td><td class="c">210</td><td class="c"><code>33</code></td><td class="c">215</td><td class="c"><code>34</code></td><td class="c">221</td><td class="c"><code>35</code></td><td class="c">226</td><td class="c"><code>36</code></td><td class="c">232</td></tr>
+          <tr><td class="c"><code>37</code></td><td class="c">237</td><td class="c"><code>38</code></td><td class="c">243</td><td class="c"><code>39</code></td><td class="c">249</td><td class="c"><code>40</code></td><td class="c">255</td><td class="c"><code>41</code></td><td class="c">261</td><td class="c"><code>42</code></td><td class="c">267</td></tr>
+          <tr><td class="c"><code>43</code></td><td class="c">274</td><td class="c"><code>44</code></td><td class="c">280</td><td class="c"><code>45</code></td><td class="c">287</td><td class="c"><code>46</code></td><td class="c">294</td><td class="c"><code>47</code></td><td class="c">301</td><td class="c"><code>48</code></td><td class="c">309</td></tr>
+          <tr><td class="c"><code>49</code></td><td class="c">316</td><td class="c"><code>50</code></td><td class="c">324</td><td class="c"><code>51</code></td><td class="c">332</td><td class="c"><code>52</code></td><td class="c">340</td><td class="c"><code>53</code></td><td class="c">348</td><td class="c"><code>54</code></td><td class="c">357</td></tr>
+          <tr><td class="c"><code>55</code></td><td class="c">365</td><td class="c"><code>56</code></td><td class="c">374</td><td class="c"><code>57</code></td><td class="c">383</td><td class="c"><code>58</code></td><td class="c">392</td><td class="c"><code>59</code></td><td class="c">402</td><td class="c"><code>60</code></td><td class="c">412</td></tr>
+          <tr><td class="c"><code>61</code></td><td class="c">422</td><td class="c"><code>62</code></td><td class="c">432</td><td class="c"><code>63</code></td><td class="c">442</td><td class="c"><code>64</code></td><td class="c">453</td><td class="c"><code>65</code></td><td class="c">464</td><td class="c"><code>66</code></td><td class="c">475</td></tr>
+          <tr><td class="c"><code>67</code></td><td class="c">487</td><td class="c"><code>68</code></td><td class="c">499</td><td class="c"><code>69</code></td><td class="c">511</td><td class="c"><code>70</code></td><td class="c">523</td><td class="c"><code>71</code></td><td class="c">536</td><td class="c"><code>72</code></td><td class="c">549</td></tr>
+          <tr><td class="c"><code>73</code></td><td class="c">562</td><td class="c"><code>74</code></td><td class="c">576</td><td class="c"><code>75</code></td><td class="c">590</td><td class="c"><code>76</code></td><td class="c">604</td><td class="c"><code>77</code></td><td class="c">619</td><td class="c"><code>78</code></td><td class="c">634</td></tr>
+          <tr><td class="c"><code>79</code></td><td class="c">649</td><td class="c"><code>80</code></td><td class="c">665</td><td class="c"><code>81</code></td><td class="c">681</td><td class="c"><code>82</code></td><td class="c">698</td><td class="c"><code>83</code></td><td class="c">715</td><td class="c"><code>84</code></td><td class="c">732</td></tr>
+          <tr><td class="c"><code>85</code></td><td class="c">750</td><td class="c"><code>86</code></td><td class="c">768</td><td class="c"><code>87</code></td><td class="c">787</td><td class="c"><code>88</code></td><td class="c">806</td><td class="c"><code>89</code></td><td class="c">825</td><td class="c"><code>90</code></td><td class="c">845</td></tr>
+          <tr><td class="c"><code>91</code></td><td class="c">866</td><td class="c"><code>92</code></td><td class="c">887</td><td class="c"><code>93</code></td><td class="c">909</td><td class="c"><code>94</code></td><td class="c">931</td><td class="c"><code>95</code></td><td class="c">953</td><td class="c"><code>96</code></td><td class="c">976</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="note">
+        <span class="lbl">Ví dụ đọc</span>
+        <code>68C</code> → 68 = 499, C = ×100 → <b>49,9 kΩ</b>. · <code>22A</code> → 165 × 1 = <b>165 Ω</b>. · <code>34E</code> → 221 × 10.000 = <b>2,21 MΩ</b>.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════ PHẦN H ══════ -->
+<div class="part" id="ph">
+  <span class="part-letter">H</span>
+  <h2>Công suất, kích thước, chủng loại</h2>
+  <span class="part-note">Cùng trị số nhưng không thay được cho nhau</span>
+</div>
+
+<div class="grid">
+
+  <div class="card">
+    <div class="card-head"><span class="no">H1</span><h3>Công suất theo kích thước</h3></div>
+    <div class="card-body">
+      <p><strong>Điện trở chân cắm</strong> — nhìn kích thước là đoán được công suất:</p>
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th class="c">Công suất</th><th class="c">Dài × đường kính</th><th>Hay gặp ở</th></tr></thead>
+        <tbody>
+          <tr><td class="c"><strong>1/8 W</strong></td><td class="c">≈ 3,2 × 1,8 mm</td><td>Mạch tín hiệu nhỏ, board dày đặc</td></tr>
+          <tr><td class="c"><strong>1/4 W</strong></td><td class="c">≈ 6,3 × 2,3 mm</td><td>Phổ thông nhất trong đồ dân dụng</td></tr>
+          <tr><td class="c"><strong>1/2 W</strong></td><td class="c">≈ 9,0 × 3,2 mm</td><td>Nguồn, mạch có dòng</td></tr>
+          <tr><td class="c"><strong>1 W</strong></td><td class="c">≈ 11,5 × 4,5 mm</td><td>Hạn dòng, xả tụ, snubber</td></tr>
+          <tr><td class="c"><strong>2 W</strong></td><td class="c">≈ 15,5 × 5,5 mm</td><td>Nguồn công suất</td></tr>
+          <tr><td class="c"><strong>3–20 W</strong></td><td class="c">Hộp gốm trắng vuông</td><td>Điện trở xi măng, tải giả, xả tụ lớn</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p><strong>Điện trở dán:</strong></p>
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th class="c">Cỡ vỏ</th><th class="c">Công suất</th><th class="c">Cỡ vỏ</th><th class="c">Công suất</th></tr></thead>
+        <tbody>
+          <tr><td class="c"><strong>0201</strong></td><td class="c">1/20 W</td><td class="c"><strong>1206</strong></td><td class="c">1/4 W</td></tr>
+          <tr><td class="c"><strong>0402</strong></td><td class="c">1/16 W</td><td class="c"><strong>1210</strong></td><td class="c">1/3 W</td></tr>
+          <tr><td class="c"><strong>0603</strong></td><td class="c">1/10 W</td><td class="c"><strong>2010</strong></td><td class="c">3/4 W</td></tr>
+          <tr><td class="c"><strong>0805</strong></td><td class="c">1/8 W</td><td class="c"><strong>2512</strong></td><td class="c">1 W</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="tip">
+        <span class="lbl">Quy tắc chọn</span>
+        Tính ra công suất tiêu tán rồi <b>chọn loại gấp đôi</b>. Điện trở chạy đúng 100% công suất định mức sẽ nóng bỏng tay, làm vàng board và chết sớm.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="no">H2</span><h3>Điện áp làm việc tối đa — thông số hay bị bỏ quên</h3></div>
+    <div class="card-body">
+      <p>Điện trở không chỉ giới hạn bởi watt. Vượt điện áp tối đa sẽ <b>phóng điện qua bề mặt</b> dù công suất còn thừa — lỗi rất hay gặp khi tự chế mạch nối thẳng vào lưới 220 V.</p>
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th class="c">Loại</th><th class="c">Điện áp tối đa điển hình</th></tr></thead>
+        <tbody>
+          <tr><td class="c">1/8 W – 1/4 W chân cắm</td><td class="c">200 – 250 V</td></tr>
+          <tr><td class="c">1/2 W chân cắm</td><td class="c">350 V</td></tr>
+          <tr><td class="c">1 W – 2 W chân cắm</td><td class="c">500 – 750 V</td></tr>
+          <tr><td class="c">Dán 0402 / 0603</td><td class="c">50 – 75 V</td></tr>
+          <tr><td class="c">Dán 0805 / 1206</td><td class="c">150 – 200 V</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="warn">
+        <span class="lbl">Cách làm đúng ở mạch cao áp</span>
+        Cần 1 MΩ chịu 400 V thì <b>mắc nối tiếp 2 con 470 kΩ</b> thay vì dùng một con — mỗi con chỉ gánh một nửa điện áp. Đây là lý do trên board nguồn hay thấy 2–3 điện trở cao ohm nối tiếp nhau.
+      </div>
+    </div>
+  </div>
+
+  <div class="card span2">
+    <div class="card-head"><span class="no">H3</span><h3>Các loại điện trở &amp; khi nào dùng loại nào</h3></div>
+    <div class="card-body">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>Loại</th><th class="c">Nhận biết</th><th class="c">Dung sai</th><th>Đặc tính &amp; chỗ dùng</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Màng than</strong><br><span class="dim">carbon film</span></td><td class="c">Thân be/nâu nhạt</td><td class="c">±5%</td><td>Rẻ, nhiễu nhiệt cao. Đồ cũ, mạch không quan trọng</td></tr>
+          <tr><td><strong>Màng kim loại</strong><br><span class="dim">metal film</span></td><td class="c">Thân xanh lam / xanh lá</td><td class="c">±1%</td><td>Ít nhiễu, ổn định — chuẩn hiện nay cho mạch tín hiệu và audio</td></tr>
+          <tr><td><strong>Oxit kim loại</strong><br><span class="dim">metal oxide</span></td><td class="c">Thân xám, to hơn</td><td class="c">±5%</td><td>Chịu nhiệt và chịu xung tốt — mạch nguồn, hạn dòng</td></tr>
+          <tr><td><strong>Dây quấn</strong><br><span class="dim">wirewound</span></td><td class="c">Thân sứ/nhôm, có thể thấy dây</td><td class="c">±1…5%</td><td>Công suất lớn, chính xác, nhưng <b>có cảm kháng</b> — không dùng ở cao tần</td></tr>
+          <tr><td><strong>Xi măng</strong><br><span class="dim">cement</span></td><td class="c">Hộp gốm trắng vuông</td><td class="c">±5%</td><td>2–20 W. Tải giả, xả tụ, hạn dòng loa</td></tr>
+          <tr><td><strong>Chống cháy / cầu chì</strong><br><span class="dim">fusible, flameproof</span></td><td class="c">Thân trắng hoặc xanh nhạt, ghi <code>F</code></td><td class="c">±5%</td><td><b>Cố ý đứt khi quá tải</b> để bảo vệ mạch. Thường đứng ngay sau cầu chì hoặc trước biến áp</td></tr>
+          <tr><td><strong>Shunt đo dòng</strong></td><td class="c">Dán to, ghi <code>R010</code>, <code>2M5</code></td><td class="c">±1%</td><td>Vài mΩ. Đo dòng cho IC bảo vệ — thay sai trị số là mạch bảo vệ sai</td></tr>
+          <tr><td><strong>Điện trở 0 Ω</strong></td><td class="c">Một vạch đen / ghi <code>0</code></td><td class="c">–</td><td>Cầu nối dây, dùng để chọn cấu hình hoặc nhảy mạch</td></tr>
+          <tr><td><strong>NTC</strong></td><td class="c">Đĩa đen, ghi <code>5D-9</code>, <code>10D-9</code></td><td class="c">–</td><td>Nóng thì trở giảm. Hạn dòng nạp lúc bật nguồn — thay đúng mã</td></tr>
+          <tr><td><strong>PTC</strong></td><td class="c">Đĩa xanh/trắng</td><td class="c">–</td><td>Nóng thì trở tăng. Cầu chì tự phục hồi, bảo vệ quá dòng</td></tr>
+          <tr><td><strong>Varistor (MOV)</strong></td><td class="c">Đĩa xanh, ghi <code>471</code>, <code>561</code>, <code>07D471K</code></td><td class="c">–</td><td><b>Không phải điện trở.</b> Chống sét, đấu song song đầu vào AC. Cháy nổ khi quá áp là đúng nhiệm vụ</td></tr>
+          <tr><td><strong>Biến trở / chiết áp</strong></td><td class="c">Có núm xoay, ghi <code>103</code>, <code>B10K</code></td><td class="c">±20%</td><td><code>103</code> = 10 kΩ. Chữ <code>A</code>=tuyến tính log (âm lượng), <code>B</code>=tuyến tính</td></tr>
+          <tr><td><strong>Quang trở (LDR)</strong></td><td class="c">Mặt gốm có đường ngoằn ngoèo</td><td class="c">–</td><td>Sáng thì trở giảm. Mạch cảm biến ánh sáng, đèn đường</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card span2">
+    <div class="card-head"><span class="no">H4</span><h3>Dãy giá trị chuẩn E6 → E96</h3></div>
+    <div class="card-body">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th class="c">Dãy</th><th class="c">Dung sai</th><th>Các trị số (nhân với 10ⁿ)</th></tr></thead>
+        <tbody>
+          <tr><td class="c"><strong>E6</strong></td><td class="c">±20%</td><td class="mono">1,0 · 1,5 · 2,2 · 3,3 · 4,7 · 6,8</td></tr>
+          <tr><td class="c"><strong>E12</strong></td><td class="c">±10%</td><td class="mono">E6 + 1,2 · 1,8 · 2,7 · 3,9 · 5,6 · 8,2</td></tr>
+          <tr><td class="c"><strong>E24</strong></td><td class="c">±5%</td><td class="mono">E12 + 1,1 · 1,3 · 1,6 · 2,0 · 2,4 · 3,0 · 3,6 · 4,3 · 5,1 · 6,2 · 7,5 · 9,1</td></tr>
+          <tr><td class="c"><strong>E48</strong></td><td class="c">±2%</td><td>48 trị số / thập kỷ</td></tr>
+          <tr><td class="c"><strong>E96</strong></td><td class="c">±1%</td><td>96 trị số / thập kỷ — chính là bảng ở mục G4</td></tr>
+          <tr><td class="c"><strong>E192</strong></td><td class="c">±0,5%</td><td>Thiết bị đo, mạch chuẩn</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="note">
+        <span class="lbl">Tại sao trị số nhìn "lẻ"</span>
+        49,9 kΩ hay 4,99 kΩ không phải là lỗi in — đó là giá trị E96 gần nhất với 50 kΩ và 5 kΩ. Gặp số lẻ kiểu này thì biết ngay đang cầm điện trở <b>±1%</b>.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════ PHẦN I ══════ -->
+<div class="part" id="pi">
+  <span class="part-letter">I</span>
+  <h2>Công thức &amp; chọn trị số điện trở</h2>
+  <span class="part-note">Ba bài toán chiếm 90% việc thực tế</span>
+</div>
+
+<div class="grid">
+
+  <div class="card">
+    <div class="card-head"><span class="no">I1</span><h3>Ohm, công suất, ghép nối</h3></div>
+    <div class="card-body">
+      <div class="fx">
+        <code>V = I × R &nbsp;·&nbsp; I = V / R &nbsp;·&nbsp; R = V / I</code>
+        <span>Định luật Ohm. V tính bằng vôn, I bằng ampe, R bằng ohm.</span>
+      </div>
+      <div class="fx">
+        <code>P = V × I = I² × R = V² / R</code>
+        <span>Công suất tiêu tán (W) — con số quyết định chọn 1/4 W hay 2 W.</span>
+      </div>
+      <div class="fx">
+        <code>Nối tiếp: R = R₁ + R₂ + …<br>Song song: 1/R = 1/R₁ + 1/R₂ + …</code>
+        <span><b>Ngược với tụ điện.</b> Hai trở song song: R = R₁R₂/(R₁+R₂). Hai trở bằng nhau song song = một nửa trị số.</span>
+      </div>
+      <div class="fx">
+        <code>Chia áp: V_ra = V_vào × R₂ / (R₁ + R₂)</code>
+        <span>R₂ là con nối xuống mass. Chỉ đúng khi tải phía sau có trở kháng lớn hơn R₂ ít nhất 10 lần.</span>
+      </div>
+      <div class="tip">
+        <span class="lbl">Nhẩm nhanh tại bàn</span>
+        Điện trở <b>1 kΩ chịu 1 V</b> thì tiêu tán 1 mW — quá nhẹ. Nhưng <b>10 Ω chịu 10 V</b> tiêu tán 10 W: cùng là "một con điện trở" nhưng một con mát và một con đỏ rực. Luôn tính P trước khi chọn.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="no">I2</span><h3>Ba bài toán hay gặp nhất</h3></div>
+    <div class="card-body">
+      <p><strong>1 · Điện trở hạn dòng cho LED</strong></p>
+      <div class="fx">
+        <code>R = (V_nguồn − V_LED) / I_LED</code>
+        <span>Nguồn 12 V, LED đỏ 2 V, 20 mA → R = 10 / 0,02 = 500 Ω → chọn <b>470 Ω</b>. P = I²R = 0,19 W → dùng <b>1/2 W</b> cho mát.</span>
+      </div>
+      <p style="font-size:13px" class="dim">V_LED tham khảo: đỏ 1,8–2,2 V · vàng/cam 2,0–2,2 V · xanh lá 2,0–3,2 V · xanh dương/trắng 3,0–3,4 V.</p>
+
+      <p><strong>2 · Điện trở treo (pull-up / pull-down)</strong></p>
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>Chỗ dùng</th><th class="c">Trị số</th></tr></thead>
+        <tbody>
+          <tr><td>Chân vào vi điều khiển, nút bấm</td><td class="c">10 kΩ</td></tr>
+          <tr><td>Bus I²C tốc độ chuẩn</td><td class="c">4,7 kΩ</td></tr>
+          <tr><td>Bus I²C tốc độ cao / dây dài</td><td class="c">2,2 kΩ</td></tr>
+          <tr><td>Chân reset</td><td class="c">10 kΩ</td></tr>
+          <tr><td>Xả cực G của MOSFET</td><td class="c">10 – 100 kΩ</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <p><strong>3 · Điện trở xả tụ nguồn (bleeder)</strong></p>
+      <div class="fx">
+        <code>R = t_xả / (5 × C) &nbsp;·&nbsp; P = V² / R</code>
+        <span>Xả tụ 220 µF/400 V trong 10 s → R = 10/(5×220µ) ≈ 9,1 kΩ → chọn <b>10 kΩ</b>. P = 400²/10.000 = <b>16 W</b> khi có điện liên tục — nên thực tế dùng 100–470 kΩ / 2 W và chấp nhận xả chậm hơn.</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════ PHẦN J ══════ -->
+<div class="part" id="pj">
+  <span class="part-letter">J</span>
+  <h2>Đo, nhận dạng, thay điện trở</h2>
+  <span class="part-note">Điện trở cháy là triệu chứng, không phải nguyên nhân</span>
+</div>
+
+<div class="grid">
+
+  <div class="card">
+    <div class="card-head"><span class="no">J1</span><h3>Đo cho đúng</h3></div>
+    <div class="card-body">
+      <ol class="rules">
+        <li><strong>Cắt điện và xả tụ trước.</strong> Đo điện trở khi mạch còn điện sẽ ra số bậy và có thể hỏng đồng hồ.</li>
+        <li><strong>Nhấc một chân ra khỏi board.</strong> Đo tại chỗ luôn cho trị số <b>nhỏ hơn thực tế</b> vì các nhánh song song trong mạch.</li>
+        <li><strong>Không cầm hai tay vào hai đầu que đo</strong> khi đo trị số lớn — cơ thể bạn cũng là một điện trở vài trăm kΩ mắc song song.</li>
+        <li><strong>Đo trị số nhỏ dưới 1 Ω</strong> cần đồng hồ 4 dây hoặc trừ đi điện trở của que đo (chập hai que lại, ghi số rồi trừ).</li>
+        <li><strong>Kết luận:</strong> lệch trong dung sai = tốt; tăng vọt hoặc <code>OL</code> = đứt; giảm nhiều = hiếm, thường do rò trên board chứ không phải bản thân điện trở.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="no">J2</span><h3>Những thứ trông giống điện trở</h3></div>
+    <div class="card-body">
+      <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>Nhìn thấy</th><th>Thực ra là</th><th>Phân biệt</th></tr></thead>
+        <tbody>
+          <tr><td>Thân có vạch màu nhưng béo tròn, thường màu xanh lá hoặc có vạch bạc rộng ở đầu</td><td><strong>Cuộn cảm</strong></td><td>Đo Ω ra <b>gần 0</b>. Ký hiệu trên board là <code>L</code>, không phải <code>R</code></td></tr>
+          <tr><td>Một vạch đen duy nhất giữa thân</td><td><strong>Điện trở 0 Ω</strong></td><td>Chỉ là cầu nối. Đo phải thông mạch</td></tr>
+          <tr><td>Thân trắng/xanh nhạt, có chữ <code>F</code> hoặc <code>FR</code></td><td><strong>Điện trở cầu chì</strong></td><td>Tra sơ đồ. <b>Không thay bằng điện trở thường</b></td></tr>
+          <tr><td>Đĩa tròn xanh ghi <code>471</code>, <code>07D471K</code></td><td><strong>Varistor chống sét</strong></td><td>Nằm ngay đầu vào AC, song song với lưới</td></tr>
+          <tr><td>Đĩa đen ghi <code>5D-9</code>, <code>10D-9</code></td><td><strong>NTC hạn dòng</strong></td><td>Nối tiếp đường vào AC, nguội đo vài Ω</td></tr>
+          <tr><td>Dán to, ghi <code>R010</code> hoặc <code>1M0</code></td><td><strong>Shunt đo dòng</strong></td><td>Trị số milliohm, hai chân bản to</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card span2">
+    <div class="card-head"><span class="no">J3</span><h3>Quy tắc thay điện trở &amp; xử lý con bị cháy</h3></div>
+    <div class="card-body">
+      <ol class="rules">
+        <li><strong>Trị số phải đúng</strong> trong phạm vi dung sai. Mạch phản hồi nguồn, mạch chia áp đo lường, mạch shunt thì phải dùng <b>đúng ±1%</b>, không lấy ±5% cho xong.</li>
+        <li><strong>Công suất bằng hoặc cao hơn</strong>, nên gấp đôi công suất tính toán. Cao hơn thì luôn an toàn — chỉ tốn chỗ.</li>
+        <li><strong>Điện trở cầu chì phải thay đúng loại.</strong> Thay bằng điện trở thường là bỏ mất lớp bảo vệ — lần sau sự cố sẽ cháy sang biến áp hoặc IC nguồn thay vì đứt một con điện trở rẻ tiền.</li>
+        <li><strong>Điện trở cháy = triệu chứng.</strong> Phải tìm ra thứ làm nó cháy (diode chập, MOSFET chập, tụ chập, tải ngắn mạch) rồi mới thay. Thay xong mà chưa tìm nguyên nhân thì nó lại cháy trong vài giây.</li>
+        <li><strong>Không thay dây quấn vào mạch cao tần</strong> — cảm kháng của nó làm mạch dao động hoặc méo tín hiệu.</li>
+        <li><strong>Metal film thay được cho carbon film</strong> ở hầu hết mọi chỗ. Chiều ngược lại thì không, nếu mạch cần độ chính xác hoặc ít nhiễu.</li>
+        <li><strong>Để hở điện trở nóng.</strong> Loại từ 1 W trở lên phải nâng cao khỏi mặt board vài milimét để tản nhiệt và không làm cháy vàng mạch in.</li>
+        <li><strong>Chú ý điện áp tối đa</strong> (mục H2), nhất là ở mạch nối thẳng vào lưới hoặc mạch cao áp.</li>
+        <li><strong>NTC, PTC, varistor, shunt phải thay đúng mã</strong> — chúng không phải điện trở thường và không có "trị số tương đương".</li>
+        <li><strong>Đo lại sau khi hàn</strong> và kiểm tra mối hàn nguội, vì điện trở cháy thường kéo theo mạch in bị bong hoặc đứt ngầm bên dưới.</li>
+      </ol>
+      <div class="warn">
+        <span class="lbl">Con điện trở cháy đen không đọc được mã — làm sao biết trị số?</span>
+        <b>1.</b> Tra sơ đồ hoặc ảnh board cùng model. &nbsp;<b>2.</b> Đo con <b>đối xứng</b> ở kênh còn lại (ampli stereo, mạch đôi). &nbsp;<b>3.</b> Suy từ vị trí trong mạch: trở cực G MOSFET 10–100 Ω · trở base transistor 1–10 kΩ · trở LED 220 Ω–1 kΩ · trở snubber 10–100 Ω · trở treo 10 kΩ · trở xả tụ nguồn 100–470 kΩ. &nbsp;<b>4.</b> Cạo lớp cháy để đọc lại là <b>không đáng tin</b> — trị số đã thay đổi khi cháy.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span>Dùng khi học, sửa mạch dân dụng, nguồn và audio. Số liệu là giá trị điển hình — với linh kiện quan trọng, tra datasheet đúng series.</span>
+  <span class="mono">10 phần · 37 mục</span>
+</footer>
+
+</div>
+
+<button id="top" type="button" aria-label="Lên đầu trang" hidden>↑</button>
+
+<script>
+(function(){
+  var d = document;
+  var input = d.getElementById('q');
+  var statusEl = d.getElementById('q-status');
+  var tocBtn = d.getElementById('toc-btn');
+  var toc = d.getElementById('toc');
+  var topBtn = d.getElementById('top');
+  var mq = window.matchMedia('(max-width:700px)');
+
+  function norm(s){
+    return s.toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .replace(/đ/g,'d')
+      .replace(/\s+/g,' ').trim();
+  }
+
+  var cards = [].slice.call(d.querySelectorAll('.wrap > .grid > .card'));
+  cards.forEach(function(c){ c.setAttribute('data-hay', norm(c.textContent)); });
+
+  var groups = [].slice.call(d.querySelectorAll('.part')).map(function(p){
+    var g = p.nextElementSibling;
+    return {
+      part: p,
+      grid: g,
+      cards: [].slice.call(g.children).filter(function(n){ return n.classList.contains('card'); })
+    };
+  });
+
+  function isSearching(){ return input.value.trim().length > 0; }
+
+  function apply(){
+    var tokens = norm(input.value).split(' ').filter(Boolean);
+    var total = 0;
+    groups.forEach(function(g){
+      var vis = 0;
+      g.cards.forEach(function(c){
+        var hay = c.getAttribute('data-hay');
+        var ok = tokens.every(function(t){ return hay.indexOf(t) > -1; });
+        c.hidden = !ok;
+        if (ok) { vis++; total++; }
+      });
+      var empty = tokens.length > 0 && vis === 0;
+      g.part.hidden = empty;
+      g.grid.hidden = empty;
+    });
+    if (tokens.length) {
+      statusEl.hidden = false;
+      statusEl.textContent = total
+        ? 'Tìm thấy ' + total + ' mục'
+        : 'Không có mục nào khớp. Thử: 104, X7R, 2A, eia-96, tu ngam, fusible';
+    } else {
+      statusEl.hidden = true;
+      statusEl.textContent = '';
+    }
+    setCollapse();
+  }
+
+  function setCollapse(){
+    var narrow = mq.matches, searching = isSearching();
+    cards.forEach(function(c){
+      var body = c.querySelector('.card-body');
+      var head = c.querySelector('.card-head');
+      if (narrow && !searching) {
+        c.classList.add('collapsible');
+        head.setAttribute('role','button');
+        head.setAttribute('tabindex','0');
+        var open = c.getAttribute('data-open') === '1';
+        body.hidden = !open;
+        head.setAttribute('aria-expanded', open ? 'true' : 'false');
+      } else {
+        c.classList.remove('collapsible');
+        head.removeAttribute('role');
+        head.removeAttribute('tabindex');
+        head.removeAttribute('aria-expanded');
+        body.hidden = false;
+      }
+    });
+  }
+
+  function toggleCard(head){
+    var c = head.parentElement;
+    c.setAttribute('data-open', c.getAttribute('data-open') === '1' ? '0' : '1');
+    setCollapse();
+  }
+
+  d.addEventListener('click', function(e){
+    if (!e.target.closest) return;
+    var head = e.target.closest('.card.collapsible > .card-head');
+    if (head) { toggleCard(head); return; }
+    if (e.target.closest('#toc a') && mq.matches) {
+      toc.classList.remove('open');
+      tocBtn.setAttribute('aria-expanded','false');
+    }
+  });
+
+  d.addEventListener('keydown', function(e){
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    if (!e.target.closest) return;
+    var head = e.target.closest('.card.collapsible > .card-head');
+    if (head) { e.preventDefault(); toggleCard(head); }
+  });
+
+  tocBtn.addEventListener('click', function(){
+    var open = toc.classList.toggle('open');
+    tocBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+
+  var timer;
+  input.addEventListener('input', function(){ clearTimeout(timer); timer = setTimeout(apply, 120); });
+  input.addEventListener('search', apply);
+
+  if (mq.addEventListener) mq.addEventListener('change', setCollapse);
+  else if (mq.addListener) mq.addListener(setCollapse);
+
+  window.addEventListener('scroll', function(){
+    topBtn.hidden = window.scrollY < 600;
+  }, {passive:true});
+
+  topBtn.addEventListener('click', function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+  });
+
+  setCollapse();
+})();
+</script>
+
+</html>
